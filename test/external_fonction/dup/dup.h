@@ -1,7 +1,7 @@
 #ifndef DUP_H
 #define DUP_H
 
-#include "../../../main.h"
+#include "../../../srcs/main.h"
 
 
 int try_dup();

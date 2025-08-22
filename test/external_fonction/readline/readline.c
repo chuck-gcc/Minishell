@@ -7,7 +7,7 @@ int ft_readline(void)
 
     while (1)
     {
-        line = readline();
+        line = readline("Minishell");
         if(line)
             printf("%s\n", line);
         else

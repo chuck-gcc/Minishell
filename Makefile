@@ -1,19 +1,19 @@
 CC= gcc
-FLAGS= -Werror -Wextra -Wall
+GFLAGS= -Werror -Wextra -Wall -g
 BRANCH= $(shell git branch)
-NAME=mini
+NAME=bin/mini
 EXT_MOD=external_fonction
 
 # Module readline : export EXT_F=readline
 
-EXT_SRCS= main.c
+EXT_SRCS= srcs/main.c
 EXT_OBJ= $(EXT_SRCS:%.c=%.o)
 
 #########
 #revoir cette parti
 
 %.o:%.c
-	$(CC) $(FLAGS) $< -c
+	$(CC) $(GFLAGS) $< -c -o $@
 
 $(NAME): $(EXT_OBJ)
 	$(CC) $(EXT_OBJ)  -Llibft -lft -lreadline -o $(NAME)

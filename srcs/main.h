@@ -2,9 +2,9 @@
 #define MAIN_H
 
 #include "tokeniser/tokeniser.h"
-#include "libft/libft.h"
-#include "test/external_fonction/dup/dup.h"
-#include "test/external_fonction/readline/readline.h"
+#include "../libft/libft.h"
+#include "../test/external_fonction/dup/dup.h"
+#include "../test/external_fonction/readline/readline.h"
 
 #include <string.h>
 #include <fcntl.h>
