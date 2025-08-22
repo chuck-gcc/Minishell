@@ -1,6 +1,6 @@
 CC= gcc
 GFLAGS= -Werror -Wextra -Wall -g
-BRANCH= $(shell git branch)
+BRANCH= $(shell git branch --show-current )
 NAME=bin/mini
 EXT_MOD=external_fonction
 
