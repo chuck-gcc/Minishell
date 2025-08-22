@@ -1,17 +1,22 @@
-CC=gcc
-GFLAGS= -Werror -Wextra -Wall
-
+CC= gcc
+FLAGS= -Werror -Wextra -Wall
+BRANCH= $(shell git branch)
 NAME=mini
 EXT_MOD=external_fonction
 
 # Module readline : export EXT_F=readline
 
 EXT_SRCS= main.c
-EXT_OBJ= $(EXT_SRCS:.c=.o)
+EXT_OBJ= $(EXT_SRCS:%.c=%.o)
 
+#########
+#revoir cette parti
+
+%.o:%.c
+	$(CC) $(FLAGS) $< -c
 
 $(NAME): $(EXT_OBJ)
-	$(CC)  $(EXT_OBJ) -o $(NAME)
+	$(CC) $(EXT_OBJ)  -Llibft -lft -lreadline -o $(NAME)
 
 
 clean:
@@ -19,3 +24,13 @@ clean:
 
 fclean: clean
 	rm -rf $(NAME)
+
+re: fclean $(NAME)
+
+git:
+	git add .
+	git commit -m $(COM)
+	git push origin $(BRANCH)
+
+lib:
+	cd libft && make fclean && make bonus && make clean
