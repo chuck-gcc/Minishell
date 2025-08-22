@@ -34,3 +34,6 @@ git:
 
 lib:
 	cd libft && make fclean && make bonus && make clean
+
+.phony:
+	re lib git clean fclean
