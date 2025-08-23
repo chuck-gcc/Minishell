@@ -8,7 +8,8 @@ LIB= -Llibft -lft -lreadline
 # Module readline : export EXT_F=readline
 
 EXT_SRCS= 		srcs/main.c \
-				srcs/tokeniser/tokeniser.c
+				srcs/tokeniser/tokeniser.c \
+				srcs/tokeniser/tokeniser_utils.c
 
 TEST_SRCS = 	test/external_fonction/dup.c  \
  				test/external_fonction/readline.c\
@@ -20,7 +21,7 @@ TEST_OBJ= $(TEST_SRCS:%.c=%.o)
 #revoir cette parti
 
 %.o:%.c
-	$(CC) $(GFLAGS) $< -c -o $@
+	@$(CC) $(GFLAGS) $< -c -o $@
 #########
 
 $(NAME): $(EXT_OBJ)
