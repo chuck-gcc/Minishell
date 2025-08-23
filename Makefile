@@ -7,7 +7,9 @@ EXT_MOD=external_fonction
 LIB= -Llibft -lft -lreadline
 # Module readline : export EXT_F=readline
 
-EXT_SRCS= srcs/main.c
+EXT_SRCS= 		srcs/main.c \
+				srcs/tokeniser/tokeniser.c
+
 TEST_SRCS = 	test/external_fonction/dup.c  \
  				test/external_fonction/readline.c\
 				test/main_test.c
@@ -29,7 +31,7 @@ run: $(NAME)
 
 test: $(TEST_OBJ)
 	@$(CC) $(TEST_OBJ) $(LIB) -o $(NAME_TEST)
-	@valgrind --leak-check=full --log-file=valgrind/valgrind_test.log ./$(NAME_TEST)
+	@valgrind --leak-check=full --read-var-info=yes --track-fds=yes --log-file=valgrind/valgrind_test.log ./$(NAME_TEST)
 
 clean:
 	rm -rf $(EXT_OBJ)

@@ -1,28 +1,20 @@
 #include "main.h"
 
-/* 
-    TOKEN:
-
-        *command
-        *arg
-        *builtin
-        *pipe
-        *redirection left
-        *redirection right
-        *single quote
-        *double cote
-        *word
-*/
-
-char *run_minishell()
-{
-    return(NULL);
-}
-
 
 int main(void)
 {
-    printf("voici la taille du mot string %ld\n", ft_strlen("string"));
-    return(0);
+    t_list **tokens;
+    char *str = " cat file.txt | grep banana | wc -l";
+    
+    tokens = get_token_list(str);
+    if(!tokens)
+    {
+        printf("Error token list\n");
+        return(1);
+    }
 
+    ft_lstiter(*tokens, display_content_lst);
+
+    ft_lstclear(tokens, delete_list);
+    return(0);
 }
