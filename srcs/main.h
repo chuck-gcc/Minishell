@@ -14,6 +14,7 @@
 #include <sys/resource.h>
 #include <sys/types.h>
 #include <sys/time.h>
+#include <assert.h>
 
 #include <readline/readline.h>
 #include <readline/history.h>

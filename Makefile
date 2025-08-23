@@ -24,10 +24,10 @@ TEST_OBJ= $(TEST_SRCS:%.c=%.o)
 #########
 
 $(NAME): $(EXT_OBJ)
-	$(CC) $(EXT_OBJ)  $(LIB) -o $(NAME)
+	@$(CC) $(EXT_OBJ)  $(LIB) -o $(NAME)
 
 run: $(NAME)
-	valgrind --leak-check=full --log-file=valgrind/valgrind.log ./$(NAME)
+	@valgrind --leak-check=full --log-file=valgrind/valgrind.log ./$(NAME)
 
 test: $(TEST_OBJ)
 	@$(CC) $(TEST_OBJ) $(LIB) -o $(NAME_TEST)
