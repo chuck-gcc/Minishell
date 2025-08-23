@@ -14,12 +14,15 @@
         *word
 */
 
+char *run_minishell()
+{
+    return(NULL);
+}
 
 
 int main(void)
 {
-
-    ft_strlen("string");
+    printf("voici la taille du mot string %ld\n", ft_strlen("string"));
     return(0);
 
 }

@@ -1,5 +1,5 @@
-#ifndef MAIN_H
-#define MAIN_H
+#ifndef MAIN_TEST_H
+#define MAIN_TEST_H
 
 #include "tokeniser/tokeniser.h"
 #include "../libft/libft.h"

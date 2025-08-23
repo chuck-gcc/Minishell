@@ -2,25 +2,40 @@ CC= gcc
 GFLAGS= -Werror -Wextra -Wall -g
 BRANCH= $(shell git branch --show-current )
 NAME=bin/mini
+NAME_TEST=bin/test
 EXT_MOD=external_fonction
-
+LIB= -Llibft -lft -lreadline
 # Module readline : export EXT_F=readline
 
 EXT_SRCS= srcs/main.c
-EXT_OBJ= $(EXT_SRCS:%.c=%.o)
+TEST_SRCS = 	test/external_fonction/dup.c  \
+ 				test/external_fonction/readline.c\
+				test/main_test.c
 
+EXT_OBJ= $(EXT_SRCS:%.c=%.o)
+TEST_OBJ= $(TEST_SRCS:%.c=%.o)
 #########
 #revoir cette parti
 
 %.o:%.c
 	$(CC) $(GFLAGS) $< -c -o $@
+#########
 
 $(NAME): $(EXT_OBJ)
-	$(CC) $(EXT_OBJ)  -Llibft -lft -lreadline -o $(NAME)
+	$(CC) $(EXT_OBJ)  $(LIB) -o $(NAME)
 
+run: $(NAME)
+	valgrind --leak-check=full --log-file=valgrind/valgrind.log ./$(NAME)
+
+test: $(TEST_OBJ)
+	@$(CC) $(TEST_OBJ) $(LIB) -o $(NAME_TEST)
+	@valgrind --leak-check=full --log-file=valgrind/valgrind_test.log ./$(NAME_TEST)
 
 clean:
 	rm -rf $(EXT_OBJ)
+	rm -rf $(TEST_OBJ)
+	rm -f valgrind/valgrind.log
+	rm -f valgrind/test/valgrind_test.log
 
 fclean: clean
 	rm -rf $(NAME)
