@@ -6,6 +6,7 @@ int main(void)
     t_list **tokens;
     char *str = " cat file.txt | grep banana | wc -l";
     
+    *tokens = NULL;
     tokens = get_token_list(str);
     if(!tokens)
     {
