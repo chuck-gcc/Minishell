@@ -1,0 +1,12 @@
+input::= line
+line::= <cmd> {{<pipe> <cmd>}}
+cmd ::= <exec> { <arg> } { <redirection> }
+arg::= (<word> | <var>)
+exec::= <path>
+path::= STRING
+var::= "$<word>"
+word::= STRING
+pipe::= "|"
+redirection::= ("<" | ">" | ">>" | "<<") <filename>
+space::= " "
+filename::= <word>

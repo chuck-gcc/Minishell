@@ -20,6 +20,7 @@ int ft_fork()
     pid = fork();
     if(pid == 0)
     {
+        printf("%d\n", isatty(fds[1]));
         close(fds[0]);
         dup2(STDOUT_FILENO, fds[1]);
         char *arg[] = {"/usr/bin/cat", "file.txt"};
