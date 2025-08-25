@@ -45,7 +45,7 @@ int		ft_atoi(const char *str);
 //Partie 2
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 void	ft_striteri(char *s, void (*f)(unsigned int, char*));
-char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_strjoin(char const *s1, char const *s2, char sep);
 char	*ft_strtrim(char const *s1, char const *set);
 char	*ft_itoa(int n);
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
@@ -90,7 +90,7 @@ void	ft_print_bit_16(int n);
 void	ft_print_bit_32(int n);
 void	ft_print_bit_64(int n);
 int		ft_index_of_int(int *arr, int len, int n);
-int		ft_index_of_c(char *arr, char c);
+int		ft_index_of_c(const char *arr, char c);
 void 	ft_generate_number(int *arr, int size);
 int		ft_get_max_value(int *arr, int size);
 void    ft_split_quick_sort(char **split, int end, int (*cmp)(const char *,const char *, size_t len));

@@ -13,7 +13,7 @@
 #include "libft.h"
 #include <assert.h>
 
-int	ft_index_of_c(char *str, char c)
+int	ft_index_of_c(const char *str, char c)
 {
 	int	i;
 

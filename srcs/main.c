@@ -1,4 +1,10 @@
 #include "main.h"
+ #include <sys/stat.h>
+#include <stdio.h>
+#include <string.h>
+
+
+char *get_next_line(int fd);
 
 void delete_list(void *content)
 {
@@ -22,10 +28,35 @@ void display_content_lst(void *liste)
     printf("\t\t\t%s\n", print_token_type(token->type));
 }
 
+int argument_fusion(t_list **tokens_lst)
+{
+    t_list *tokens = *tokens_lst;
+    char *line = NULL;
+    if(!tokens_lst || !*tokens_lst )
+        return(-1);
+    while (tokens)
+    {
+        if(tokens && ((t_token *)(tokens->content))->type == CMD)
+        {
+            tokens = tokens->next;
+            while (tokens && ((t_token *)(tokens->content))->type == WORD)
+            {
+                t_token *token_v = (t_token *)(tokens->content);
+                line = ft_strjoin(line, token_v->value, ' ');
+                printf("content %s, token type %d\n", line, ((t_token *)(tokens->content))->type);
+                tokens = tokens ->next;
+            }
+        }
+        else
+            tokens = tokens->next;
+    }
+    return(0);
+}
+
 int main(void)
 {
     t_list **tokens_lst;
-    char *str = " echo hellow < file.txt | cat file.txt | grep banana | wc -l >> file2";
+    char *str = "cat file.txt  | grep banana | wc -l";
     
     tokens_lst = calloc(sizeof(t_list *) , 1);
     if(!tokens_lst)
@@ -38,10 +69,15 @@ int main(void)
         return(1);
     }
 
-    ft_lstiter(*tokens_lst, display_content_lst);
-    ft_lstclear(tokens_lst, delete_list);
+    //ft_lstiter(*tokens_lst, display_content_lst);
+    
+    printf("\n\n\n");
+    
+    argument_fusion(tokens_lst);
+    //ft_lstclear(tokens_lst, delete_list);
 
-
+    
+    
 
     return(0);
 }

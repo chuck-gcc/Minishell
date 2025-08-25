@@ -40,7 +40,7 @@ t_list **get_token_list(char *str, t_list **lst)
         //     free(node->content);
         //     node->content = NULL;
         // }
-
+        node->next = NULL;
         if(node->content == NULL)
             return(ft_split_clean(&split));
         ft_lstadd_back(lst, node);
