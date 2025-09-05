@@ -1,4 +1,10 @@
-CC= gcc
+OS= $(shell uname)
+ifeq ($(OS), Darwin)
+	CC=cc
+else
+	CC=gcc
+endif
+
 GFLAGS= -Werror -Wextra -Wall -g
 BRANCH= $(shell git branch --show-current )
 NAME=bin/mini
@@ -28,7 +34,11 @@ $(NAME): $(EXT_OBJ)
 	@$(CC) $(EXT_OBJ)  $(LIB) -o $(NAME)
 
 run: $(NAME)
+ifeq ($(OS), Darwin)
+	./$(NAME)
+else
 	@valgrind --leak-check=full --log-file=valgrind/valgrind.log ./$(NAME)
+endif
 
 test: $(TEST_OBJ)
 	@$(CC) $(TEST_OBJ) $(LIB) -o $(NAME_TEST)
@@ -52,6 +62,8 @@ git:
 
 lib:
 	cd libft && make fclean && make bonus && make clean
+n:
+	echo $(CC)
 
 .phony:
 	re lib git clean fclean
