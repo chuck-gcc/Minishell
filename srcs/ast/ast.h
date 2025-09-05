@@ -3,6 +3,6 @@
 
 #include "../tokeniser/tokeniser.h"
 
-t_token *generate_ast(t_list *token_list);
+void generate_ast(t_list *token_list, t_token *ast_root);
 
 #endif

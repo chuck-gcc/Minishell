@@ -7,7 +7,7 @@ endif
 
 GFLAGS= -Werror -Wextra -Wall -g
 BRANCH= $(shell git branch --show-current )
-NAME=bin/mini
+NAME=bin/*
 NAME_TEST=bin/test
 EXT_MOD=external_fonction
 LIB= -Llibft -lft -lreadline
