@@ -16,17 +16,7 @@ void delete_list(void *content)
 }
 
 
-void display_content_lst(void *liste)
-{
-    t_token *token;
-    char *value;
-    
-    token = (t_token *)liste;
-    value = token->value;
 
-    printf("%s", value);
-    printf("\t\t\t%s\n", print_token_type(token->type));
-}
 
 int argument_fusion(t_list **tokens_lst)
 {
@@ -69,9 +59,10 @@ int main(void)
         return(1);
     }
 
-    ft_lstiter(*tokens_lst, display_content_lst);
     
     printf("\n\n\n");
+
+    generate_ast(*tokens_lst);
     
     ft_lstclear(tokens_lst, delete_list);
 

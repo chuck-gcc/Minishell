@@ -11,7 +11,10 @@ t_token *new_node(char *str)
         return(NULL);
     new_node->value = ft_strdup(str);
     new_node->type = get_token_type(str);
-    new_node->next = NULL;
+    new_node->precedence = get_precedence(new_node->type);
+    new_node->asso= get_asso(new_node->type);
+    new_node->left = NULL;
+    new_node->right = NULL;
     return(new_node);
 }
 

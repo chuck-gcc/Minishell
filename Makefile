@@ -15,6 +15,7 @@ LIB= -Llibft -lft -lreadline
 
 EXT_SRCS= 		srcs/main.c \
 				srcs/tokeniser/tokeniser.c \
+				srcs/ast/ast.c \
 				srcs/tokeniser/tokeniser_utils.c
 
 TEST_SRCS = 	test/external_fonction/dup.c  \
@@ -35,7 +36,7 @@ $(NAME): $(EXT_OBJ)
 
 run: $(NAME)
 ifeq ($(OS), Darwin)
-	./$(NAME)
+	@./$(NAME)
 else
 	@valgrind --leak-check=full --log-file=valgrind/valgrind.log ./$(NAME)
 endif

@@ -45,7 +45,6 @@ int ft_is_commande(char *str)
     DIR *dir;
     int is_cmd;
     struct dirent *files;
-
     dir = opendir("/usr/bin");
     is_cmd = 1;
     if(dir == NULL)
@@ -75,4 +74,38 @@ int get_token_type(char *str)
     if(!ft_strncmp(str, "<<", ft_strlen_longest(str, "<<")))
         return(DELIM);
     return(WORD);
+}
+
+int get_precedence(int token_type)
+{
+    if(token_type == PIPE)
+        return(3);
+    if(token_type == CMD)
+        return(2);
+    else
+        return(1);
+}
+
+int get_asso(int token_type)
+{
+    if(token_type == PIPE)
+        return(3);
+    if(token_type == CMD)
+        return(2);
+    else
+        return(1);
+}
+
+void display_content_lst(void *liste)
+{
+    t_token *token;
+    char *value;
+    
+    token = (t_token *)liste;
+    value = token->value;
+
+    printf("%-10s | %-15s | precedence: %-3d | asso: %-3d\n",value,
+    print_token_type(token->type),
+    token->precedence,
+    token->asso);
 }

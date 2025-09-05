@@ -36,7 +36,9 @@ typedef struct s_token
     char            *value;
     char            *args;
     int             precedence;
-    struct s_token *next;
+    int             asso;
+    struct s_token  *left;
+    struct s_token  *right;
 
 } t_token;
 
@@ -47,5 +49,7 @@ int     ft_is_builtin(char *str);
 int     ft_is_commande(char *str);
 int     get_token_type(char *str);
 char    *print_token_type(int token_type);
-
+int     get_asso(int token_type);
+int     get_precedence(int token_type);
+void display_content_lst(void *liste);
 # endif

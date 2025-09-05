@@ -2,6 +2,7 @@
 #define MAIN_H
 
 #include "tokeniser/tokeniser.h"
+#include "ast/ast.h"
 #include "../libft/libft.h"
 #include "../test/external_fonction/dup.h"
 #include "../test/external_fonction/readline.h"
