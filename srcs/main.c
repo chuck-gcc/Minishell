@@ -69,12 +69,11 @@ int main(void)
         return(1);
     }
 
-    //ft_lstiter(*tokens_lst, display_content_lst);
+    ft_lstiter(*tokens_lst, display_content_lst);
     
     printf("\n\n\n");
     
-    argument_fusion(tokens_lst);
-    //ft_lstclear(tokens_lst, delete_list);
+    ft_lstclear(tokens_lst, delete_list);
 
     
     
