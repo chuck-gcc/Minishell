@@ -60,15 +60,15 @@ int main(void)
     }
 
     
-    printf("\n\n\n");
+    printf("\n");
 
 
     t_token *ast_root;
 
     ast_root = NULL;
-    generate_ast(*tokens_lst, ast_root);
-    
-    ft_lstclear(tokens_lst, delete_list);
+    generate_ast(*tokens_lst, &ast_root);
+    printf("ast generate! great\n");
+    //ft_lstclear(tokens_lst, delete_list);
 
     
     
