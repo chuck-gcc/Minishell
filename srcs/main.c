@@ -43,6 +43,8 @@ int argument_fusion(t_list **tokens_lst)
     return(0);
 }
 
+
+
 int main(void)
 {
     t_list **tokens_lst;
@@ -63,14 +65,12 @@ int main(void)
     printf("\n");
 
 
-    t_token *ast_root;
+    t_token **ast_root;
 
-    ast_root = NULL;
-    generate_ast(*tokens_lst, &ast_root);
-    printf("ast generate! great\n");
+    ast_root = malloc(sizeof(t_token *));
+    *ast_root = NULL;
+    generate_ast(*tokens_lst, ast_root);
     //ft_lstclear(tokens_lst, delete_list);
-
-    
     
 
     return(0);
