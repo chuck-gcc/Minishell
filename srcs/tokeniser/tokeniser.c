@@ -2,13 +2,14 @@
 #include "tokeniser.h"
 
 
-t_token *new_node(char *str)
+t_token *new_node(char *str, int num)
 {
     t_token *new_node;
 
     new_node = malloc(sizeof(t_token));
     if(!new_node)
         return(NULL);
+    new_node->num = num;
     new_node->value = ft_strdup(str);
     new_node->type = get_token_type(str);
     new_node->precedence = get_precedence(new_node->type);
@@ -34,7 +35,7 @@ t_list **get_token_list(char *str, t_list **lst)
         node = malloc(sizeof(t_list));
         if(!node)
             return(ft_split_clean(&split));
-        node->content = new_node(split[i]);
+        node->content = new_node(split[i], i);
         //error simulation
         // if(i == 2)
         // {

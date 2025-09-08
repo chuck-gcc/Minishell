@@ -43,6 +43,15 @@ int argument_fusion(t_list **tokens_lst)
     return(0);
 }
 
+void display_binary_tree(t_token *root)
+{
+    
+    if(!root)
+        return;
+    printf("%s\n", root->value);
+    display_binary_tree(root->left);
+    display_binary_tree(root->right);
+}
 
 
 int main(void)
@@ -71,7 +80,9 @@ int main(void)
     *ast_root = NULL;
     generate_ast(*tokens_lst, ast_root);
     //ft_lstclear(tokens_lst, delete_list);
-    
+
+    assert(*ast_root);
+    display_binary_tree(*ast_root);
 
     return(0);
 }

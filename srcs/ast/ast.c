@@ -1,7 +1,7 @@
 #include "ast.h"
 
 
-t_token *get_last_token(t_token *root)
+static t_token *get_last_token(t_token *root)
 {
     t_token *last;
 
@@ -13,15 +13,9 @@ t_token *get_last_token(t_token *root)
     return(last);
 }
 
-void display_binary_tree(t_token *root)
-{
-    
-    if(!root)
-        return;
-    display_binary_tree(root->left);
-    display_binary_tree(root->right);
-    printf("%s\n", root->value);
-}
+
+
+
 
 int generate_ast(t_list *token_list, t_token **ast_r)
 {
@@ -33,7 +27,7 @@ int generate_ast(t_list *token_list, t_token **ast_r)
     {
         printf("ast generate! great\n");
 
-        display_binary_tree(*ast_r);
+        //display_binary_tree(*ast_r);
         return 1;
     }
     else

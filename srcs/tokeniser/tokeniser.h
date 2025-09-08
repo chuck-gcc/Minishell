@@ -33,6 +33,7 @@
 typedef struct s_token
 {
     int             type;
+    int             num;
     char            *value;
     char            *args;
     int             precedence;
