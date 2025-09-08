@@ -43,24 +43,69 @@ int argument_fusion(t_list **tokens_lst)
     return(0);
 }
 
-void display_binary_tree(t_token *root)
+void display_binary_tree(t_token *parent, t_token *actual)
 {
     
-    if(!root)
+    if(!actual)
         return;
-    printf("%s\n", root->value);
-    display_binary_tree(root->left);
-    display_binary_tree(root->right);
+    printf("%-10s | %-15s | precedence: %-3d | asso: %-3d\n",actual->value,
+    print_token_type(actual->type),
+    actual->precedence,
+    actual->asso);
+    parent = actual;
+    display_binary_tree(actual,actual->left);
+    if(!actual->right)
+        printf("go in right of :%-5s: Nothing\n", parent->value);
+    else
+        printf("go in right of :%-10s\n", parent->value);
+
+    display_binary_tree(actual, actual->right);
 }
 
+void test_ast(t_list **list)
+{
+    t_token *root;
+    t_token *token1 = (*list)->content;
+    t_token *token2 = (*list)->next->content;
+    t_token *token3 = (*list)->next->next->content;
+    t_token *token4 = (*list)->next->next->next->content;
+    t_token *token5 = (*list)->next->next->next->next->content;
+    t_token *token6 = (*list)->next->next->next->next->next->content;
+    t_token *token7 = (*list)->next->next->next->next->next->next->content;
+    t_token *token8 = (*list)->next->next->next->next->next->next->next->content;
+
+    // printf("Token 1 %s\n", token1->value);
+    // printf("Token 2 %s\n", token2->value);
+    // printf("Token 3 %s\n", token3->value);
+    // printf("Token 4 %s\n", token4->value);
+    // printf("Token 5 %s\n", token5->value);
+    // printf("Token 6 %s\n", token6->value);
+    // printf("Token 7 %s\n", token7->value);
+    // printf("Token 8 %s\n", token8->value);
+
+    root = token6;
+    root->left = token3;
+    root->right = token7;
+    root->right->left = token8;
+    root->left->left = token1;
+    root->left->left->left = token2;
+    root->left->right = token4;
+    root->left->right->left = token5;
+    printf("\n");
+    display_binary_tree(NULL,root);
+}
 
 int main(void)
 {
     t_list **tokens_lst;
+    t_list **tokens_lst2;
     char *str = "cat file.txt  | grep banana | wc -l";
     
     tokens_lst = calloc(sizeof(t_list *) , 1);
     if(!tokens_lst)
+        return(1);
+    tokens_lst2 = calloc(sizeof(t_list *) , 1);
+    if(!tokens_lst2)
         return(1);
     
     if(!get_token_list(str, tokens_lst))
@@ -69,7 +114,15 @@ int main(void)
         ft_lstclear(tokens_lst, delete_list);
         return(1);
     }
+    if(!get_token_list(str, tokens_lst2))
+    {
+        printf("Error token list\n");
+        ft_lstclear(tokens_lst, delete_list);
+        return(1);
+    }
 
+
+    test_ast(tokens_lst2);
     
     printf("\n");
 
@@ -82,7 +135,10 @@ int main(void)
     //ft_lstclear(tokens_lst, delete_list);
 
     assert(*ast_root);
-    display_binary_tree(*ast_root);
+    
+    printf("%s\n", (*ast_root)->right->value);
+    
+    display_binary_tree(NULL,*ast_root);
 
     return(0);
 }

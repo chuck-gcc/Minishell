@@ -1,17 +1,17 @@
 #include "ast.h"
 
 
-static t_token *get_last_token(t_token *root)
-{
-    t_token *last;
+// static t_token *get_last_token(t_token *root)
+// {
+//     t_token *last;
 
-    last = root;
-    while (last->left)
-    {
-        last = last->left;
-    }
-    return(last);
-}
+//     last = root;
+//     while (last->left)
+//     {
+//         last = last->left;
+//     }
+//     return(last);
+// }
 
 
 
@@ -26,7 +26,6 @@ int generate_ast(t_list *token_list, t_token **ast_r)
     if(!token_list)
     {
         printf("ast generate! great\n");
-
         //display_binary_tree(*ast_r);
         return 1;
     }
@@ -39,18 +38,30 @@ int generate_ast(t_list *token_list, t_token **ast_r)
             //printf("new root is  %s\n", (*ast_r)->value);
             generate_ast(token_list->next, ast_r);
         }
-        else if(!(*ast_r)->left)
+        else if(token->precedence >= (*ast_r)->precedence)
         {
-            (*ast_r)->left = token;
-            //printf("there is new left node in city %s\n", (*ast_r)->left->value);
+            t_token *tmp = *ast_r;
+
+            *ast_r = token;
+            (*ast_r)->left = tmp;
+            printf("there is new left node in city %s\n", (*ast_r)->left->value);
             generate_ast(token_list->next, ast_r);
         }
         else
         {
-            t_token *last = get_last_token((*ast_r));
-            //printf("find the last %s\n", last->value);
-            last->left = token;
-            generate_ast(token_list->next, ast_r);
+            if(!(*ast_r)->left)
+            {
+                (*ast_r)->left = token;
+                generate_ast(token_list->next, ast_r);
+            }
+            else if(!(*ast_r)->right)
+            {
+                (*ast_r)->right = token;
+                generate_ast(token_list->next, ast_r); 
+            }
+            else
+                generate_ast(token_list, &(*ast_r)->right);
+            
         }
         return 0;
     }
