@@ -14,7 +14,30 @@
 // }
 
 
+void    add_node(t_token *token, t_token *root, t_token *parent)
+{
+    if(!token)
+    {
+        return;
+    }
+    
+    // printf("token: %s, ast : %s \n", token->value, root->value);
+    // if(!root->left)
+    // {
+    //     root->left = token;
+    //     token = NULL;
+    // }
+    // else if(!token->right)
+    // {
+    //     root->right = token;
+    //     token = NULL;
+    // }
+    parent = root;
+    add_node(token, root->left, parent);
 
+    add_node(token, root->right, parent);
+
+}
 
 
 int generate_ast(t_list *token_list, t_token **ast_root)
@@ -38,27 +61,13 @@ int generate_ast(t_list *token_list, t_token **ast_root)
             t_token *tmp = *ast_root;
             *ast_root = token;
             (*ast_root)->left = tmp;
-            //printf("new root %s\n", token->value);
+            printf("new root %s\n", token->value);
             generate_ast(token_list->next, ast_root);
         }
         else
         {
-            if(!(*ast_root)->left && !(*ast_root)->right)
-            {
-                (*ast_root)->left = token;
-                generate_ast(token_list->next, ast_root);
-
-            }
-            else if((*ast_root)->left && !(*ast_root)->right)
-            {
-                (*ast_root)->right = token;
-                generate_ast(token_list->next, ast_root);
-            }
-            else
-            {
-                generate_ast(token_list, &(*ast_root)->right);
-            }
-
+            add_node(token, *ast_root, *ast_root);
+            generate_ast(token_list->next, ast_root);
         }
     }
     return 1;
