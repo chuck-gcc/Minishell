@@ -45,19 +45,22 @@ int argument_fusion(t_list **tokens_lst)
 
 void display_binary_tree(t_token *parent, t_token *actual)
 {
-    
-    if(!actual)
+    (void)parent;
+
+    if(actual == NULL)
         return;
     printf("%-10s | %-15s | precedence: %-3d | asso: %-3d\n",actual->value,
     print_token_type(actual->type),
     actual->precedence,
     actual->asso);
     parent = actual;
+
     display_binary_tree(actual,actual->left);
+
     if(!actual->right)
-        printf("go in right of :%-5s: Nothing\n", parent->value);
+        printf("\033[0;31m" "go in right of :%-5s: Nothing\n\n" "\033[0m", parent->value);
     else
-        printf("go in right of :%-10s\n", parent->value);
+        printf("\033[0;32m""go in right of :%-10s\n\n""\033[0m", parent->value);
 
     display_binary_tree(actual, actual->right);
 }
@@ -122,7 +125,7 @@ int main(void)
     }
 
 
-    test_ast(tokens_lst2);
+    //test_ast(tokens_lst2);
     
     printf("\n");
 
@@ -134,9 +137,8 @@ int main(void)
     generate_ast(*tokens_lst, ast_root);
     //ft_lstclear(tokens_lst, delete_list);
 
-    assert(*ast_root);
+    assert(ast_root);
     
-    printf("%s\n", (*ast_root)->right->value);
     
     display_binary_tree(NULL,*ast_root);
 
