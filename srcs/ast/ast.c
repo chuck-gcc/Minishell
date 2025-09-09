@@ -38,18 +38,28 @@ int generate_ast(t_list *token_list, t_token **ast_root)
             t_token *tmp = *ast_root;
             *ast_root = token;
             (*ast_root)->left = tmp;
-            printf("new root %s\n", token->value);
+            //printf("new root %s\n", token->value);
+            generate_ast(token_list->next, ast_root);
         }
         else
         {
             if(!(*ast_root)->left && !(*ast_root)->right)
+            {
                 (*ast_root)->left = token;
+                generate_ast(token_list->next, ast_root);
+
+            }
             else if((*ast_root)->left && !(*ast_root)->right)
+            {
                 (*ast_root)->right = token;
+                generate_ast(token_list->next, ast_root);
+            }
             else
-                (*ast_root)->right->left = token;
+            {
+                generate_ast(token_list, &(*ast_root)->right);
+            }
+
         }
-        generate_ast(token_list->next, ast_root);
     }
     return 1;
     

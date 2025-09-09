@@ -49,13 +49,15 @@ void display_binary_tree(t_token *parent, t_token *actual)
 
     if(actual == NULL)
         return;
+    
+    parent = actual;
+
+    display_binary_tree(actual,actual->left);
+
     printf("%-10s | %-15s | precedence: %-3d | asso: %-3d\n",actual->value,
     print_token_type(actual->type),
     actual->precedence,
     actual->asso);
-    parent = actual;
-
-    display_binary_tree(actual,actual->left);
 
     if(!actual->right)
         printf("\033[0;31m" "go in right of :%-5s: Nothing\n\n" "\033[0m", parent->value);
@@ -102,7 +104,7 @@ int main(void)
 {
     t_list **tokens_lst;
     t_list **tokens_lst2;
-    char *str = "cat file.txt  | grep banana | wc -l";
+    char *str = "cat file.txt  | grep banana | wc -l > out.txt";
     
     tokens_lst = calloc(sizeof(t_list *) , 1);
     if(!tokens_lst)
