@@ -1,5 +1,28 @@
 #include "ast.h"
 
+void display_binary_tree(t_token *parent, t_token *actual)
+{
+    (void)parent;
+
+    if(actual == NULL)
+        return;
+    
+    parent = actual;
+
+    printf("%-10s | %-15s | precedence: %-3d | asso: %-3d\n",actual->value,
+    print_token_type(actual->type),
+    actual->precedence,
+    actual->asso);
+    display_binary_tree(actual,actual->left);
+
+
+    if(!actual->right)
+        printf("\033[0;31m" "go in right of :%-5s: Nothing\n\n" "\033[0m", parent->value);
+    else
+        printf("\033[0;32m""go in right of :%-10s\n\n""\033[0m", parent->value);
+
+    display_binary_tree(actual, actual->right);
+}
 
 // static t_token *get_last_token(t_token *root)
 // {

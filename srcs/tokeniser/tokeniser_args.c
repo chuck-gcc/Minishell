@@ -8,15 +8,15 @@ static int count_args(char **input)
         return(-1);
     i = 0;
     while (get_token_type(input[i]) == WORD)
-    {
         i++;
-    }
     return(i);
 }
 
 int get_args(t_list *node, char **input)
 {
-    int i,idx, args_count;
+    int i;
+    int idx;
+    int args_count;
     char **args;
 
     i = 0;
@@ -31,18 +31,11 @@ int get_args(t_list *node, char **input)
             return(-1);
         }
         while (get_token_type(input[idx]) != PIPE && !is_redir(input[idx]))
-        {
-            args[i] = ft_strdup(input[idx]);
-            i++;
-            idx++;
-        }
+            args[i++] = ft_strdup(input[idx++]);
         args[i] = NULL;
         ((t_token *)node->content)->args = args;
-        //printf("we have proceced the args for the commande :%s\n",((t_token *)node->content)->value);
         return(idx);
     }
     else
-    {
         return(0);
-    }
 }
