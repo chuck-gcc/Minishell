@@ -43,6 +43,7 @@ run: $(NAME)
 ifeq ($(OS), Darwin)
 	@./$(NAME)
 else
+	@echo $(CMD)
 	@valgrind --leak-check=full --log-file=valgrind/valgrind.log ./$(NAME)
 endif
 
@@ -61,7 +62,7 @@ fclean: clean
 
 re: fclean $(NAME)
 
-git:
+git: fclean
 	git add .
 	git commit -m $(COM)
 	git push origin $(BRANCH)

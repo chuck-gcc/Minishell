@@ -4,10 +4,10 @@ static int count_args(char **input)
 {
     int i;
 
-    if(!input || !*input)
+    if(!input)
         return(-1);
     i = 0;
-    while (get_token_type(input[i]) == WORD)
+    while (input[i] && get_token_type(input[i]) != PIPE)
         i++;
     return(i);
 }

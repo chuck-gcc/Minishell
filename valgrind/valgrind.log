@@ -1,22 +1,15 @@
-==498503== Memcheck, a memory error detector
-==498503== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==498503== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
-==498503== Command: ./bin/minishell
-==498503== Parent PID: 498500
-==498503== 
-==498503== 
-==498503== HEAP SUMMARY:
-==498503==     in use at exit: 208,163 bytes in 222 blocks
-==498503==   total heap usage: 516 allocs, 294 frees, 272,429 bytes allocated
-==498503== 
-==498503== LEAK SUMMARY:
-==498503==    definitely lost: 0 bytes in 0 blocks
-==498503==    indirectly lost: 0 bytes in 0 blocks
-==498503==      possibly lost: 0 bytes in 0 blocks
-==498503==    still reachable: 208,163 bytes in 222 blocks
-==498503==         suppressed: 0 bytes in 0 blocks
-==498503== Reachable blocks (those to which a pointer was found) are not shown.
-==498503== To see them, rerun with: --leak-check=full --show-leak-kinds=all
-==498503== 
-==498503== For lists of detected and suppressed errors, rerun with: -s
-==498503== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==545179== Memcheck, a memory error detector
+==545179== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==545179== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==545179== Command: ./bin/minishell
+==545179== Parent PID: 545172
+==545179== 
+==545179== 
+==545179== HEAP SUMMARY:
+==545179==     in use at exit: 0 bytes in 0 blocks
+==545179==   total heap usage: 75 allocs, 75 frees, 1,051,942 bytes allocated
+==545179== 
+==545179== All heap blocks were freed -- no leaks are possible
+==545179== 
+==545179== For lists of detected and suppressed errors, rerun with: -s
+==545179== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

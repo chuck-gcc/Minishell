@@ -2,4 +2,6 @@
 
 ## Une interface entre l'utilisateur et le systeme d'exploitation
 
-En locu
+Commande liste:
+
+echo fez | grep grep grep : the first grep is cmd the two next are args. becafull.

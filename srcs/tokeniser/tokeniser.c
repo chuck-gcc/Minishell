@@ -1,7 +1,7 @@
 
 #include "tokeniser.h"
 
-static t_token *new_token_node(char *str, int num)
+static t_token *new_token_node(char *str, int num, int precedent_token)
 {
     t_token *new_node;
 
@@ -11,6 +11,9 @@ static t_token *new_token_node(char *str, int num)
     new_node->num = num;
     new_node->value = ft_strdup(str);
     new_node->type = get_token_type(str);
+    if((new_node->type == CMD && precedent_token == CMD && num != 0 )
+        || (new_node->type == BUILTIN && precedent_token == BUILTIN && num != 0))
+        new_node->type = WORD;
     new_node->precedence = get_precedence(new_node->type);
     new_node->asso= get_asso(new_node->type);
     new_node->args = NULL;
@@ -21,14 +24,14 @@ static t_token *new_token_node(char *str, int num)
     return(new_node);
 }
 
-static t_list *new_list_node(char *str, int i)
+static t_list *new_list_node(char *str, int i, char *precedent)
 {
     t_list *node;
 
     node = malloc(sizeof(t_list));
     if(!node)
         return(NULL);
-    node->content = new_token_node(str, i);
+    node->content = new_token_node(str, i, get_token_type(precedent));
     if(node->content == NULL)
             return(NULL);
     node->next = NULL;
@@ -39,14 +42,22 @@ static t_list *new_list_node(char *str, int i)
 {
     int i;
     int r; 
+    int rdir; 
     
     i = 0;
     r = get_args(node, input);
     if(r == -1)
         return(-1);
     i += r ;
+    
     if(is_redir(input[i]) > 0)
-        i += get_redir(node, &input[i]);
+    {
+        rdir = get_redir(node, &input[i]);
+        if(rdir == -1)
+            return(-1);
+        else
+            i += rdir;
+    }
     return(i);
 }
 
@@ -57,6 +68,7 @@ static int process_node(t_list *node_lst, char **input)
 
     node = ((t_token *)(node_lst->content));
     process = 0;
+    
     if(node->type == CMD || node->type == BUILTIN)
     {
         process = process_cmd_node(node_lst, (input + 1));
@@ -80,9 +92,11 @@ t_list **get_token_list(char *str, t_list **lst)
     split = ft_split(str, 32);
     if(!split)
         return(NULL);
+    process = 0;
     while (split[i])
     {
-        node = new_list_node(split[i], i);
+
+        node = new_list_node(split[i], i, split[i - process]);
         if(!node)
             return(ft_split_clean(&split));
         process = process_node(node,&split[i]);

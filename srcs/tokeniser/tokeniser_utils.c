@@ -40,7 +40,7 @@ int ft_is_commande(char *str)
 int get_token_type(char *str)
 {
     if(!str)
-        return(-1);
+        return(0);
     if(ft_is_builtin(str))
         return(BUILTIN);
     if(!ft_is_commande(str))
