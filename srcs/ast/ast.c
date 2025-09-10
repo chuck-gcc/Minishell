@@ -74,7 +74,7 @@ int generate_ast(t_list *token_list, t_token **ast_root)
     if(!*ast_root)
     {
         *ast_root = token;
-        printf("new root\n");
+        //printf("new root\n");
         generate_ast(token_list->next, ast_root);
     }
     else
@@ -84,17 +84,19 @@ int generate_ast(t_list *token_list, t_token **ast_root)
             t_token *tmp = *ast_root;
             *ast_root = token;
             (*ast_root)->left = tmp;
-            printf("new root %s\n", token->value);
+            //printf("new root %s\n", token->value);
             generate_ast(token_list->next, ast_root);
         }
         else
         {
-            add_node(token, *ast_root, *ast_root);
+            if(!(*ast_root)->left)
+                (*ast_root)->left = token;
+            else
+                (*ast_root)->right = token;
             generate_ast(token_list->next, ast_root);
         }
     }
     return 1;
-    
 }
 
 // int generate_ast_1(t_list *token_list, t_token **ast_r)

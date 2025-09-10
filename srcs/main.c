@@ -23,6 +23,18 @@ static int process_user_input(char *str)
      ft_lstiter(*tokens_lst, display_content_lst);
     printf("\n\n");
     ft_lstiter(*tokens_lst, display_arg_of_cmd);
+
+    t_token **ast = malloc(sizeof(t_token *));
+    if(!ast)
+    {
+        ft_lstclear(tokens_lst, delete_list);
+        return(1);
+    }
+    *ast = NULL;
+    generate_ast(*tokens_lst, ast);
+
+    display_binary_tree(NULL,*ast);
+
     ft_lstclear(tokens_lst, delete_list);
     return(0);
 }
