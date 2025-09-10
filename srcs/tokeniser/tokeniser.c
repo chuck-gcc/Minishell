@@ -47,18 +47,23 @@ static t_list *new_list_node(char *str, int i, char *precedent)
     i = 0;
     r = get_args(node, input);
     if(r == -1)
+    {
+        printf("error get arg\n");
         return(-1);
+    }
     i += r ;
-    
     if(is_redir(input[i]) > 0)
     {
         rdir = get_redir(node, &input[i]);
         if(rdir == -1)
+        {
+            printf("error get redir\n");
             return(-1);
+        }
         else
             i += rdir;
     }
-    return(i);
+    return(i + 1);
 }
 
 static int process_node(t_list *node_lst, char **input)
@@ -68,7 +73,6 @@ static int process_node(t_list *node_lst, char **input)
 
     node = ((t_token *)(node_lst->content));
     process = 0;
-    
     if(node->type == CMD || node->type == BUILTIN)
     {
         process = process_cmd_node(node_lst, (input + 1));
@@ -77,8 +81,8 @@ static int process_node(t_list *node_lst, char **input)
         else
             return(-1);
     }
-    else
-        return(1);
+    
+    return(1);
 }
 
 t_list **get_token_list(char *str, t_list **lst)
@@ -99,11 +103,12 @@ t_list **get_token_list(char *str, t_list **lst)
         node = new_list_node(split[i], i, split[i - process]);
         if(!node)
             return(ft_split_clean(&split));
-        process = process_node(node,&split[i]);
+        process = process_node(node, &split[i]);
         if(process == -1)
             return(ft_split_clean(&split));
         i += process;
         ft_lstadd_back(lst, node);
+        //ft_lstiter(*lst, display_content_lst);
     }
     ft_split_clean(&split);
     return(lst);

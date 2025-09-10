@@ -19,7 +19,7 @@ static int redir_check(char *str)
     int redir_type;
 
     if(!str)
-        return(-1);
+        return(0);
     if(get_token_type(str) == PIPE)
     {
         printf("bash: syntax error near unexpected token `|'\n");
@@ -42,7 +42,10 @@ int get_redir(t_list *node, char **input)
     
     idx = 0;
     if(redir_check(input[idx + 1]) == -1)
+    {
+        printf("error redir check\n");
         return(-1);
+    }
     redir = ft_strdup(input[idx]);
     if(!redir)
         return(-1);
@@ -60,5 +63,5 @@ int get_redir(t_list *node, char **input)
     ((t_token *)node->content)->radir[1] = redir_arg;
     //printf("we have proceced the redir %s for the commande :%s\n",((t_token *)node->content)->radir[0], ((t_token *)node->content)->value);
     
-    return(idx + 1);
+    return(idx);
 }
