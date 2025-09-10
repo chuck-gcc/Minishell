@@ -1,8 +1,7 @@
 
 #include "tokeniser.h"
 
-
-t_token *new_node(char *str, int num)
+static t_token *new_token_node(char *str, int num)
 {
     t_token *new_node;
 
@@ -22,132 +21,62 @@ t_token *new_node(char *str, int num)
     return(new_node);
 }
 
-static int count_args(char **input)
+static t_list *new_list_node(char *str, int i)
+{
+    t_list *node;
+
+    node = malloc(sizeof(t_list));
+    if(!node)
+        return(NULL);
+    node->content = new_token_node(str, i);
+    if(node->content == NULL)
+            return(NULL);
+    node->next = NULL;
+    return(node);
+}
+
+ static int process_cmd_node(t_list *node, char **input)
 {
     int i;
-
-    if(!input || !*input)
-        return(-1);
+    int r; 
+    
     i = 0;
-    while (get_token_type(input[i]) == WORD)
-    {
-        i++;
-    }
+    r = get_args(node, input);
+    if(r == -1)
+        return(-1);
+    i += r ;
+    if(is_redir(input[i]) > 0)
+        i += get_redir(node, &input[i]);
+    else
+        i += 1;
     return(i);
 }
 
-static int is_redir(char *str)
+static int process_node(t_list *node_lst, char **input)
 {
-    if(!str)
-        return(-1);
-    if(!ft_strncmp(str, "<", ft_strlen(str)))
-        return(1);
-    if(!ft_strncmp(str, ">", ft_strlen(str)))
-        return(2);
-    if(!ft_strncmp(str, ">>", ft_strlen(str)))
-        return(3);
+    int process;
+    t_token *node;
 
-    return(0);
-}
-
-// static int redir_check_validity(char **intput)
-// {
-//     int i;
-
-//     i = 0;
-//     while (get_token_type(intput[i]) == WORD)
-//     {
-//         i++;
-//     }
-//     if(i < 1)
-//     {
-//         printf("syntax error near unexpected token \n");
-//         return(0);
-//     }
-//     else
-//         return(1);
-// }
-
-int get_args(t_list *node, char **input)
-{
-    int i,idx, args_count;
-    char **args;
-
-    i = 0;
-    idx = 0;
-    args_count = count_args(input);
-    if(args_count)
+    node = ((t_token *)(node_lst->content));
+    process = 0;
+    if(node->type == CMD || node->type == BUILTIN)
     {
-        args = malloc(sizeof(char *) * (args_count + 1));
-        if(!args)
-        {
-            perror("Error malloc:");
+        process = process_cmd_node(node_lst, (input + 1));
+        if(process != -1)
+            return(process);
+        else
             return(-1);
-        }
-        while (get_token_type(input[idx]) != PIPE && !is_redir(input[idx]))
-        {
-            args[i] = ft_strdup(input[idx]);
-            i++;
-            idx++;
-        }
-        args[i] = NULL;
-        ((t_token *)node->content)->args = args;
-        //printf("we have proceced the args for the commande :%s\n",((t_token *)node->content)->value);
-        return(idx);
     }
     else
-    {
-        return(0);
-    }
-}
-
-
-
-static int get_redir(t_list *node, char **input)
-{
-    int idx;
-    int redir_type;
-    char *redir;
-    char *redir_arg;
-    
-    idx = 0;
-    if(get_token_type(input[idx + 1]) == PIPE)
-    {
-        printf("bash: syntax error near unexpected token `|'\n");
-        return(-1);
-    }
-    redir_type = is_redir(input[idx + 1]);
-    if (redir_type)
-    {
-        printf("bash: syntax error near unexpected token `%s'\n", input[idx]);
-        return(-1);
-    }
-    redir = ft_strdup(input[idx]);
-    if(!redir)
-        return(-1);
-    ((t_token *)node->content)->radir[0] = redir;
-    idx += 1;
-    while (get_token_type(input[idx]) == WORD)
-    {
-        idx++;
-    }
-    redir_arg = ft_strdup(input[idx - 1]);
-    if(!redir_arg)
-    {
-        free(redir);
-        redir = NULL;
-        return(-1);
-    }
-    ((t_token *)node->content)->radir[1] = redir_arg;
-    //printf("we have proceced the redir %s for the commande :%s\n",((t_token *)node->content)->radir[0], ((t_token *)node->content)->value);
-    return(idx);
+        return(1);
 }
 
 t_list **get_token_list(char *str, t_list **lst)
 {
     int i;
-    char    **split;
+    int process;
     t_list  *node;
+    char    **split;
 
     i = 0;
     split = ft_split(str, 32);
@@ -155,47 +84,13 @@ t_list **get_token_list(char *str, t_list **lst)
         return(NULL);
     while (split[i])
     {
-        if(get_token_type(split[i]) == CMD)
-        {
-            node = malloc(sizeof(t_list));
-            if(!node)
-                return(ft_split_clean(&split));
-            node->content = new_node(split[i], i);
-            i++;
-
-            int r = get_args(node, &split[i]);
-            if(r == -1)
-                return(ft_split_clean(&split));
-            //assert(r == 1);
-            i += r;
-
-            if(is_redir(split[i]))
-                i += get_redir(node, &split[i]);
-            if(r == -1)
-                return(ft_split_clean(&split));
-            //assert(i == 5);
-            (void)get_redir;
-        }
-        else
-        {
-            node = malloc(sizeof(t_list));
-            if(!node)
-                return(ft_split_clean(&split));
-            node->content = new_node(split[i], i);
-            i++;
-        }
-        
-        //error simulation
-        // if(i == 2)
-        // {
-        //     free(((t_token *)node->content)->value);
-        //     ((t_token *)node->content)->value = NULL;
-        //     free(node->content);
-        //     node->content = NULL;
-        // }
-        node->next = NULL;
-        if(node->content == NULL)
+        node = new_list_node(split[i], i);
+        if(!node)
             return(ft_split_clean(&split));
+        process = process_node(node,&split[i]);
+        if(process == -1)
+            return(ft_split_clean(&split));
+        i += process;
         ft_lstadd_back(lst, node);
     }
     ft_split_clean(&split);

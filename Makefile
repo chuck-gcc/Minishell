@@ -7,7 +7,7 @@ endif
 
 GFLAGS= -Werror -Wextra -Wall -g
 BRANCH= $(shell git branch --show-current )
-NAME=bin/*
+NAME=bin/minishell
 NAME_TEST=bin/test
 EXT_MOD=external_fonction
 LIB= -Llibft -lft -lreadline
@@ -16,7 +16,10 @@ LIB= -Llibft -lft -lreadline
 EXT_SRCS= 		srcs/main.c \
 				srcs/tokeniser/tokeniser.c \
 				srcs/ast/ast.c \
-				srcs/tokeniser/tokeniser_utils.c
+				srcs/tokeniser/tokeniser_utils.c \
+				srcs/tokeniser/tokeniser_args.c \
+				srcs/tokeniser/tokeniser_redir.c \
+				srcs/tokeniser/tokeniser_display.c
 
 TEST_SRCS = 	test/external_fonction/dup.c  \
  				test/external_fonction/readline.c\

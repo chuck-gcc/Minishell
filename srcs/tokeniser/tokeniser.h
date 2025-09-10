@@ -48,12 +48,26 @@ typedef struct s_token
 
 t_list  **get_token_list(char *str, t_list **lst);
 
+// utils
+
 int     ft_is_builtin(char *str);
 int     ft_is_commande(char *str);
 int     get_token_type(char *str);
-char    *print_token_type(int token_type);
 int     get_asso(int token_type);
 int     get_precedence(int token_type);
-void display_content_lst(void *liste);
-void display_arg_of_cmd(void *liste);
+
+
+// tokeniser redir
+int get_redir(t_list *node, char **input);
+int is_redir(char *str);
+
+// tokeniser args
+int get_args(t_list *node, char **input);
+
+//tokeniser display
+
+char    *print_token_type(int token_type);
+void    display_content_lst(void *liste);
+void    display_arg_of_cmd(void *liste);
+
 # endif
