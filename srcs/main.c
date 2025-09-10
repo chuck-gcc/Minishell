@@ -9,6 +9,7 @@ char *get_next_line(int fd);
 void delete_list(void *content)
 {
     t_token *token = (t_token *)content;
+
     if(token && token->value)
         free(token->value);
     if(token)
@@ -103,7 +104,8 @@ void test_ast(t_list **list)
 int main(void)
 {
     t_list **tokens_lst;
-    char *str = "cat file.txt  | grep banana | wc -l > out.txt";
+    char *str = "cat -A  < file.txt  | grep banana | wc -l > out.txt";
+    //char *str = " wc -l > out.txt baba";
     
     tokens_lst = calloc(sizeof(t_list *) , 1);
     if(!tokens_lst)
@@ -116,25 +118,11 @@ int main(void)
         ft_lstclear(tokens_lst, delete_list);
         return(1);
     }
-  
 
-
-    //test_ast(tokens_lst2);
-    
-    printf("\n");
-
-
-    t_token **ast_root;
-
-    ast_root = malloc(sizeof(t_token *));
-    *ast_root = NULL;
-    generate_ast(*tokens_lst, ast_root);
-    //ft_lstclear(tokens_lst, delete_list);
-
-    assert(ast_root);
-    
-    
-    display_binary_tree(NULL,*ast_root);
-
+    printf("\n\n");
+    ft_lstiter(*tokens_lst, display_content_lst);
+    printf("\n\n");
+    ft_lstiter(*tokens_lst, display_arg_of_cmd);
+    ft_lstclear(tokens_lst, delete_list);
     return(0);
 }

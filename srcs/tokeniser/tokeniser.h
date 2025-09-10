@@ -3,6 +3,7 @@
 
 #include<stdio.h>
 #include <dirent.h>
+#include <assert.h>
 #include "../../libft/libft.h"
 
 /* 
@@ -38,7 +39,7 @@ typedef struct s_token
     int             asso;
     char            *value;
     char            **args;
-    char            radir[2];
+    char            *radir[2];
     struct s_token  *left;
     struct s_token  *right;
 
@@ -54,4 +55,5 @@ char    *print_token_type(int token_type);
 int     get_asso(int token_type);
 int     get_precedence(int token_type);
 void display_content_lst(void *liste);
+void display_arg_of_cmd(void *liste);
 # endif

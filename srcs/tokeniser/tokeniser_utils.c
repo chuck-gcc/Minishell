@@ -59,6 +59,8 @@ int ft_is_commande(char *str)
 
 int get_token_type(char *str)
 {
+    if(!str)
+        return(-1);
     if(ft_is_builtin(str))
         return(BUILTIN);
     if(!ft_is_commande(str))
@@ -109,3 +111,28 @@ void display_content_lst(void *liste)
     token->precedence,
     token->asso);
 }
+
+void display_arg_of_cmd(void *liste)
+{
+    t_token *token;
+    
+    token = (t_token *)liste;
+    if(token->type == CMD)
+    {
+        printf("Commande: [%s]\n", token->value);
+        int i = 0;
+        printf("Args: ");
+        while (token->args[i])
+        {
+            printf("[%s]", token->args[i]);
+            i++;
+        }
+        printf("\n");
+        printf("Redir: ");
+        printf("[%s]", token->radir[0]);
+        printf("[%s]", token->radir[1]);
+        printf("\n");
+    }
+    printf("\n");
+}
+
