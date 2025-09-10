@@ -1,15 +1,32 @@
-==496774== Memcheck, a memory error detector
-==496774== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==496774== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
-==496774== Command: ./bin/minishell
-==496774== Parent PID: 496765
-==496774== 
-==496774== 
-==496774== HEAP SUMMARY:
-==496774==     in use at exit: 0 bytes in 0 blocks
-==496774==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
-==496774== 
-==496774== All heap blocks were freed -- no leaks are possible
-==496774== 
-==496774== For lists of detected and suppressed errors, rerun with: -s
-==496774== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==497915== Memcheck, a memory error detector
+==497915== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==497915== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==497915== Command: ./bin/minishell
+==497915== Parent PID: 497912
+==497915== 
+==497915== 
+==497915== Process terminating with default action of signal 2 (SIGINT)
+==497915==    at 0x490C75B: kill (syscall-template.S:120)
+==497915==    by 0x48A9F39: _rl_signal_handler (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==497915==    by 0x48AABEC: rl_getc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==497915==    by 0x48AA460: rl_read_key (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==497915==    by 0x488EC86: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==497915==    by 0x4897D14: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==497915==    by 0x10940C: run_minishell (main.c:40)
+==497915==    by 0x1094C0: main (main.c:64)
+==497915== 
+==497915== HEAP SUMMARY:
+==497915==     in use at exit: 217,765 bytes in 277 blocks
+==497915==   total heap usage: 631 allocs, 354 frees, 1,389,924 bytes allocated
+==497915== 
+==497915== LEAK SUMMARY:
+==497915==    definitely lost: 0 bytes in 0 blocks
+==497915==    indirectly lost: 0 bytes in 0 blocks
+==497915==      possibly lost: 0 bytes in 0 blocks
+==497915==    still reachable: 217,765 bytes in 277 blocks
+==497915==         suppressed: 0 bytes in 0 blocks
+==497915== Reachable blocks (those to which a pointer was found) are not shown.
+==497915== To see them, rerun with: --leak-check=full --show-leak-kinds=all
+==497915== 
+==497915== For lists of detected and suppressed errors, rerun with: -s
+==497915== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
