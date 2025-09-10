@@ -10,14 +10,42 @@ void delete_list(void *content)
 {
     t_token *token = (t_token *)content;
 
-    if(token && token->value)
-        free(token->value);
     if(token)
+    {
+        if(token->value)
+        {
+            free(token->value);
+            token->value = NULL;
+        }
+        if(token->args)
+        {
+            char **tmp;
+
+            tmp = token->args;
+            while (*tmp)
+            {
+                free(*tmp);
+                *tmp = NULL;
+                tmp++;
+            }
+            free(token->args);
+            token->args = NULL;
+        }
+        if(token->radir[0])
+        {
+            free(token->radir[0]);
+            token->radir[0] = NULL;
+        }
+        if(token->radir[1])
+        {
+            free(token->radir[1]);
+            token->radir[1] = NULL;
+        }
         free(token);
+        token = NULL;
+    }
+    
 }
-
-
-
 
 int argument_fusion(t_list **tokens_lst)
 {
@@ -123,6 +151,7 @@ int main(void)
     ft_lstiter(*tokens_lst, display_content_lst);
     printf("\n\n");
     ft_lstiter(*tokens_lst, display_arg_of_cmd);
+    
     ft_lstclear(tokens_lst, delete_list);
     return(0);
 }

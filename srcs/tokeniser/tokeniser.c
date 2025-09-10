@@ -15,6 +15,8 @@ t_token *new_node(char *str, int num)
     new_node->precedence = get_precedence(new_node->type);
     new_node->asso= get_asso(new_node->type);
     new_node->args = NULL;
+    new_node->radir[0] = NULL;
+    new_node->radir[1] = NULL;
     new_node->left = NULL;
     new_node->right = NULL;
     return(new_node);
