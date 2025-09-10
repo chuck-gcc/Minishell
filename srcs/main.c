@@ -132,8 +132,8 @@ void test_ast(t_list **list)
 int main(void)
 {
     t_list **tokens_lst;
-    char *str = "cat -A  < file.txt  | grep banana | wc -l > out.txt";
-    //char *str = " wc -l > out.txt baba";
+    //char *str = "cat -A  < file.txt  | grep banana | wc -l > out.txt";
+    char *str = " wc -l > out.txt baba";
     
     tokens_lst = calloc(sizeof(t_list *) , 1);
     if(!tokens_lst)
@@ -151,7 +151,7 @@ int main(void)
     ft_lstiter(*tokens_lst, display_content_lst);
     printf("\n\n");
     ft_lstiter(*tokens_lst, display_arg_of_cmd);
-    
+
     ft_lstclear(tokens_lst, delete_list);
     return(0);
 }

@@ -48,7 +48,7 @@ test: $(TEST_OBJ)
 clean:
 	rm -rf $(EXT_OBJ)
 	rm -rf $(TEST_OBJ)
-	rm -f valgrind/valgrind.log
+#rm -f valgrind/valgrind.log
 	rm -f valgrind/test/valgrind_test.log
 
 fclean: clean
