@@ -32,12 +32,13 @@
 
 typedef struct s_token
 {
-    int             type;
     int             num;
-    char            *value;
-    char            *args;
+    int             type;
     int             precedence;
     int             asso;
+    char            *value;
+    char            **args;
+    char            radir[2];
     struct s_token  *left;
     struct s_token  *right;
 
