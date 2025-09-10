@@ -62,9 +62,9 @@ int main(int argc, char **argv, char **envp)
 
     //run_minishell(envp);
 
-    char *cmd = "cat cat fefazzea fafa < out.txt dzadaz | grep grep | wc -l > out.txt";
+    //char *cmd = "cat cat fefazzea fafa < out.txt dzadaz | grep grep | wc -l > out.txt";
     //char *cmd = "cat < infile.txt | grep error | sort -r > outfile.log";
-    //char *cmd = "sort -u < unsorted.txt | grep error | tee result.log >> all.log";
+    char *cmd = "sort -u < unsorted.txt | grep error | tee result.log >> all.log";
 
     printf("Commande: %s\n", cmd);
     process_user_input(cmd);
