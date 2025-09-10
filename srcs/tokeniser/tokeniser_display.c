@@ -45,7 +45,7 @@ void display_arg_of_cmd(void *liste)
         printf("Commande: [%s]\n", token->value);
         int i = 0;
         printf("Args: ");
-        while (token->args[i])
+        while (token->args && token->args[i])
         {
             printf("[%s]", token->args[i]);
             i++;

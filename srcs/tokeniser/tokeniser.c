@@ -47,8 +47,6 @@ static t_list *new_list_node(char *str, int i)
     i += r ;
     if(is_redir(input[i]) > 0)
         i += get_redir(node, &input[i]);
-    else
-        i += 1;
     return(i);
 }
 

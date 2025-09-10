@@ -16,6 +16,7 @@ LIB= -Llibft -lft -lreadline
 EXT_SRCS= 		srcs/main.c \
 				srcs/tokeniser/tokeniser.c \
 				srcs/ast/ast.c \
+				srcs/builtin/env.c \
 				srcs/tokeniser/tokeniser_utils.c \
 				srcs/tokeniser/tokeniser_args.c \
 				srcs/tokeniser/tokeniser_redir.c \
