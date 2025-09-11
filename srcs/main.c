@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 
-static int process_user_input(char *str)
+static int process_user_input(char *str, char **envp)
 {
 
     
@@ -37,10 +37,8 @@ static int process_user_input(char *str)
         return(1);
     }
 
-    display_binary_tree(NULL,*ast,0);
-    ft_lstiter(*tokens_lst, display_args_of_cmd);
 
-    int r = execute_ast(*ast);
+    int r = execute_ast(*ast, envp);
 
     ft_lstclear(tokens_lst, delete_list);
     free(ast);
@@ -66,8 +64,10 @@ int run_minishell(char **envp)
                 clear_history();
                 return(1);
             }
-            int status = process_user_input(input);
-            printf("STATUS COMMANDE %d\n", status);
+            int status = process_user_input(input, envp);
+            (void)status;
+
+            //printf("STATUS COMMANDE %d\n", status);
             free(input);
             rl_on_new_line();
         }

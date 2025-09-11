@@ -69,7 +69,7 @@ void destroy_token(t_token **tk)
         *tk = NULL;
     }
 }
-int execute_commande(t_token *token, char *path)
+int execute_commande(t_token *token, char *path, char **envp)
 {
     pid_t   pid;
     int     status;
@@ -83,20 +83,20 @@ int execute_commande(t_token *token, char *path)
     }
     if(pid == 0)
     {
-        (void)path;
-        execve(path, token->args, NULL);
+        assert(envp && *envp);
+        execve(path, token->args, envp);
         perror("Execution error");
         exit(errno);
     }
     else
     {
         wait(&status);
-        printf("status %d\n", status);
+        //printf("status %d\n", status);
     }
     return(status);
 }
 
-int execute_ast(t_token *ast)
+int execute_ast(t_token *ast, char **envp)
 {
     int status;
 
@@ -118,7 +118,7 @@ int execute_ast(t_token *ast)
         {
             
             printf("\ni am the children [PID: %d], my father is [PID: %d] \n\n", getpid(), getppid());
-            execute_ast(ast->left);
+            execute_ast(ast->left, envp);
 
         }
         else
@@ -132,13 +132,12 @@ int execute_ast(t_token *ast)
     {
         char *path = get_path(ast->value);
 
-        int r = execute_commande(ast, path);
-        printf("%s\n", path);
+        int r = execute_commande(ast, path, envp);
         free(path);
         return(r);
     }
     
-    execute_ast(ast->right);
+    execute_ast(ast->right, envp);
 
     return(status);
 }
