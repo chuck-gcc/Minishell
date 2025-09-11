@@ -68,7 +68,8 @@ int get_args(t_list *node, char **input);
 
 char    *print_token_type(int token_type);
 void    display_content_lst(void *liste);
-void    display_arg_of_cmd(void *liste);
+void    display_args_of_cmd(void *liste);
+void    display_arg_of_cmd(t_token *token);
 
 // cleannig
 void delete_list(void *content);

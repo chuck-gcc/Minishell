@@ -21,7 +21,7 @@ int get_args(t_list *node, char **input)
 
     i = 0;
     idx = 0;
-    args_count = count_args(input);
+    args_count = count_args(input) + 1;
     if(args_count)
     {
         args = malloc(sizeof(char *) * (args_count + 1));
@@ -30,6 +30,7 @@ int get_args(t_list *node, char **input)
             perror("Error malloc:");
             return(-1);
         }
+        args[i++] = ft_strdup(((t_token *)node->content)->value);
         while (get_token_type(input[idx]) != PIPE && !is_redir(input[idx]))
             args[i++] = ft_strdup(input[idx++]);
         args[i] = NULL;

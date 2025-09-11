@@ -15,7 +15,8 @@ LIB= -Llibft -lft -lreadline
 
 EXT_SRCS= 		srcs/main.c \
 				srcs/tokeniser/tokeniser.c \
-				srcs/ast/ast.c \
+				srcs/ast/ast_generation.c \
+				srcs/ast/ast_execution.c \
 				srcs/builtin/env.c \
 				srcs/tokeniser/tokeniser_utils.c \
 				srcs/tokeniser/tokeniser_args.c \
@@ -44,12 +45,12 @@ ifeq ($(OS), Darwin)
 	@./$(NAME)
 else
 	@echo $(CMD)
-	@valgrind --leak-check=full --log-file=valgrind/valgrind.log ./$(NAME)
+	@valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --log-file=valgrind/valgrind.log ./$(NAME)
 endif
 
 test: $(TEST_OBJ)
 	@$(CC) $(TEST_OBJ) $(LIB) -o $(NAME_TEST)
-	@valgrind --leak-check=full --read-var-info=yes --track-fds=yes --log-file=valgrind/valgrind_test.log ./$(NAME_TEST)
+	@valgrind --leak-check=full --read-var-info=yes --track-fds=yes --trace-children=yes --log-file=valgrind/valgrind_test.log ./$(NAME_TEST)
 
 clean:
 	rm -rf $(EXT_OBJ)

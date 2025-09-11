@@ -35,11 +35,16 @@ void display_content_lst(void *liste)
     token->asso);
 }
 
-void display_arg_of_cmd(void *liste)
+void display_args_of_cmd(void *liste)
 {
     t_token *token;
-    
     token = (t_token *)liste;
+    display_arg_of_cmd(token);
+}
+void display_arg_of_cmd(t_token *token)
+{
+    if(!token)
+        return;
     if(token->type == CMD || token->type == BUILTIN)
     {
         printf("Commande: [%s]\n", token->value);

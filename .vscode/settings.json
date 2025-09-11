@@ -9,6 +9,11 @@
         "tuple": "c",
         "type_traits": "c",
         "utility": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "atomic": "c",
+        "unistd.h": "c",
+        "assert.h": "c",
+        "wait.h": "c",
+        "tokeniser.h": "c"
     }
 }

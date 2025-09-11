@@ -18,7 +18,7 @@
 #include <sys/time.h>
 #include <assert.h>
 #include <errno.h>
-
+#include <unistd.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 
