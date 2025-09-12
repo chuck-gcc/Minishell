@@ -33,10 +33,13 @@ int ft_env(char **envp, char **var)
         printf("%s\n", *ptr);
         ptr++;
     }
-    while (*var)
+    if(var)
     {
-        printf("%s\n", *var);
-        var++;
+        while (*var)
+        {
+            printf("%s\n", *var);
+            var++;
+        }
     }
     return(0);
 }

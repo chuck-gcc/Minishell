@@ -5,7 +5,7 @@ else
 	CC=gcc
 endif
 
-GFLAGS= -Werror -Wextra -Wall -g
+GFLAGS= -Werror -Wextra -Wall -Wno-unused-parameter -g
 BRANCH= $(shell git branch --show-current )
 NAME=bin/minishell
 NAME_TEST=bin/test
@@ -18,6 +18,7 @@ EXT_SRCS= 		srcs/main.c \
 				srcs/ast/ast_generation.c \
 				srcs/ast/ast_execution.c \
 				srcs/builtin/env.c \
+				srcs/builtin/cd.c \
 				srcs/tokeniser/tokeniser_utils.c \
 				srcs/tokeniser/tokeniser_args.c \
 				srcs/tokeniser/tokeniser_redir.c \
@@ -45,7 +46,8 @@ ifeq ($(OS), Darwin)
 	@./$(NAME)
 else
 	@echo $(CMD)
-	@valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --log-file=valgrind/valgrind.log ./$(NAME)
+	./$(NAME)
+#@ ./$(NAME)
 endif
 
 test: $(TEST_OBJ)

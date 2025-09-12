@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 
-static int process_user_input(char *str)
+static int process_user_input(char *str, char **envp)
 {
 
     
@@ -40,7 +40,7 @@ static int process_user_input(char *str)
     display_binary_tree(NULL,*ast,0);
     ft_lstiter(*tokens_lst, display_args_of_cmd);
 
-    int r = execute_ast(*ast);
+    int r = execute_ast(*ast, envp);
 
     ft_lstclear(tokens_lst, delete_list);
     free(ast);
@@ -52,7 +52,6 @@ int run_minishell(char **envp)
 {
     char *input;
 
-    (void)envp;
     while (1)
     {
         input = readline("minishell: ");
@@ -66,8 +65,8 @@ int run_minishell(char **envp)
                 clear_history();
                 return(1);
             }
-            int status = process_user_input(input);
-            printf("STATUS COMMANDE %d\n", status);
+            int status = process_user_input(input, envp);
+            printf("STATUS COMMANDE %d\n\n", status);
             free(input);
             rl_on_new_line();
         }
@@ -77,47 +76,10 @@ int run_minishell(char **envp)
 
 int main(int argc, char **argv, char **envp)
 {
-    (void)argc;
-    (void)argv;
-    (void)envp;
+    
 
+    //ft_env(envp, NULL);
     run_minishell(envp);
-
-    //char *cmd = "cat cat fefazzea fafa < out.txt dzadaz | grep grep | wc -l > out.txt";
-    //char *cmd = "cat < infile.txt | grep error | sort -r > outfile.log";
-    //char *cmd = "sort -u < unsorted.txt | grep error | tee result.log >> all.log";
-    //char *cmd = "cat < file.txt | grep banana | wc -l >> file.log";
-    //char *cmd = "echo hello world | echo hello";
-
-
-    //printf("Commande: %s\n\n", cmd);
-
-    //process_user_input(cmd);
     
-    
-
-    // pid_t pid;
-    // int st;
-
-    // pid = fork();
-    // st = 11;
-    // if(pid == -1)
-    // {
-    //     perror("Fork error");
-    //     return(errno);
-    // }
-    // if(pid == 0)
-    // {
-    //     char *args[] = {"echo", "hello", "world", NULL};
-    //     execve("/usr/bin/echo", args, NULL);
-    //     perror("Execution error");
-    //     exit(errno);
-    // }
-    // else
-    // {
-
-    //     wait(&st);
-    //     printf("status %d\n", st);
-    // }
     return(0);
 }
