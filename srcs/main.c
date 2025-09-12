@@ -37,8 +37,8 @@ static int process_user_input(char *str, char **envp)
         return(1);
     }
 
-    display_binary_tree(NULL,*ast,0);
-    ft_lstiter(*tokens_lst, display_args_of_cmd);
+    //display_binary_tree(NULL,*ast,0);
+    //ft_lstiter(*tokens_lst, display_args_of_cmd);
 
     int r = execute_ast(*ast, envp);
 
@@ -66,7 +66,8 @@ int run_minishell(char **envp)
                 return(1);
             }
             int status = process_user_input(input, envp);
-            printf("STATUS COMMANDE %d\n\n", status);
+            (void)status;
+            //printf("STATUS COMMANDE %d\n\n", status);
             free(input);
             rl_on_new_line();
         }

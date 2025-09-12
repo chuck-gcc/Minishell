@@ -91,7 +91,7 @@ int execute_commande(t_token *token, char *path, char **envp)
     else
     {
         wait(&status);
-        printf("status %d\n", status);
+        //printf("status %d\n", status);
     }
     return(status);
 }
@@ -105,6 +105,10 @@ int execute_builtin(t_token *token, char **envp)
         return(ft_cd(token));
     if(ft_strncmp(token->value, "env", ft_strlen(token->value)) == 0)
         return(ft_env(envp, envp));
+    if(ft_strncmp(token->value, "pwd", ft_strlen(token->value)) == 0)
+        return(ft_pwd());
+    if(ft_strncmp(token->value, "echo", ft_strlen(token->value)) == 0)
+        return(ft_echo(token));
     return(1);
 }
 
@@ -146,7 +150,7 @@ int execute_ast(t_token *ast, char **envp)
         char *path = get_path(ast->value);
 
         int r = execute_commande(ast, path, envp);
-        printf("%s\n", path);
+        //printf("%s\n", path);
         free(path);
         return(r);
     }

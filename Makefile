@@ -19,6 +19,8 @@ EXT_SRCS= 		srcs/main.c \
 				srcs/ast/ast_execution.c \
 				srcs/builtin/env.c \
 				srcs/builtin/cd.c \
+				srcs/builtin/pwd.c \
+				srcs/builtin/echo.c \
 				srcs/tokeniser/tokeniser_utils.c \
 				srcs/tokeniser/tokeniser_args.c \
 				srcs/tokeniser/tokeniser_redir.c \
