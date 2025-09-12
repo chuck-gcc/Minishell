@@ -20,7 +20,7 @@ static int process_user_input(char *str, char **envp)
     }
 
     // printf("\n\n");
-    //  ft_lstiter(*tokens_lst, display_content_lst);
+    ft_lstiter(*tokens_lst, display_args_of_cmd);
     // printf("\n\n");
 
     t_token **ast = malloc(sizeof(t_token *));
