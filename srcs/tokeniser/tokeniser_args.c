@@ -34,6 +34,7 @@ int get_args(t_list *node, char **input)
         while (get_token_type(input[idx]) != PIPE && !is_redir(input[idx]))
             args[i++] = ft_strdup(input[idx++]);
         args[i] = NULL;
+        assert(args[i] == NULL);
         printf("%p\n", args[i - 1]);
         ((t_token *)node->content)->args = args;
         display_arg_of_cmd(((t_token *)node->content));
