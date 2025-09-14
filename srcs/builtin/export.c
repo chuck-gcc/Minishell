@@ -86,6 +86,20 @@ size_t is_on_env(char *var, char **env, size_t idx)
     return(-1);
 }
 
+char *export_expend_var(char *var)
+{
+    char *env_variable;
+    char *new_var;
+
+    env_variable = &var[ft_index_of_c(var,'=') + 2];
+    printf("%s\n", env_variable);
+    new_var = getenv(env_variable);
+    if(!new_var)
+        return(ft_strdup(" "));
+    else
+        return(ft_strdup(new_var));
+}
+
 char **get_new_env(char **envp, char **args)
 {
     char **new_env;
@@ -114,12 +128,19 @@ char **get_new_env(char **envp, char **args)
     {
         if(is_valide_variable(args[j]) != -1)
         {
+            if(args[j][ft_index_of_c(args[j],'=') + 1] == '$')
+            {
+                free(args[j]);
+                args[j] = export_expend_var(args[j]);
+            }
             int on_env = is_on_env(args[j], new_env, i);
             if(on_env >= 0)
             {
                 free(new_env[on_env]);
                 new_env[on_env] = ft_strdup(args[j]);
             }
+            else if(args[j][ft_index_of_c(args[j],'=') + 1] == '$')
+                new_env[i++] = export_expend_var(args[j]);
             else
                 new_env[i++] = ft_strdup(args[j]);
         }
