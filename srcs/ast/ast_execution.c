@@ -97,24 +97,24 @@ int execute_commande(t_token *token, char *path, char **envp)
 }
 
 
-int execute_builtin(t_token *token, char **envp)
+int execute_builtin(t_token *token, char ***envp)
 {
     if(!token)
         return(1);
     if(ft_strncmp(token->value, "cd", ft_strlen(token->value)) == 0)
         return(ft_cd(token));
     if(ft_strncmp(token->value, "env", ft_strlen(token->value)) == 0)
-        return(ft_env(envp, envp));
+        return(ft_env(*envp, *envp));
     if(ft_strncmp(token->value, "pwd", ft_strlen(token->value)) == 0)
         return(ft_pwd());
     if(ft_strncmp(token->value, "echo", ft_strlen(token->value)) == 0)
         return(ft_echo(token));
     if(ft_strncmp(token->value, "export", ft_strlen(token->value)) == 0)
-        return(ft_export(&envp,token));
+        return(ft_export(envp,token));
     return(1);
 }
 
-int execute_ast(t_token *ast, char **envp)
+int execute_ast(t_token *ast, char ***envp)
 {
     int status;
 
@@ -147,7 +147,7 @@ int execute_ast(t_token *ast, char **envp)
     {
         char *path = get_path(ast->value);
 
-        status = execute_commande(ast, path, envp);
+        status = execute_commande(ast, path, *envp);
         free(path);
         if(status > 0)
             execute_ast(ast->right, envp);

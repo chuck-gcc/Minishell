@@ -17,7 +17,7 @@ int ft_expend_var(t_token *token)
     int i;
     char *var;
 
-    if(!token)
+    if(!token || !token->args)
         return(1);
     i = 0;
     while (token->args[i])
@@ -30,11 +30,9 @@ int ft_expend_var(t_token *token)
                 token->args[i] = ft_strdup(" ");
             else
                 token->args[i] = ft_strdup(var);
-                
         }
         i++;
     }
-
     return(0);
 }
 int get_args(t_list *node, char **input)

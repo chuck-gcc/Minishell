@@ -3,11 +3,12 @@
 #include <stdio.h>
 #include <string.h>
 
-static int process_user_input(char *str, char **envp)
+static int process_user_input(char *str, char ***envp)
 {
 
     
     t_list **tokens_lst;
+    
     tokens_lst = calloc(sizeof(t_list *) , 1);
     if(!tokens_lst)
         return(1);
@@ -65,7 +66,7 @@ int run_minishell(char **envp)
                 clear_history();
                 return(1);
             }
-            int status = process_user_input(input, envp);
+            int status = process_user_input(input, &envp);
             (void)status;
             //printf("STATUS COMMANDE %d\n\n", status);
             free(input);

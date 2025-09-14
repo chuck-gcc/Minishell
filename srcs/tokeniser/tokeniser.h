@@ -63,7 +63,7 @@ int is_redir(char *str);
 
 // tokeniser args
 int get_args(t_list *node, char **input);
-
+int ft_expend_var(t_token *token);
 //tokeniser display
 
 char    *print_token_type(int token_type);
