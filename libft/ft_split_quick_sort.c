@@ -33,7 +33,7 @@ static int ft_split_partition(char **split, int end, int (*cmp)(const char *,con
     return(i);
 }
 
-void    ft_env_quick_sortft_split_quick_sort(char **split, int end, int (*cmp)(const char *,const char *, size_t len))
+void   ft_split_quick_sort(char **split, int end, int (*cmp)(const char *,const char *, size_t len))
 {
     int i;
 

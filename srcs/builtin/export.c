@@ -25,23 +25,34 @@ void display_export(char **envp)
     }
 }
 
+/*
+    A  word  consisting  only  of alphanumeric characters and under‐
+    scores, and beginning with an alphabetic character or an  under‐
+    score.  Also referred to as an identifier
+*/
+
+
+
+
+
+
 
 int ft_export(char ***envp, t_token *token)
 {
-    char **args;
     int i;
+    char    **tmp;
 
-    if(!envp || !*envp)
+
+    if(!envp || !*envp || !token)
         return(-1);
     i = 0;
-    args = &token->args[1];
-    while(args[i])
+    if(!token->args)
     {
-        printf("%s\n", *args);
-        i++;
-    }    
-    if(i == 0)
+        tmp = *envp;
+        ft_split_quick_sort(tmp, ft_get_split_len(tmp), ft_strncmp);
         display_export(*envp);
-
+    }
+    while(token->args && token->args[i])
+        i++;
     return(0);
 }

@@ -20,7 +20,7 @@ static int process_user_input(char *str, char **envp)
     }
 
     // printf("\n\n");
-    ft_lstiter(*tokens_lst, display_args_of_cmd);
+    //ft_lstiter(*tokens_lst, display_args_of_cmd);
     // printf("\n\n");
 
     t_token **ast = malloc(sizeof(t_token *));
@@ -79,8 +79,7 @@ int main(int argc, char **argv, char **envp)
 {
     
 
-    //ft_env(envp, NULL);
     run_minishell(envp);
-    
+
     return(0);
 }

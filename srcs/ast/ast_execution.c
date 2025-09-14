@@ -117,13 +117,10 @@ int execute_builtin(t_token *token, char **envp)
 int execute_ast(t_token *ast, char **envp)
 {
     int status;
-    int r;
 
     status = 0;
     if(!ast)
-    {
         return(-1);
-    }
 
     if(ast->type == PIPE)
     {
@@ -138,7 +135,6 @@ int execute_ast(t_token *ast, char **envp)
             
             printf("\ni am the children [PID: %d], my father is [PID: %d] \n\n", getpid(), getppid());
             execute_ast(ast->left, envp);
-
         }
         else
         {
@@ -151,17 +147,18 @@ int execute_ast(t_token *ast, char **envp)
     {
         char *path = get_path(ast->value);
 
-        int r = execute_commande(ast, path, envp);
-        //printf("%s\n", path);
+        status = execute_commande(ast, path, envp);
         free(path);
-        return(r);
+        if(status > 0)
+            execute_ast(ast->right, envp);
+        return(status);
     }
     else if(ast->type == BUILTIN)
     {
-        r = execute_builtin(ast, envp);
-        return(r);
+        status = execute_builtin(ast, envp);
+        if(status > 0)
+            execute_ast(ast->right, envp);
+        return(status);
     }
-    
-    execute_ast(ast->right, envp);
     return(status);
 }

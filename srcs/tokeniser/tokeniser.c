@@ -71,8 +71,11 @@ static int process_node(t_list *node_lst, char **input)
     int process;
     t_token *node;
 
+
     node = ((t_token *)(node_lst->content));
     process = 0;
+    if(!input)
+        return(1);
     if(node->type == CMD || node->type == BUILTIN)
     {
         process = process_cmd_node(node_lst, (input + 1));
@@ -99,7 +102,6 @@ t_list **get_token_list(char *str, t_list **lst)
     process = 0;
     while (split[i])
     {
-
         node = new_list_node(split[i], i, split[i - process]);
         if(!node)
             return(ft_split_clean(&split));
