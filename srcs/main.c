@@ -76,11 +76,76 @@ int run_minishell(char **envp)
     return(0);
 }
 
+int ft_index_of_str(char **split, char *str)
+{
+    int i;
+
+    i = 0;
+    while (split[i])
+    {   
+        if(ft_strncmp(split[i], str, ft_index_of_c(split[i], '=') - 1) == 0)
+            return(i);
+        i++;
+    }
+    return(-1);
+}
+
+char *export_var_expend(char **envp, char *var)
+{
+    int idx_str_in_env;
+    int equal_idx_var;
+    int i;
+    int j;
+    char *first_part;
+    char *seconde_part;
+    char *new_var;
+
+    equal_idx_var = ft_index_of_c(var,'=');
+    if(equal_idx_var == -1 || var[equal_idx_var + 1] != '$')
+    {
+        return(var);
+    }
+    else
+    {
+        printf("error %d\n", equal_idx_var);
+        idx_str_in_env = ft_index_of_str(envp, &var[equal_idx_var + 2]);
+        if(idx_str_in_env == -1)
+        {
+            printf("not in env %s\n", &var[equal_idx_var + 1]);
+            return(strdup(""));
+        }
+        first_part = ft_substr(var, 0, ft_index_of_c(var, '='));
+        seconde_part = &envp[idx_str_in_env][ft_index_of_c(envp[idx_str_in_env], '=') + 1];
+        printf("var %s and %s \n", first_part, seconde_part);
+        int new_var_len = ft_strlen(first_part) + ft_strlen(seconde_part) + 2;
+        new_var = malloc(sizeof(char) * new_var_len);
+        if(!new_var)
+            return(NULL);
+        i = 0;
+        j = 0;
+        while (first_part[i])
+        {
+            new_var[j++] = first_part[i++];
+        }
+        new_var[j++] = '=';
+        i = 0;
+        while (seconde_part[i])
+        {
+            new_var[j++] = seconde_part[i++];
+        }
+        new_var[j] = '\0';
+    }
+    return(new_var);
+}
 int main(int argc, char **argv, char **envp)
 {
     
 
-    run_minishell(envp);
+    //run_minishell(envp);
 
+    char *var = "Z1=$Z";
+
+    char *new_var = export_var_expend(envp, var);
+    printf("voici %s\n", new_var);
     return(0);
 }
