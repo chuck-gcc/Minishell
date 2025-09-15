@@ -50,6 +50,7 @@ int is_valide_variable(char *var)
             return(-1);
         ptr++;
     }
+
     return(0);
 }
 
@@ -76,24 +77,26 @@ size_t is_on_env(char *var, char **env, size_t idx)
     size_t i;
 
     i = 0;
-    while (i <= idx)
+
+    while (i < idx)
     {
+
         int idx = ft_index_of_c(env[i],'=');
         if(ft_strncmp(var, env[i], idx ) == 0)
             return(i);
         i++;
     }
+
     return(-1);
 }
 
 char *export_expend_var(char *var)
 {
-    char *env_variable;
     char *new_var;
+    int idx = ft_index_of_c(var,'=') + 1;
 
-    env_variable = &var[ft_index_of_c(var,'=') + 2];
-    printf("%s\n", env_variable);
-    new_var = getenv(env_variable);
+    new_var = getenv(var);
+    printf("dada %s\n", new_var);
     if(!new_var)
         return(ft_strdup(" "));
     else
@@ -110,7 +113,6 @@ char **get_new_env(char **envp, char **args)
 
     len_env = ft_get_split_len(envp);
     valide_var = count_valide_variable(args);
-    
     new_env = malloc(sizeof(char *) * len_env + valide_var + 1);
     if(!new_env)
     {
@@ -118,6 +120,7 @@ char **get_new_env(char **envp, char **args)
         return(NULL);
     }
     i = 0;
+
     while (envp[i])
     {
         new_env[i] = ft_strdup(envp[i]);
@@ -128,21 +131,27 @@ char **get_new_env(char **envp, char **args)
     {
         if(is_valide_variable(args[j]) != -1)
         {
-            if(args[j][ft_index_of_c(args[j],'=') + 1] == '$')
+            if(export_expend_var(args[i]))
             {
+                char *tmp;
+                tmp = export_expend_var(args[j]);
                 free(args[j]);
-                args[j] = export_expend_var(args[j]);
+                args[j] = tmp;
+                printf("voici lme result %s\n", &args[j][idx + 1]);
             }
+
             int on_env = is_on_env(args[j], new_env, i);
             if(on_env >= 0)
             {
                 free(new_env[on_env]);
                 new_env[on_env] = ft_strdup(args[j]);
             }
-            else if(args[j][ft_index_of_c(args[j],'=') + 1] == '$')
-                new_env[i++] = export_expend_var(args[j]);
             else
+            {
+                printf("here\n");
                 new_env[i++] = ft_strdup(args[j]);
+            }
+
         }
         j++;
     }
