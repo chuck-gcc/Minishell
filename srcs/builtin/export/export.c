@@ -1,4 +1,4 @@
-#include "builtin.h"
+#include "../builtin.h"
 
 void display_export(char **envp)
 {
@@ -72,91 +72,104 @@ size_t count_valide_variable(char **vars)
     }
     return(i);
 }
-size_t is_on_env(char *var, char **env, size_t idx)
+int is_on_env(char *var, char **env, int len)
 {
-    size_t i;
-
+    int i;
+    int idx_env; 
+    int idx_var; 
+    char *sub_var; 
+    char *sub_env;
+    
     i = 0;
-
-    while (i < idx)
+    
+    idx_var = ft_index_of_c(var,'=');
+    sub_var = ft_substr(var, 0, idx_var);
+    while (i < len)
     {
-
-        int idx = ft_index_of_c(env[i],'=');
-        if(ft_strncmp(var, env[i], idx ) == 0)
+        idx_env =  ft_index_of_c(env[i],'=');
+        sub_env = ft_substr(env[i], 0, idx_env);
+        if(ft_strncmp(sub_env, sub_var, ft_strlen_longest(sub_var, sub_env)) == 0)
+        {
+            // free(sub_env);
+            // free(sub_var);
             return(i);
+        }
         i++;
     }
-
+    // free(sub_env);
+    // free(sub_var);
     return(-1);
 }
 
-char *export_expend_var(char *var)
+char *get_variable_value_in_env(char **envp, char *var)
 {
-    char *new_var;
-    int idx = ft_index_of_c(var,'=') + 1;
-
-    printf("%d\n", idx);
-    new_var = getenv(var);
-    printf("dada %s\n", new_var);
-    if(!new_var)
-        return(ft_strdup(" "));
-    else
-        return(ft_strdup(new_var));
+    char **ptr;
+    char *v;
+    char *value;
+    
+    ptr = envp;
+    while (*ptr)
+    {
+        v = ft_substr(*ptr, 0, ft_index_of_c(*ptr, '='));
+        if(!v)
+            return(NULL);
+        if(ft_strncmp(v,var,ft_strlen(v)) == 0)
+        {
+            value = ptr[ft_index_of_c(*ptr, '=') + 1];
+            printf("value %s\n", value);
+            free(v);
+            return(ft_strdup(value));
+        }
+        ptr++;
+    }
+    return(ft_strdup(""));
 }
 
 char **get_new_env(char **envp, char **args)
 {
     char **new_env;
+    int on_env;
     size_t len_env;
     size_t valide_var;
-    size_t  i;
     size_t  j;
 
     len_env = ft_get_split_len(envp);
     valide_var = count_valide_variable(args);
-    new_env = malloc(sizeof(char *) * len_env + valide_var + 1);
+    if(valide_var == 0)
+        return(NULL);
+    new_env = malloc(sizeof(char *) * (len_env + valide_var + 1));
     if(!new_env)
     {
         perror("get new env");
         return(NULL);
     }
-    i = 0;
-
-    while (envp[i])
-    {
-        new_env[i] = ft_strdup(envp[i]);
-        i++;
-    }
+    ft_memcpy(new_env, envp, sizeof(char *) * len_env);
     j = 0;
     while (args[j])
     {
         if(is_valide_variable(args[j]) != -1)
         {
-            if(export_expend_var(args[i]))
-            {
-                char *tmp;
-                tmp = export_expend_var(args[j]);
-                free(args[j]);
-                args[j] = tmp;
-                printf("voici lme result %s\n", args[j]);
-            }
+            char *tmp;
 
-            int on_env = is_on_env(args[j], new_env, i);
+            tmp = export_var_expend(envp, args[j]);
+            if(tmp)
+            {
+                //free(args[j]);
+                args[j] = tmp;
+            }
+            on_env = is_on_env(args[j], new_env, len_env);
             if(on_env >= 0)
             {
-                free(new_env[on_env]);
+                //free(new_env[on_env]);
                 new_env[on_env] = ft_strdup(args[j]);
             }
             else
-            {
-                printf("here\n");
-                new_env[i++] = ft_strdup(args[j]);
-            }
+                new_env[len_env++] = ft_strdup(args[j]);
 
         }
         j++;
     }
-    new_env[i] = NULL;
+    new_env[len_env] = NULL;
     return(new_env);
 }
 
@@ -170,6 +183,8 @@ int ft_export(char ***envp, t_token *token)
         return(-1);
     if(!token->args)
     {
+            
+        START;
         ft_split_quick_sort(*envp, ft_get_split_len(*envp), ft_strncmp);
         display_export(*envp);
         return(0);

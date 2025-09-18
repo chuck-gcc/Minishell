@@ -76,76 +76,50 @@ int run_minishell(char **envp)
     return(0);
 }
 
-int ft_index_of_str(char **split, char *str)
-{
-    int i;
-
-    i = 0;
-    while (split[i])
-    {   
-        if(ft_strncmp(split[i], str, ft_index_of_c(split[i], '=') - 1) == 0)
-            return(i);
-        i++;
-    }
-    return(-1);
-}
-
-char *export_var_expend(char **envp, char *var)
-{
-    int idx_str_in_env;
-    int equal_idx_var;
-    int i;
-    int j;
-    char *first_part;
-    char *seconde_part;
-    char *new_var;
-
-    equal_idx_var = ft_index_of_c(var,'=');
-    if(equal_idx_var == -1 || var[equal_idx_var + 1] != '$')
-    {
-        return(var);
-    }
-    else
-    {
-        printf("error %d\n", equal_idx_var);
-        idx_str_in_env = ft_index_of_str(envp, &var[equal_idx_var + 2]);
-        if(idx_str_in_env == -1)
-        {
-            printf("not in env %s\n", &var[equal_idx_var + 1]);
-            return(strdup(""));
-        }
-        first_part = ft_substr(var, 0, ft_index_of_c(var, '='));
-        seconde_part = &envp[idx_str_in_env][ft_index_of_c(envp[idx_str_in_env], '=') + 1];
-        printf("var %s and %s \n", first_part, seconde_part);
-        int new_var_len = ft_strlen(first_part) + ft_strlen(seconde_part) + 2;
-        new_var = malloc(sizeof(char) * new_var_len);
-        if(!new_var)
-            return(NULL);
-        i = 0;
-        j = 0;
-        while (first_part[i])
-        {
-            new_var[j++] = first_part[i++];
-        }
-        new_var[j++] = '=';
-        i = 0;
-        while (seconde_part[i])
-        {
-            new_var[j++] = seconde_part[i++];
-        }
-        new_var[j] = '\0';
-    }
-    return(new_var);
-}
 int main(int argc, char **argv, char **envp)
 {
+    t_token token_1;
+    t_token token_2;
+    t_token token_3;
+
+    char *cmd[] = {"export", "Z=1","Z2=2","Z3=3", NULL};
+    char *cmd_2[] = {"export", "Z=4","Z2=5","Z3=6", NULL};
+
+    char **env;
+
+    env = malloc(sizeof(char **) * 4);
+    if(!env)
+        return(1);
+    env[0] = "A=1";
+    env[1] = "B=2";
+    env[2] =  "C=3";
+    env[3] = NULL;
+
+
+
+    token_1.type = BUILTIN;
+    token_1.value = "export";
+    token_1.args = cmd;
     
+    token_2.type = BUILTIN;
+    token_2.value = "export";
+    token_2.args = NULL;
 
+    token_3.type = BUILTIN;
+    token_3.value = "export";
+    token_3.args = cmd_2;
+
+    ft_export(&env, &token_1);
+    ft_export(&env, &token_2);
+    ft_export(&env, &token_3);
+    ft_export(&env, &token_2);
+    (void)token_2;
+    (void)token_1;
+
+    // assert(is_on_env("Z=1", envp, ft_get_split_len(envp)) != -1);
+    // assert(is_on_env("Z1=1", envp, ft_get_split_len(envp)) == -1);
+    // assert(is_on_env("Z2=1", envp, ft_get_split_len(envp)) == -1);
     //run_minishell(envp);
-
-    char *var = "Z1=$Z";
-
-    char *new_var = export_var_expend(envp, var);
-    printf("voici %s\n", new_var);
     return(0);
+
 }
