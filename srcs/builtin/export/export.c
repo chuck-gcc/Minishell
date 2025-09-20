@@ -149,14 +149,6 @@ char **get_new_env(char **envp, char **args)
     {
         if(is_valide_variable(args[j]) != -1)
         {
-            char *tmp;
-
-            tmp = export_var_expend(envp, args[j]);
-            if(tmp)
-            {
-                //free(args[j]);
-                args[j] = tmp;
-            }
             on_env = is_on_env(args[j], new_env, len_env);
             if(on_env >= 0)
             {
@@ -184,7 +176,6 @@ int ft_export(char ***envp, t_token *token)
     if(!token->args)
     {
             
-        START;
         ft_split_quick_sort(*envp, ft_get_split_len(*envp), ft_strncmp);
         display_export(*envp);
         return(0);

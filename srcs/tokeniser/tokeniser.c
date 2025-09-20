@@ -1,7 +1,21 @@
 
 #include "tokeniser.h"
 
-static t_token *new_token_node(char *str, int num, int precedent_token)
+char *expend_var(char *str, char **envp)
+{
+    char *var;
+
+
+    if(ft_index_of_c(str, '$') == -1)
+        return(ft_strdup(str));
+    var = &str[ft_index_of_c(str, '$') + 1];
+    printf("voici %s\n", var);
+    assert(1==2);
+    return(var);
+    
+}
+
+static t_token *new_token_node(char *str, int num, int precedent_token, char **envp)
 {
     t_token *new_node;
 
@@ -24,14 +38,14 @@ static t_token *new_token_node(char *str, int num, int precedent_token)
     return(new_node);
 }
 
-static t_list *new_list_node(char *str, int i, char *precedent)
+static t_list *new_list_node(char *str, int i, char *precedent, char **envp)
 {
     t_list *node;
 
     node = malloc(sizeof(t_list));
     if(!node)
         return(NULL);
-    node->content = new_token_node(str, i, get_token_type(precedent));
+    node->content = new_token_node(str, i, get_token_type(precedent), envp);
     if(node->content == NULL)
             return(NULL);
     node->next = NULL;
@@ -88,7 +102,7 @@ static int process_node(t_list *node_lst, char **input)
     return(1);
 }
 
-t_list **get_token_list(char *str, t_list **lst)
+t_list **get_token_list(char *str, t_list **lst, char **envp)
 {
     int i;
     int process;
@@ -102,7 +116,7 @@ t_list **get_token_list(char *str, t_list **lst)
     process = 0;
     while (split[i])
     {
-        node = new_list_node(split[i], i, split[i - process]);
+        node = new_list_node(split[i], i, split[i - process], envp);
         if(!node)
             return(ft_split_clean(&split));
         process = process_node(node, &split[i]);
@@ -110,7 +124,6 @@ t_list **get_token_list(char *str, t_list **lst)
             return(ft_split_clean(&split));
         i += process;
         ft_lstadd_back(lst, node);
-        //ft_lstiter(*lst, display_content_lst);
     }
     ft_split_clean(&split);
     return(lst);

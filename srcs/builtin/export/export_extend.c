@@ -6,7 +6,7 @@
 /*   By: cw3l <cw3l@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 16:23:35 by cw3l              #+#    #+#             */
-/*   Updated: 2025/09/17 07:01:11 by cw3l             ###   ########.fr       */
+/*   Updated: 2025/09/20 08:17:48 by cw3l             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ char *var_not_on_env(char *var)
 
 char *var_on_env(char **envp, char *var, int idx_env)
 {
-
+    START;
     char *new_var;
     char *new_value;
     int i;
@@ -61,24 +61,37 @@ char *var_on_env(char **envp, char *var, int idx_env)
         return(NULL);
     }
     new_value = &envp[idx_env][ft_index_of_c(envp[idx_env], '=') + 1];
-    printf("new value %s\n", new_value);
+    printf("voici new value %s\n", new_value);
     i = 0;
     while (var[i])
     {
         new_var[i] = var[i];
+        if(var[i] == '=')
+        {
+            i++;
+            break;
+        }
         i++;
     }
     j = 0;
     while(new_value[j])
         new_var[i++] = new_value[j++]; 
     new_var[i] = '\0';
+
     return(new_var);
 }
+
+
+
+//heare
+
 
 char *export_var_expend(char **envp, char *var)
 {
     char *v;
     int idx_env;
+
+    
 
     if(!envp | !*envp | !var )
         return(NULL);
@@ -88,13 +101,17 @@ char *export_var_expend(char **envp, char *var)
     if(!v)
         return(NULL);
     idx_env = ft_index_of_str(envp, &var[ft_index_of_c(var, '$') + 1]);
-    
     if(idx_env == -1)
     {
         free(v);
         return(var);
     }
     else
-        return(var_on_env(envp, var, idx_env));
+    {
+        START;
+        char *va = var_on_env(envp, var, idx_env);
+        printf("voici va %s\n", va);
+        return(va);
+    }
     return(NULL);
 }

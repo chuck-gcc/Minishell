@@ -15,14 +15,21 @@ static int count_args(char **input)
 int ft_expend_var(t_token *token)
 {
     int i;
+    int idx_in_var;
+    char *new_var;
     char *var;
+    int j; 
+    int k;
 
     if(!token || !token->args)
         return(1);
     i = 0;
     while (token->args[i])
     {
-        if(token->args[i][0] == '$')
+
+        idx_in_var = ft_index_of_c(token->args[i], '$');
+        
+        if(idx_in_var == 0)
         {
             var = getenv(&token->args[i][1]);
             free(token->args[i]);
@@ -30,6 +37,37 @@ int ft_expend_var(t_token *token)
                 token->args[i] = ft_strdup(" ");
             else
                 token->args[i] = ft_strdup(var);
+        }
+        else if (idx_in_var > 0)
+        {
+
+            j = 0;
+            k = 0;
+            var = getenv(&token->args[i][idx_in_var + 1]);
+            if(var)
+            {
+
+                new_var = malloc(sizeof(char) * (idx_in_var + ft_strlen(var) + 1));
+                if(!new_var)
+                    return(-1);
+                
+
+                while (j < idx_in_var)
+                {
+
+                    new_var[j] = token->args[i][j];
+                    j++;
+                }
+                while (var[k])
+                {
+
+                    new_var[j] = var[k];
+                    j++;
+                    k++;
+                }
+                new_var[j] = '\0';
+                token->args[i] = new_var;
+            }
         }
         i++;
     }

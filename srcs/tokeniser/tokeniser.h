@@ -46,7 +46,7 @@ typedef struct s_token
 } t_token;
 
 
-t_list  **get_token_list(char *str, t_list **lst);
+t_list  **get_token_list(char *str, t_list **lst, char **envp);
 
 // utils
 
@@ -55,7 +55,7 @@ int     ft_is_commande(char *str);
 int     get_token_type(char *str);
 int     get_asso(int token_type);
 int     get_precedence(int token_type);
-
+int     ft_expend_var(t_token *token);
 
 // tokeniser redir
 int get_redir(t_list *node, char **input);
