@@ -28,7 +28,6 @@ int ft_expend_var(t_token *token)
     {
 
         idx_in_var = ft_index_of_c(token->args[i], '$');
-        
         if(idx_in_var == 0)
         {
             var = getenv(&token->args[i][1]);
