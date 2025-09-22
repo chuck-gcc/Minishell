@@ -1,5 +1,18 @@
 #include "tokeniser.h"
 
+char *ft_get_env(char *var, char **envp)
+{
+    int i;
+    char *var;
+
+    i = 0;
+    while (envp[i])
+    {
+        var = ft_substr(envp[i], 0, ft_index_of_c(envp[i], '=') - 1);
+        
+    }
+    
+}
 static int count_args(char **input)
 {
     int i;
@@ -12,7 +25,7 @@ static int count_args(char **input)
     return(i);
 }
 
-int ft_expend_var(t_token *token)
+int ft_expend_var(t_token *token, char **envp)
 {
     int i;
     int idx_in_var;
@@ -31,6 +44,8 @@ int ft_expend_var(t_token *token)
         if(idx_in_var == 0)
         {
             var = getenv(&token->args[i][1]);
+            printf("voici var %s\n", var);
+            assert(1==3);
             free(token->args[i]);
             if(!var)
                 token->args[i] = ft_strdup(" ");
@@ -72,7 +87,7 @@ int ft_expend_var(t_token *token)
     }
     return(0);
 }
-int get_args(t_list *node, char **input)
+int get_args(t_list *node, char **input, char **envp)
 {
     int i;
     int idx;
@@ -82,7 +97,6 @@ int get_args(t_list *node, char **input)
     i = 0;
     idx = 0;
     args_count = 0;
-    
     if(*input)
         args_count = count_args(input) + 1;
     if(args_count)
@@ -98,7 +112,7 @@ int get_args(t_list *node, char **input)
             args[i++] = ft_strdup(input[idx++]);
         args[i] = NULL;
         ((t_token *)node->content)->args = args;
-        ft_expend_var(((t_token *)node->content));
+        ft_expend_var(((t_token *)node->content), envp);
         return(idx);
     }
     else

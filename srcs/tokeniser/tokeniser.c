@@ -52,14 +52,14 @@ static t_list *new_list_node(char *str, int i, char *precedent, char **envp)
     return(node);
 }
 
- static int process_cmd_node(t_list *node, char **input)
+ static int process_cmd_node(t_list *node, char **input, char **envp)
 {
     int i;
     int r; 
     int rdir; 
     
     i = 0;
-    r = get_args(node, input);
+    r = get_args(node, input, envp);
     if(r == -1)
     {
         printf("error get arg\n");
@@ -80,7 +80,7 @@ static t_list *new_list_node(char *str, int i, char *precedent, char **envp)
     return(i + 1);
 }
 
-static int process_node(t_list *node_lst, char **input)
+static int process_node(t_list *node_lst, char **input, char **envp)
 {
     int process;
     t_token *node;
@@ -92,7 +92,7 @@ static int process_node(t_list *node_lst, char **input)
         return(1);
     if(node->type == CMD || node->type == BUILTIN)
     {
-        process = process_cmd_node(node_lst, (input + 1));
+        process = process_cmd_node(node_lst, (input + 1), envp);
         if(process != -1)
             return(process);
         else
@@ -119,7 +119,7 @@ t_list **get_token_list(char *str, t_list **lst, char **envp)
         node = new_list_node(split[i], i, split[i - process], envp);
         if(!node)
             return(ft_split_clean(&split));
-        process = process_node(node, &split[i]);
+        process = process_node(node, &split[i], envp);
         if(process == -1)
             return(ft_split_clean(&split));
         i += process;

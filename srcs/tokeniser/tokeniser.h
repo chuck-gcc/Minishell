@@ -55,15 +55,14 @@ int     ft_is_commande(char *str);
 int     get_token_type(char *str);
 int     get_asso(int token_type);
 int     get_precedence(int token_type);
-int     ft_expend_var(t_token *token);
 
 // tokeniser redir
 int get_redir(t_list *node, char **input);
 int is_redir(char *str);
 
 // tokeniser args
-int get_args(t_list *node, char **input);
-int ft_expend_var(t_token *token);
+int get_args(t_list *node, char **input, char **envp);
+int ft_expend_var(t_token *token, char **envp);
 //tokeniser display
 
 char    *print_token_type(int token_type);
