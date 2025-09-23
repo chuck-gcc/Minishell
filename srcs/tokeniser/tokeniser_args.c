@@ -1,18 +1,30 @@
 #include "tokeniser.h"
 
-char *ft_get_env(char *var, char **envp)
+static char *ft_get_env(char *var, char **envp)
 {
     int i;
-    char *var;
+    char *var_env;
+    char *value;
 
     i = 0;
     while (envp[i])
     {
-        var = ft_substr(envp[i], 0, ft_index_of_c(envp[i], '=') - 1);
-        
+        var_env = ft_substr(envp[i], 0, ft_index_of_c(envp[i], '='));
+        if(var_env)
+        {
+            if(ft_strncmp(var, var_env, ft_strlen_longest(var, var_env)) == 0)
+            {
+                value = &envp[i][ft_index_of_c(envp[i], '=') + 1];
+                free(var_env);
+                return(value);
+            }
+        }
+        free(var_env);
+        i++;
     }
-    
+    return(NULL);
 }
+
 static int count_args(char **input)
 {
     int i;
@@ -39,13 +51,10 @@ int ft_expend_var(t_token *token, char **envp)
     i = 0;
     while (token->args[i])
     {
-
         idx_in_var = ft_index_of_c(token->args[i], '$');
         if(idx_in_var == 0)
         {
-            var = getenv(&token->args[i][1]);
-            printf("voici var %s\n", var);
-            assert(1==3);
+            var = ft_get_env(&token->args[i][1], envp);
             free(token->args[i]);
             if(!var)
                 token->args[i] = ft_strdup(" ");
@@ -57,24 +66,20 @@ int ft_expend_var(t_token *token, char **envp)
 
             j = 0;
             k = 0;
-            var = getenv(&token->args[i][idx_in_var + 1]);
+            var = ft_get_env(&token->args[i][idx_in_var + 1], envp);
             if(var)
             {
 
                 new_var = malloc(sizeof(char) * (idx_in_var + ft_strlen(var) + 1));
                 if(!new_var)
                     return(-1);
-                
-
                 while (j < idx_in_var)
                 {
-
                     new_var[j] = token->args[i][j];
                     j++;
                 }
                 while (var[k])
                 {
-
                     new_var[j] = var[k];
                     j++;
                     k++;
@@ -104,7 +109,7 @@ int get_args(t_list *node, char **input, char **envp)
         args = malloc(sizeof(char *) * (args_count) + 1);
         if(!args)
         {
-            perror("Error malloc:");
+            perror("get args");
             return(-1);
         }
         args[i++] = ft_strdup(((t_token *)node->content)->value);
@@ -115,6 +120,5 @@ int get_args(t_list *node, char **input, char **envp)
         ft_expend_var(((t_token *)node->content), envp);
         return(idx);
     }
-    else
-        return(0);
+    return(0);
 }
