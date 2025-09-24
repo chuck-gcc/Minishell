@@ -6,7 +6,7 @@
 /*   By: cw3l <cw3l@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 09:46:52 by cbouhadr          #+#    #+#             */
-/*   Updated: 2025/09/15 16:27:13 by cw3l             ###   ########.fr       */
+/*   Updated: 2025/09/24 03:49:51 by cw3l             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
 	char	*ptr;
 
-	if (!s | (len < 0))
+	if (!s)
 		return (NULL);
 	if (len == 0 || start >= ft_strlen(s))
 		return (ft_strdup(""));

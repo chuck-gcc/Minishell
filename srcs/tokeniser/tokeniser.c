@@ -125,6 +125,7 @@ t_list **get_token_list(char *str, t_list **lst, char **envp)
         i += process;
         ft_lstadd_back(lst, node);
     }
+
     ft_split_clean(&split);
     return(lst);
 }
