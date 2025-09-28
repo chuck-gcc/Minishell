@@ -13,6 +13,7 @@ int ft_pwd(void);
 int ft_echo(t_token *token);
 int ft_export(char ***envp, t_token *token);
 int ft_unset(char ***envp, t_token *token);
+void ft_exit();
 
 int is_valide_variable(char *var);
 size_t count_valide_variable(char **vars, int mode);

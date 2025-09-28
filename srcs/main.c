@@ -78,6 +78,12 @@ int main(int argc, char **argv, char **envp)
 {
    
     run_minishell(envp);
+
+    // int h = ft_is_builtin("exit");
+
+    // if(h)
+    //     printf("is commande\n");
+
     return(0);
 
 }

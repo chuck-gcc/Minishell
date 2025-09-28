@@ -113,6 +113,8 @@ int execute_builtin(t_token *token, char ***envp)
         return(ft_export(envp,token));
     if(ft_strncmp(token->value, "unset", ft_strlen(token->value)) == 0)
         return(ft_unset(envp,token));
+    if(ft_strncmp(token->value, "exit", ft_strlen(token->value)) == 0)
+        ft_exit();
     return(1);
 }
 

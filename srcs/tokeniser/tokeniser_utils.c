@@ -26,8 +26,8 @@ int ft_is_commande(char *str)
     int is_cmd;
     struct dirent *files;
     // linux
-    //dir = opendir("/usr/bin");
-    dir = opendir("/bin");
+    dir = opendir("/usr/bin");
+    //dir = opendir("/bin");
     is_cmd = 1;
     if(dir == NULL)
         return(-1);
@@ -44,7 +44,9 @@ int get_token_type(char *str)
     if(!str)
         return(0);
     if(ft_is_builtin(str))
+    {
         return(BUILTIN);
+    }
     if(!ft_is_commande(str))
         return(CMD);
     if(!ft_strncmp(str, "|", ft_strlen_longest(str, "|")))

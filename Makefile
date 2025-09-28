@@ -23,6 +23,7 @@ EXT_SRCS= 		srcs/main.c \
 				srcs/builtin/echo.c \
 				srcs/builtin/export.c \
 				srcs/builtin/unset.c \
+				srcs/builtin/exit.c \
 				srcs/tokeniser/tokeniser_utils.c \
 				srcs/tokeniser/tokeniser_args.c \
 				srcs/tokeniser/tokeniser_redir.c \
