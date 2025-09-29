@@ -22,6 +22,8 @@
 #include <readline/readline.h>
 #include <readline/history.h>
  #include <termios.h>
+#include <signal.h>
+
 
 #define START printf("Start\n")
 #define END printf("End\n")
