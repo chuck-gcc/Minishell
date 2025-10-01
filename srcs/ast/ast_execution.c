@@ -121,6 +121,7 @@ int execute_builtin(t_token *token, char ***envp)
 int execute_ast(t_token *ast, char ***envp)
 {
     int status;
+    int tube[2];
 
     status = 0;
     if(!ast)
@@ -136,7 +137,6 @@ int execute_ast(t_token *ast, char ***envp)
         }
         else if(pid == 0)
         {
-            
             printf("\ni am the children [PID: %d], my father is [PID: %d] \n\n", getpid(), getppid());
             execute_ast(ast->left, envp);
         }

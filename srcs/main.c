@@ -79,7 +79,7 @@ int main(int argc, char **argv, char **envp)
 {
    
     //run_minishell(envp);
-
+    char tab[ft_strlen("hello from children\n")];
     int tube[2];
     int status;
     pid_t f;
@@ -97,13 +97,16 @@ int main(int argc, char **argv, char **envp)
     }
     else if(f == 0)
     {
-        printf("we are in children\n");
-        exit(11);
+        close(tube[0]);
+        write(tube[1], "hello from children\n", ft_strlen("hello from children\n"));
     }
     else
     {
+        close(tube[1]);
+        read(tube[0], tab, ft_strlen("hello from children\n"));
+
         waitpid(f, &status, WUNTRACED | WCONTINUED);
-        printf("im the parent children finish with status %d\n", status);
+        printf(" %s\n", tab);
     }
 
 
