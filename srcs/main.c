@@ -36,14 +36,14 @@ static int process_user_input(char *str, char ***envp)
         return(1);
     }
 
-    display_binary_tree(NULL,*ast,0);
+    //display_binary_tree(NULL,*ast,0);
     //ft_lstiter(*tokens_lst, display_args_of_cmd);
 
-    //int r = execute_ast(*ast, envp);
+    int r = execute_ast(*ast, envp);
 
     ft_lstclear(tokens_lst, delete_list);
     free(ast);
-    return(1);
+    return(r);
 }
 
 
@@ -78,36 +78,36 @@ int run_minishell(char **envp)
 int main(int argc, char **argv, char **envp)
 {
    
-    //run_minishell(envp);
-    char tab[ft_strlen("hello from children\n")];
-    int tube[2];
-    int status;
-    pid_t f;
+    run_minishell(envp);
+    // char tab[ft_strlen("hello from children\n")];
+    // int tube[2];
+    // int status;
+    // pid_t f;
 
-    if(pipe(tube))
-    {
-        perror("Tube");
-        return(1);
-    }
-    f = fork();
-    if(f == -1)
-    {
-        perror("fork");
-        return(1); 
-    }
-    else if(f == 0)
-    {
-        close(tube[0]);
-        write(tube[1], "hello from children\n", ft_strlen("hello from children\n"));
-    }
-    else
-    {
-        close(tube[1]);
-        read(tube[0], tab, ft_strlen("hello from children\n"));
+    // if(pipe(tube))
+    // {
+    //     perror("Tube");
+    //     return(1);
+    // }
+    // f = fork();
+    // if(f == -1)
+    // {
+    //     perror("fork");
+    //     return(1); 
+    // }
+    // else if(f == 0)
+    // {
+    //     close(tube[0]);
+    //     write(tube[1], "hello from children\n", ft_strlen("hello from children\n"));
+    // }
+    // else
+    // {
+    //     close(tube[1]);
+    //     read(tube[0], tab, ft_strlen("hello from children\n"));
 
-        waitpid(f, &status, WUNTRACED | WCONTINUED);
-        printf(" %s\n", tab);
-    }
+    //     waitpid(f, &status, WUNTRACED);
+    //     printf(" %s\n", tab);
+    // }
 
 
 

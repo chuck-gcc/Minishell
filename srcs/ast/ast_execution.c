@@ -121,7 +121,7 @@ int execute_builtin(t_token *token, char ***envp)
 int execute_ast(t_token *ast, char ***envp)
 {
     int status;
-    int tube[2];
+    //int tube[2];
 
     status = 0;
     if(!ast)
