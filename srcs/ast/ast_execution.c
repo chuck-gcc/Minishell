@@ -123,12 +123,18 @@ int execute_ast(t_token *ast, char ***envp)
     int status;
     int tube[2];
 
+    printf("voici ast type %s\n", print_token_type(ast->type));
     status = 0;
     if(!ast)
         return(-1);
 
     if(ast->type == PIPE)
     {
+        if(pipe(tube) == -1)
+        {
+            perror("pipe");
+            return(errno);
+        }
         pid_t pid =  fork();
         if(pid == -1)
         {
@@ -137,32 +143,41 @@ int execute_ast(t_token *ast, char ***envp)
         }
         else if(pid == 0)
         {
+
+            // if(dup2(tube[1], STDOUT_FILENO) == -1)
+            // {
+            //     perror("dup");
+            //     return(errno);
+            // }
             printf("\ni am the children [PID: %d], my father is [PID: %d] \n\n", getpid(), getppid());
+
             execute_ast(ast->left, envp);
+            execute_ast(ast->right, envp);
+
+            return(0);
         }
         else
         {
-            wait(&status);
+            waitpid(pid, &status,0);
+
             printf("\ni am  [PID: %d], the father of [PID: %d] i'm wating the status %d \n",getpid(),pid, status);
+
             exit(status);
         }
     }
-    else if(ast->type == CMD)
+    printf("\ni am the fork [PID: %d], my father is [PID: %d] \n\n", getpid(), getppid());
+
+    if(ast->type == CMD)
     {
         char *path = get_path(ast->value);
-
         status = execute_commande(ast, path, *envp);
         free(path);
-        if(status > 0)
-            execute_ast(ast->right, envp);
-        return(status);
     }
     else if(ast->type == BUILTIN)
     {
+        printf("we are in echo\n");
         status = execute_builtin(ast, envp);
-        if(status > 0)
-            execute_ast(ast->right, envp);
-        return(status);
+
     }
     return(status);
 }
