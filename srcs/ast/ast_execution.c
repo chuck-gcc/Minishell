@@ -152,17 +152,15 @@ int execute_ast(t_token *ast, char ***envp)
             printf("\ni am the children [PID: %d], my father is [PID: %d] \n\n", getpid(), getppid());
 
             execute_ast(ast->left, envp);
-            execute_ast(ast->right, envp);
 
-            return(0);
+            exit(0);
         }
         else
         {
             waitpid(pid, &status,0);
-
             printf("\ni am  [PID: %d], the father of [PID: %d] i'm wating the status %d \n",getpid(),pid, status);
-
-            exit(status);
+            execute_ast(ast->right, envp);
+            return(status);
         }
     }
     printf("\ni am the fork [PID: %d], my father is [PID: %d] \n\n", getpid(), getppid());
@@ -175,8 +173,9 @@ int execute_ast(t_token *ast, char ***envp)
     }
     else if(ast->type == BUILTIN)
     {
-        printf("we are in echo\n");
+        printf("we are in buitltin\n");
         status = execute_builtin(ast, envp);
+        return(status);
 
     }
     return(status);
