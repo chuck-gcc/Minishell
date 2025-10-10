@@ -36,13 +36,14 @@ static int process_user_input(char *str, char ***envp)
     }
 
     display_binary_tree(NULL,*ast,0);
+    printf("\n");
     //ft_lstiter(*tokens_lst, display_args_of_cmd);
 
-    int r = execute_ast(*ast, envp);
-
+    //int r = execute_ast(*ast, envp);
+    execute_ast_test(*ast, envp);
     ft_lstclear(tokens_lst, delete_list);
     free(ast);
-    return(r);
+    return(0);
 }
 
 

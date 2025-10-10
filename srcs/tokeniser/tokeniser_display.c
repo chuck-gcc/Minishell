@@ -45,7 +45,7 @@ void display_arg_of_cmd(t_token *token)
 {
     if(!token)
         return;
-    if(token->type == CMD || token->type == BUILTIN)
+    if(token->type == CMD || token->type == BUILTIN  || token->type == PIPE)
     {
         printf("Commande: [%s]\n", token->value);
         int i = 0;

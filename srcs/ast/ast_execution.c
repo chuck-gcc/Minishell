@@ -121,7 +121,6 @@ int execute_builtin(t_token *token, char ***envp)
 int execute_ast(t_token *ast, char ***envp)
 {
     int status;
-    int tube[2];
 
     printf("voici ast type %s\n", print_token_type(ast->type));
     status = 0;
@@ -130,6 +129,8 @@ int execute_ast(t_token *ast, char ***envp)
 
     if(ast->type == PIPE)
     {
+        int tube[2];
+
         if(pipe(tube) == -1)
         {
             perror("pipe");
@@ -143,22 +144,20 @@ int execute_ast(t_token *ast, char ***envp)
         }
         else if(pid == 0)
         {
-
-            // if(dup2(tube[1], STDOUT_FILENO) == -1)
-            // {
-            //     perror("dup");
-            //     return(errno);
-            // }
-            printf("\ni am the children [PID: %d], my father is [PID: %d] \n\n", getpid(), getppid());
-
+            close(tube[0]);
+            if(dup2(tube[1], STDOUT_FILENO) == -1)
+            {
+                perror("dup");
+                return(errno);
+            }
+            close(tube[1]);
             execute_ast(ast->left, envp);
-
             exit(0);
         }
         else
         {
             waitpid(pid, &status,0);
-            printf("\ni am  [PID: %d], the father of [PID: %d] i'm wating the status %d \n",getpid(),pid, status);
+            close(tube[1]);
             execute_ast(ast->right, envp);
             return(status);
         }
@@ -167,9 +166,11 @@ int execute_ast(t_token *ast, char ***envp)
 
     if(ast->type == CMD)
     {
+        printf("we are in commande\n");
         char *path = get_path(ast->value);
         status = execute_commande(ast, path, *envp);
         free(path);
+        exit(status);
     }
     else if(ast->type == BUILTIN)
     {
@@ -179,4 +180,53 @@ int execute_ast(t_token *ast, char ***envp)
 
     }
     return(status);
+}
+
+void execute_ast_test(t_token *ast, char ***envp)
+{
+    int status;
+
+    if(!ast)
+        return;
+    status = 0;
+    if(ast->type == PIPE)
+    {
+        int tube[2];
+        if(pipe(tube) == -1) {perror("fork"); return ;}
+        pid_t f = fork();
+        if(f == -1) { perror("fork"); return ;}
+        if(f == 0)
+        {
+            printf("we are in children %d and %d\n",tube[0], tube[1]);
+            close(tube[0]);
+            dup2(tube[1], STDOUT_FILENO);
+            close(tube[1]);
+            execute_ast_test(ast->left, envp);
+            exit(0) ;
+        }
+        else
+        {
+            waitpid(f, &status, 0);
+            printf("we are in parent\n");
+            
+            close(tube[1]);
+            dup2(tube[0], STDIN_FILENO);
+            close(tube[0]);
+            execute_ast_test(ast->right, envp);
+            return ;
+        }
+    }
+    printf("voici le pid%d et type %s\n", getppid(), ast->value);
+    if(ast->type == BUILTIN)
+    {
+        execute_builtin(ast, envp);
+        exit(0);
+    }
+    else if(ast->type == CMD)
+    {
+        char *path = get_path(ast->value);
+        execute_commande(ast, path, *envp);
+        exit(0);
+    }
+    return ;
 }

@@ -17,6 +17,7 @@ void display_binary_tree(t_token *parent, t_token *actual, int deriv)
     actual->asso);
 
     display_binary_tree(actual,actual->left, deriv);
+    
 
     if(deriv)
     {
