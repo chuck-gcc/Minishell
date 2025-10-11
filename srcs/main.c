@@ -19,6 +19,7 @@ static int process_user_input(char *str, char ***envp)
         return(1);
     }
 
+    printf("\n");
     ft_lstiter(*tokens_lst, display_args_of_cmd);
 
     t_token **ast = malloc(sizeof(t_token *));
@@ -38,13 +39,13 @@ static int process_user_input(char *str, char ***envp)
     display_binary_tree(NULL,*ast,0);
     printf("\n");
 
-    int r = execute_ast_test(*ast, envp);
+    //int r = execute_ast_test(*ast, envp);
 
     // important know
     
     ft_lstclear(tokens_lst, delete_list);
     free(ast);
-    return(r);
+    return(1);
 }
 
 
@@ -54,7 +55,7 @@ int run_minishell(char **envp)
 
     while (1)
     {
-        input = readline("minisheddll: ");
+        input = readline("mini michel: ");
         if(input)
         {
             if(*input)
@@ -65,7 +66,7 @@ int run_minishell(char **envp)
             //     clear_history();
             //     return(1);
             // }
-            printf("voici le status %s\n", input);
+            //printf("voici le status %s\n", input);
             (void)process_user_input;
             int status = process_user_input(input, &envp);
             (void)status;
@@ -80,8 +81,11 @@ int run_minishell(char **envp)
 
 int main(int argc, char **argv, char **envp)
 {
-    char *l = get_base("ls");
-    //run_minishell(envp);
-    printf("voici l %s\n", l);
+    
+    run_minishell(envp);
+
+
+
+
     return(0);
 }

@@ -22,21 +22,13 @@ int ft_is_builtin(char *str)
 // looping inside th repository
 int ft_is_commande(char *str)
 {
-    DIR *dir;
-    int is_cmd;
-    struct dirent *files;
-    // linux
-    //dir = opendir("/usr/bin");
-    dir = opendir("/bin/");
-    is_cmd = 1;
-    if(dir == NULL)
-        return(-1);
-    while((files = readdir(dir)))
-        if(!ft_strncmp(str,files->d_name, ft_strlen_longest(str,files->d_name)))
-            is_cmd = 0;
-        
-    closedir(dir);
-    return(is_cmd);
+    char *path;
+
+    path = get_path(str);
+    if(!path)
+        return(0);
+    free(path);
+    return(1);
 }
 
 int get_token_type(char *str)
@@ -47,7 +39,7 @@ int get_token_type(char *str)
     {
         return(BUILTIN);
     }
-    if(!ft_is_commande(str))
+    if(ft_is_commande(str))
         return(CMD);
     if(!ft_strncmp(str, "|", ft_strlen_longest(str, "|")))
         return(PIPE);

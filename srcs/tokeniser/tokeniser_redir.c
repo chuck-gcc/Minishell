@@ -10,6 +10,8 @@ int is_redir(char *str)
         return(2);
     if(!ft_strncmp(str, ">>", ft_strlen(str)))
         return(3);
+    if(!ft_strncmp(str, "<<", ft_strlen(str)))
+        return(4);
 
     return(0);
 }
@@ -19,7 +21,10 @@ static int redir_check(char *str)
     int redir_type;
 
     if(!str)
-        return(0);
+    {
+        printf("bash: no redirection argument '\n");
+        return(-1);
+    }
     if(get_token_type(str) == PIPE)
     {
         printf("bash: syntax error near unexpected token `|'\n");
@@ -50,17 +55,34 @@ int get_redir(t_list *node, char **input)
     if(!redir)
         return(-1);
     ((t_token *)node->content)->radir[0] = redir;
-    idx += 1;
-    while (get_token_type(input[idx]) == WORD)
-        idx++;
-    redir_arg = ft_strdup(input[idx - 1]);
-    if(!redir_arg)
+    if(get_token_type(input[idx]) == DELIM)
     {
-        free(redir);
-        redir = NULL;
-        return(-1);
+        redir_arg = ft_strdup(input[++idx]);
+        if(!redir_arg)
+        {
+            free(redir);
+            redir = NULL;
+            return(-1);
+        }
+        ((t_token *)node->content)->radir[1] = redir_arg;
     }
-    ((t_token *)node->content)->radir[1] = redir_arg;
+    else
+    {
+        idx++;
+        while (get_token_type(input[idx]))
+        {
+            printf("were here %s\n",print_token_type(get_token_type(input[idx])) );
+            idx++;
+        }
+        redir_arg = ft_strdup(input[idx - 1]);
+        if(!redir_arg)
+        {
+            free(redir);
+            redir = NULL;
+            return(-1);
+        }
+        ((t_token *)node->content)->radir[1] = redir_arg;
+    }
     //printf("we have proceced the redir %s for the commande :%s\n",((t_token *)node->content)->radir[0], ((t_token *)node->content)->value);
     
     return(idx);

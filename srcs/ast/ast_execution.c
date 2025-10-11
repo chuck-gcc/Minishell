@@ -1,86 +1,5 @@
 #include "ast.h"
 
-char *get_os(void)
-{
-    int tube[2];
-    char os[100];
-    int status;
-    int i;
-    i = 0;
-    if(pipe(tube) == -1) {perror("pipe"); return (NULL);}
-    pid_t f;
-
-    f = fork();
-    if(f == -1) {perror("fork"); return(NULL);}
-    if(f == 0)
-    {
-        close(tube[0]);
-        dup2(tube[1], STDOUT_FILENO);
-        close(tube[1]);
-        char *argv[] = { "uname", NULL};
-        if(execve("/usr/bin/uname", argv, NULL) == -1){perror("excve");exit(errno);}
-    }
-    else
-    {
-        close(tube[1]);
-        waitpid(f,&status,0);
-        if(( i = read(tube[0], os, 100)) == -1)
-            printf("Error wirte\n");
-        os[i - 1] = '\0';
-        close(tube[0]);
-    }
-    return(ft_strdup(os));
-}
-
-char *get_base(char *str)
-{
-    char *os;
-
-    os = get_os();
-    if(os && !ft_strncmp(os,"Linux", ft_strlen(os)))
-    {
-        free(os);
-        return(ft_strdup("/usr/bin/"));
-    }
-    else if( !ft_strncmp(os, "Darwin", ft_strlen(os)))
-    {
-        return(NULL);
-    }
-    return(os);
-}
-
-char *get_path(char *str)
-{
-    char *path;
-    char *base;
-    int len_1;
-    int len_2;
-    int i;
-    int j;
-
-    if(!str)
-        return(NULL);
-    //if mac os
-    base = get_base(str);
-    if(!base)
-        return(NULL);
-    len_1 = ft_strlen(base);
-    len_2 = ft_strlen(str);
-    i = 0;
-    j = 0;
-    path = malloc(sizeof(char *) * (len_1 + len_2 ) + 1);
-    if(!path)
-        return(NULL);
-    while (base[i])
-        path[j++] = base[i++];
-    i = 0;
-    while (str[i])
-        path[j++] = str[i++];
-    path[j] = '\0';
-    return(path);
-}
-
-
 void destroy_token(t_token **tk)
 {
     t_token *token; 
@@ -136,7 +55,7 @@ int execute_commande(t_token *token, char *path, char **envp)
     if(pid == 0)
     {
         (void)path;
-        printf("voici path %s\n", path);
+        //printf("voici path %s\n", path);
         execve(path, token->args, envp);
         perror("Execution error");
         exit(errno);
@@ -229,8 +148,7 @@ int execute_ast(t_token *ast, char ***envp)
     {
         printf("we are in buitltin\n");
         status = execute_builtin(ast, envp);
-        return(status);
-
+        exit(status);
     }
     return(status);
 }
@@ -241,6 +159,7 @@ int execute_ast_test(t_token *ast, char ***envp)
 
     if(!ast)
         return(0);
+        
     status = 0;
     if(ast->type == PIPE)
     {
@@ -265,6 +184,8 @@ int execute_ast_test(t_token *ast, char ***envp)
             dup2(tube[0], STDIN_FILENO);
             close(tube[0]);
             execute_ast_test(ast->right, envp);
+
+
             dup2(saved_stdin, STDIN_FILENO);
             dup2(saved_stdout, STDOUT_FILENO);
             return (status);

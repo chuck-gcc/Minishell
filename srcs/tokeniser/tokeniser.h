@@ -5,6 +5,7 @@
 #include <dirent.h>
 #include <assert.h>
 #include "../../libft/libft.h"
+#include "../tools/tools.h"
 
 /* 
     TOKEN:

@@ -28,7 +28,8 @@ EXT_SRCS= 		srcs/main.c \
 				srcs/tokeniser/tokeniser_args.c \
 				srcs/tokeniser/tokeniser_redir.c \
 				srcs/tokeniser/tokeniser_display.c \
-				srcs/tokeniser/tokeniser_clean.c
+				srcs/tokeniser/tokeniser_clean.c \
+				srcs/tools/tools_path.c \
 
 TEST_SRCS = 	test/external_fonction/dup.c  \
  				test/external_fonction/readline.c\
