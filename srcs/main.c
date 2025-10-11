@@ -37,13 +37,14 @@ static int process_user_input(char *str, char ***envp)
 
     display_binary_tree(NULL,*ast,0);
     printf("\n");
-    //ft_lstiter(*tokens_lst, display_args_of_cmd);
 
-    //int r = execute_ast(*ast, envp);
-    execute_ast_test(*ast, envp);
+    int r = execute_ast_test(*ast, envp);
+
+    // important know
+    
     ft_lstclear(tokens_lst, delete_list);
     free(ast);
-    return(0);
+    return(r);
 }
 
 
@@ -53,7 +54,7 @@ int run_minishell(char **envp)
 
     while (1)
     {
-        input = readline("minishell: ");
+        input = readline("minisheddll: ");
         if(input)
         {
             if(*input)
@@ -79,7 +80,8 @@ int run_minishell(char **envp)
 
 int main(int argc, char **argv, char **envp)
 {
-    run_minishell(envp);
-    
+    char *l = get_base("ls");
+    //run_minishell(envp);
+    printf("voici l %s\n", l);
     return(0);
 }

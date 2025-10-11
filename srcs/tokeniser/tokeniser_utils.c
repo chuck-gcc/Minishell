@@ -26,8 +26,8 @@ int ft_is_commande(char *str)
     int is_cmd;
     struct dirent *files;
     // linux
-    dir = opendir("/usr/bin");
-    //dir = opendir("/bin");
+    //dir = opendir("/usr/bin");
+    dir = opendir("/bin/");
     is_cmd = 1;
     if(dir == NULL)
         return(-1);
