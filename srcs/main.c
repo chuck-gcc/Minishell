@@ -39,13 +39,13 @@ static int process_user_input(char *str, char ***envp)
     display_binary_tree(NULL,*ast,0);
     printf("\n");
 
-    //int r = execute_ast_test(*ast, envp);
+    int r = execute_ast_test(*ast, envp);
 
     // important know
     
     ft_lstclear(tokens_lst, delete_list);
     free(ast);
-    return(1);
+    return(r);
 }
 
 
@@ -83,9 +83,5 @@ int main(int argc, char **argv, char **envp)
 {
     
     run_minishell(envp);
-
-
-
-
     return(0);
 }
