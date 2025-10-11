@@ -53,7 +53,7 @@ char *get_path_for_mac(char *cmd)
             s = readdir(folder);
             if(!s)
                 break;
-            if(ft_strncmp(cmd,s->d_name, ft_strlen(s->d_name)) == 0)
+            if(ft_strncmp(cmd,s->d_name, ft_strlen(cmd)) == 0)
             {
                 closedir(folder);
                 folder = NULL;
@@ -69,21 +69,21 @@ char *get_path_for_mac(char *cmd)
 
 char *get_base_path(char *str)
 {
-    char *os;
+    char *final_path;
 
-    os = get_os();
-    if(os && !ft_strncmp(os,"Linux", ft_strlen(os)))
-    {
-        free(os);
-        return(ft_strdup("/usr/bin/"));
-    }
-    else if( !ft_strncmp(os, "Darwin", ft_strlen(os)))
-    {
-        
-        char *final_path = get_path_for_mac(str);
-        return(final_path);
-    }
-    return(NULL);
+    if(!str)
+        return(NULL);
+    #ifdef __linux__ 
+        final_path = ft_strdup("/usr/bin/");
+        if(!final_path)
+            return(NULL);
+    #else
+        final_path = get_path_for_mac(str);
+        if(!final_path)
+            return(NULL);
+    #endif
+
+    return(final_path);
 }
 
 char *get_path(char *str)

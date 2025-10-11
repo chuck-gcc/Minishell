@@ -67,7 +67,6 @@ int run_minishell(char **envp)
             //     return(1);
             // }
             //printf("voici le status %s\n", input);
-            (void)process_user_input;
             int status = process_user_input(input, &envp);
             (void)status;
 
@@ -81,7 +80,33 @@ int run_minishell(char **envp)
 
 int main(int argc, char **argv, char **envp)
 {
+
     
+
     run_minishell(envp);
+
+
+    // int tube[2];    
+    // int status;
+
+    // pipe(tube);
+    // pid_t f = fork();
+    // if(f == 0)
+    // {
+    //     char buffer[1024];
+    //     close(tube[0]);
+    //     int b;
+    //     if( (b = read(tube[1], buffer, 1024) == -1)){perror("reasd"); return(1);}
+    //     printf("end input\n");
+    //     exit(0);
+    // }
+    // waitpid(f, &status, 0);
+    // char buffer[1024];
+    // close(tube[1]);
+    // int b;
+    // if( (b = read(tube[0], buffer, 1024) == -1)){perror("reasd"); return(1);}
+    // printf("voici buffer %s\n", buffer);
+
+
     return(0);
 }
