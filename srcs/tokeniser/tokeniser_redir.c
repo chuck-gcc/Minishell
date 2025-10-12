@@ -72,9 +72,9 @@ int get_redir(t_list *node, char **input)
     else
     {
         idx++;
-        while (get_token_type(input[idx]) != PIPE)
+        while (input[idx] && get_token_type(input[idx]) != PIPE)
         {
-            printf("were here %s\n",print_token_type(get_token_type(input[idx])) );
+            printf("were here %s and %s\n",print_token_type(get_token_type(input[idx])), input[idx] );
             idx++;
         }
         redir_arg = ft_strdup(input[idx - 1]);
