@@ -51,13 +51,14 @@ int get_redir(t_list *node, char **input)
         printf("error redir check\n");
         return(-1);
     }
-    redir = ft_strdup(input[idx++]);
+    redir = ft_strdup(input[idx]);
     if(!redir)
         return(-1);
     ((t_token *)node->content)->radir[0] = redir;
     if(get_token_type(input[idx]) == DELIM)
     {
-        redir_arg = ft_strdup(input[idx]);
+        idx++;
+        redir_arg = ft_strdup(input[idx++]);
         if(!redir_arg)
         {
             free(redir);
@@ -65,11 +66,13 @@ int get_redir(t_list *node, char **input)
             return(-1);
         }
         ((t_token *)node->content)->radir[1] = redir_arg;
+        while (input[idx] && get_token_type(input[idx]) != PIPE)
+            idx++;
     }
     else
     {
         idx++;
-        while (get_token_type(input[idx]) != PIPE && !is_redir(input[idx]))
+        while (get_token_type(input[idx]) != PIPE)
         {
             printf("were here %s\n",print_token_type(get_token_type(input[idx])) );
             idx++;

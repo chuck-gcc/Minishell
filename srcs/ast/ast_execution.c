@@ -91,7 +91,7 @@ int execute_builtin(t_token *token, char ***envp)
     return(1);
 }
 
-int execute_ast_test(t_token *ast, char ***envp)
+int execute_ast(t_token *ast, char ***envp)
 {
     int status;
 
@@ -110,7 +110,7 @@ int execute_ast_test(t_token *ast, char ***envp)
             close(tube[0]);
             dup2(tube[1], STDOUT_FILENO);
             close(tube[1]);
-            int r = execute_ast_test(ast->left, envp);
+            int r = execute_ast(ast->left, envp);
             exit(r) ;
         }
         else
@@ -122,7 +122,7 @@ int execute_ast_test(t_token *ast, char ***envp)
             close(tube[1]);
             dup2(tube[0], STDIN_FILENO);
             close(tube[0]);
-            execute_ast_test(ast->right, envp);
+            execute_ast(ast->right, envp);
             dup2(saved_stdin, STDIN_FILENO);
             dup2(saved_stdout, STDOUT_FILENO);
             return (status);

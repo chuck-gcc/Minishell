@@ -3,6 +3,20 @@
 #include <stdio.h>
 #include <string.h>
 
+
+int execute_heredoc(t_token *ast)
+{
+    printf("here %s\n", ast->radir[0]);
+    if(!ast)
+        return(1);
+    if(ast->radir[0] && ft_strncmp(ast->radir[0], "<<", ft_strlen(ast->radir[0]) ) == 0)
+    {
+        printf("here doc\n");
+        return(1);
+    }
+    return(0);
+}
+
 static int process_user_input(char *str, char ***envp)
 {
     
@@ -39,8 +53,8 @@ static int process_user_input(char *str, char ***envp)
     display_binary_tree(NULL,*ast,0);
     printf("\n");
 
-    int r = execute_ast_test(*ast, envp);
-
+    //int r = execute_ast(*ast, envp);
+    int r = execute_heredoc(*ast);
     // important know
     
     ft_lstclear(tokens_lst, delete_list);
