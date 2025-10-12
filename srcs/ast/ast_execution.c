@@ -54,12 +54,17 @@ int execute_commande(t_token *token, char *path, char **envp)
     }
     if(pid == 0)
     {
-        (void)path;
         //printf("voici path %s\n", path);
         execve(path, token->args, envp);
         perror("Execution error");
         exit(errno);
     }
+    else
+    {
+        waitpid(pid, &status, 0);
+        return(status);
+    }
+    
     
     return(status);
 }
@@ -114,13 +119,10 @@ int execute_ast_test(t_token *ast, char ***envp)
             waitpid(f, &status, 0);
             int saved_stdin = dup(STDIN_FILENO);
             int saved_stdout = dup(STDOUT_FILENO);
-
             close(tube[1]);
             dup2(tube[0], STDIN_FILENO);
             close(tube[0]);
             execute_ast_test(ast->right, envp);
-
-
             dup2(saved_stdin, STDIN_FILENO);
             dup2(saved_stdout, STDOUT_FILENO);
             return (status);
