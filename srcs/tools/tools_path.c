@@ -67,6 +67,28 @@ char *get_path_for_mac(char *cmd)
     return(NULL);
 }
 
+char *get_path_for_linux(char *cmd)
+{
+    DIR     *folder;
+    struct  dirent *s;
+
+    folder = opendir("/usr/bin/");
+    while(folder)
+    {
+        s = readdir(folder);
+        if(!s)
+            break;
+        if(ft_strncmp(cmd,s->d_name, ft_strlen(cmd)) == 0)
+        {
+            closedir(folder);
+            folder = NULL;
+            return(ft_strdup("/usr/bin/"));
+        }
+    }
+    closedir(folder);
+    return(NULL);
+}
+
 char *get_base_path(char *str)
 {
     char *final_path;
@@ -74,7 +96,7 @@ char *get_base_path(char *str)
     if(!str)
         return(NULL);
     #ifdef __linux__ 
-        final_path = ft_strdup("/usr/bin/");
+        final_path = get_path_for_linux(str);
         if(!final_path)
             return(NULL);
     #else
