@@ -55,7 +55,6 @@ char *get_path_for_mac(char *cmd)
                 break;
             if(ft_strncmp(cmd,s->d_name, ft_strlen_longest(cmd, s->d_name)) == 0)
             {
-                printf("found command %s and %s\n", cmd,s->d_name );
                 closedir(folder);
                 folder = NULL;
                 return(ft_strdup(path[i]));
@@ -81,7 +80,6 @@ char *get_path_for_linux(char *cmd)
             break;
         if(ft_strncmp(cmd,s->d_name, ft_strlen_longest(cmd, s->d_name)) == 0)
         {
-            printf("found command %s and %s\n", cmd,s->d_name );
             closedir(folder);
             folder = NULL;
             return(ft_strdup("/usr/bin/"));

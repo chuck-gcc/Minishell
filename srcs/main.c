@@ -3,15 +3,78 @@
 #include <stdio.h>
 #include <string.h>
 
-
-int execute_heredoc(t_token *ast)
+int execute_heredoc(t_token *ast, char *delim, char **envp)
 {
-    printf("here %s\n", ast->radir[0]);
     if(!ast)
         return(1);
     if(ast->radir[0] && ft_strncmp(ast->radir[0], "<<", ft_strlen(ast->radir[0]) ) == 0)
     {
-        printf("here doc\n");
+        printf("here %s\n", ast->radir[0]);
+
+        int tube[2];
+        pid_t pid;
+        int status;
+
+        if(pipe(tube) == -1) {perror("pipe"); return(1);}
+        pid = fork();
+        if(pid == -1){perror("fork"); return(1);}
+        else if (pid == 0)
+        {
+            char buffer[1024];
+            int b_read;
+
+            close(tube[0]);
+            dup2(tube[1], STDIN_FILENO);
+            do
+            {
+                b_read = write(tube[1], buffer, 1024);
+                if(b_read == -1)
+                {
+                    perror("read");
+                    return(1);
+                }
+                if(ft_index_of_c(buffer, 32) == -1)
+                {
+                    printf("one word %s et delim %s\n", buffer,delim);
+                    if(ft_strncmp(buffer, delim, ft_strlen_longest(buffer, delim)) == 0)
+                    {
+                        ft_memset(buffer, 0, 1024);
+                        exit(0);
+                    }
+                }
+                ft_memset(buffer, 0, 1024);
+            } while (b_read > 0);
+            
+            
+            exit(errno);
+        }
+        else
+        {
+            char buf[1024];
+            close(tube[1]);
+            while (read(tube[0], buf, 1024) > 0)
+            {
+                if(ft_strlen(buf) > 0)
+                    printf("voici %s\n", buf);
+            }
+            
+            
+
+            waitpid(pid, &status, 0);
+            
+            
+
+            printf("voici status %d\n", status);
+            if(WIFEXITED(status))
+                printf("processur enfqnt terminer avec un code=%d\n", WEXITSTATUS(status));
+            if(WIFSIGNALED(status))
+                printf("processur enfqnt tuer par un signal\n");
+            if(WIFSTOPPED(status))
+                printf("processur enfqnt stoper par un signal\n");
+
+        }
+        
+
         return(1);
     }
     return(0);
@@ -19,7 +82,6 @@ int execute_heredoc(t_token *ast)
 
 static int process_user_input(char *str, char ***envp)
 {
-    
     t_list **tokens_lst;
     
     tokens_lst = calloc(sizeof(t_list *) , 1);
@@ -54,7 +116,7 @@ static int process_user_input(char *str, char ***envp)
     printf("\n");
 
     //int r = execute_ast(*ast, envp);
-    int r = execute_heredoc(*ast);
+    int r = execute_heredoc(*ast, "n\n",*envp);
     // important know
     
     ft_lstclear(tokens_lst, delete_list);
@@ -98,29 +160,6 @@ int main(int argc, char **argv, char **envp)
     
 
     run_minishell(envp);
-
-
-    // int tube[2];    
-    // int status;
-
-    // pipe(tube);
-    // pid_t f = fork();
-    // if(f == 0)
-    // {
-    //     char buffer[1024];
-    //     close(tube[0]);
-    //     int b;
-    //     if( (b = read(tube[1], buffer, 1024) == -1)){perror("reasd"); return(1);}
-    //     printf("end input\n");
-    //     exit(0);
-    // }
-    // waitpid(f, &status, 0);
-    // char buffer[1024];
-    // close(tube[1]);
-    // int b;
-    // if( (b = read(tube[0], buffer, 1024) == -1)){perror("reasd"); return(1);}
-    // printf("voici buffer %s\n", buffer);
-
-
+    
     return(0);
 }
