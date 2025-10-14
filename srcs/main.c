@@ -20,51 +20,55 @@ int execute_heredoc(t_token *ast, char *delim, char **envp)
         if(pid == -1){perror("fork"); return(1);}
         else if (pid == 0)
         {
-            char buffer[1024];
             int b_read;
 
             close(tube[0]);
-            dup2(tube[1], STDIN_FILENO);
+            
             do
             {
-                b_read = write(tube[1], buffer, 1024);
+                char *line = readline(NULL);
+                if(ft_nbr_of_word(line) == 1)
+                {
+                    if(ft_strncmp(line, delim, ft_strlen_longest(line, delim)) == 0)
+                    {
+                        exit(0);
+                    }
+                }
+                b_read = write(tube[1], line, ft_strlen(line));
                 if(b_read == -1)
                 {
                     perror("read");
                     return(1);
                 }
-                if(ft_index_of_c(buffer, 32) == -1)
-                {
-                    printf("one word %s et delim %s\n", buffer,delim);
-                    if(ft_strncmp(buffer, delim, ft_strlen_longest(buffer, delim)) == 0)
-                    {
-                        ft_memset(buffer, 0, 1024);
-                        exit(0);
-                    }
-                }
-                ft_memset(buffer, 0, 1024);
+                write(tube[1], "\n", ft_strlen("\n"));
             } while (b_read > 0);
-            
-            
             exit(errno);
         }
         else
         {
-            char buf[1024];
             close(tube[1]);
-            while (read(tube[0], buf, 1024) > 0)
-            {
-                if(ft_strlen(buf) > 0)
-                    printf("voici %s\n", buf);
-            }
-            
-            
-
+            // char bu[1024];
+            // int b;
             waitpid(pid, &status, 0);
+
+            dup2(tube[0], STDIN_FILENO);
+            // do
+            // {
+            //     b = read(tube[0], bu, 1023);
+            //     bu [b] = '\0';
+            //     printf("%s\n", bu);
+
+            // } while (b > 0);
             
+            char *cnd[] = {"cat", NULL};
+            execve("/usr/bin/cat", cnd, envp);
+            printf("cat\n");
+           
+            printf("voici status %d\n", status);
             
 
-            printf("voici status %d\n", status);
+            
+
             if(WIFEXITED(status))
                 printf("processur enfqnt terminer avec un code=%d\n", WEXITSTATUS(status));
             if(WIFSIGNALED(status))
@@ -116,7 +120,7 @@ static int process_user_input(char *str, char ***envp)
     printf("\n");
 
     //int r = execute_ast(*ast, envp);
-    int r = execute_heredoc(*ast, "n\n",*envp);
+    int r = execute_heredoc(*ast, "n",*envp);
     // important know
     
     ft_lstclear(tokens_lst, delete_list);

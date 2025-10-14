@@ -100,5 +100,6 @@ int 	ft_is_split_sort(char **split);
 int 	ft_strlen_longest(char *str_1, char *str_2);
 char 	*ft_skip_space_and_quote(char *str);
 int		ft_isquote(char c);
+int 	ft_nbr_of_word(const char *str);
 
 #endif
