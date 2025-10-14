@@ -23,16 +23,13 @@ int execute_heredoc(t_token *ast, char *delim, char **envp)
             int b_read;
 
             close(tube[0]);
-            
             do
             {
                 char *line = readline(NULL);
                 if(ft_nbr_of_word(line) == 1)
                 {
                     if(ft_strncmp(line, delim, ft_strlen_longest(line, delim)) == 0)
-                    {
                         exit(0);
-                    }
                 }
                 b_read = write(tube[1], line, ft_strlen(line));
                 if(b_read == -1)
@@ -47,34 +44,24 @@ int execute_heredoc(t_token *ast, char *delim, char **envp)
         else
         {
             close(tube[1]);
-            // char bu[1024];
-            // int b;
+                
+            dup2(tube[0], STDIN_FILENO);
+            close(tube[0]);
             waitpid(pid, &status, 0);
 
-            dup2(tube[0], STDIN_FILENO);
-            // do
-            // {
-            //     b = read(tube[0], bu, 1023);
-            //     bu [b] = '\0';
-            //     printf("%s\n", bu);
-
-            // } while (b > 0);
-            
             char *cnd[] = {"cat", NULL};
             execve("/usr/bin/cat", cnd, envp);
-            printf("cat\n");
-           
-            printf("voici status %d\n", status);
-            
-
-            
-
             if(WIFEXITED(status))
                 printf("processur enfqnt terminer avec un code=%d\n", WEXITSTATUS(status));
             if(WIFSIGNALED(status))
                 printf("processur enfqnt tuer par un signal\n");
             if(WIFSTOPPED(status))
                 printf("processur enfqnt stoper par un signal\n");
+            printf("voici status %d\n", status);
+
+            
+
+            
 
         }
         
