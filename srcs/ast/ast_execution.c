@@ -67,7 +67,7 @@ int execute_commande(t_token *token, char *path, char **envp)
         printf("process terminé avec succes\n");
     else
     {
-        printf("Error %d\n", WIFEXITED(status));
+        printf("Error %d\n", WEXITSTATUS(status));
         return(status);
     }
     return(status);
@@ -132,7 +132,6 @@ int      execute_ast(t_token *ast, char ***envp)
         close(tube[1]);
         waitpid(f1,&status, 0);
         waitpid(f2,&status2, 0);
-        printf("fork finished\n");
         return (status);
     }
     if(ast->type == BUILTIN)
@@ -142,7 +141,6 @@ int      execute_ast(t_token *ast, char ***envp)
     }
     else if(ast->type == CMD)
     {
-        printf("voici %s\n", ast->value);
         char *path = get_path(ast->value);
         if(!path)
             return(-1);
