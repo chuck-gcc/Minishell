@@ -68,9 +68,9 @@ int execute_commande(t_token *token, char *path, char **envp)
     else
     {
         printf("Error %d\n", WEXITSTATUS(status));
-        return(status);
+        return(WEXITSTATUS(status));
     }
-    return(status);
+    return(WEXITSTATUS(status));
 }
 
 
@@ -98,6 +98,7 @@ int execute_builtin(t_token *token, char ***envp)
 int      execute_ast(t_token *ast, char ***envp)
 {
     int status;
+    int r;
 
     if(!ast)
         return(0);
@@ -136,7 +137,7 @@ int      execute_ast(t_token *ast, char ***envp)
     }
     if(ast->type == BUILTIN)
     {
-        int r = execute_builtin(ast, envp);
+        r = execute_builtin(ast, envp);
         return(r);
     }
     else if(ast->type == CMD)
@@ -145,7 +146,7 @@ int      execute_ast(t_token *ast, char ***envp)
         if(!path)
             return(-1);
         
-        int r = execute_commande(ast, path, *envp);
+        r = execute_commande(ast, path, *envp);
         return(r);
     }
     return (0);

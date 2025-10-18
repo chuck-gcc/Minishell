@@ -1,19 +1,20 @@
+
 #include "main.h"
- #include <sys/stat.h>
+#include <sys/stat.h>
 #include <stdio.h>
 #include <string.h>
 
 
-
-static int process_user_input(char *str, char ***envp)
+static int process_user_input(char *str, char ***envp, int status_code)
 {
-    t_list **tokens_lst;
+    t_list  **tokens_lst;
+    int     status;
     
     tokens_lst = calloc(sizeof(t_list *) , 1);
     if(!tokens_lst)
         return(1);
    
-    if(!get_token_list(str, tokens_lst, *envp))
+    if(!get_token_list(str, tokens_lst, *envp, status_code))
     {
         printf("Error token list\n");
         ft_lstclear(tokens_lst, delete_list);
@@ -40,20 +41,23 @@ static int process_user_input(char *str, char ***envp)
     display_binary_tree(NULL,*ast,0);
     printf("\n");
 
-    int r = execute_ast(*ast, envp);
+    status = execute_ast(*ast, envp);
+    printf("voici status %d\n", status_code);
     //int r = execute_heredoc(*ast, "n",*envp);
     // important know
     
     ft_lstclear(tokens_lst, delete_list);
     free(ast);
-    return(r);
+    return(status);
 }
 
 
 int run_minishell(char **envp)
 {
     char *input;
+    int status_code;
 
+    status_code = -1;
     while (1)
     {
         input = readline("mini michel: ");
@@ -68,9 +72,7 @@ int run_minishell(char **envp)
             //     return(1);
             // }
             //printf("voici le status %s\n", input);
-            int status = process_user_input(input, &envp);
-            (void)status;
-
+            status_code = process_user_input(input, &envp, status_code);
             //printf("STATUS COMMANDE %d\n\n", status);
             free(input);
             rl_on_new_line();

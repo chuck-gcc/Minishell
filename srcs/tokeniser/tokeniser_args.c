@@ -37,7 +37,7 @@ static int count_args(char **input)
     return(i);
 }
 
-int ft_expend_var(t_token *token, char **envp)
+int ft_expend_var(t_token *token, char **envp, int status_code)
 {
     int i;
     int idx_in_var;
@@ -54,12 +54,20 @@ int ft_expend_var(t_token *token, char **envp)
         idx_in_var = ft_index_of_c(token->args[i], '$');
         if(idx_in_var == 0)
         {
-            var = ft_get_env(&token->args[i][1], envp);
-            free(token->args[i]);
-            if(!var)
-                token->args[i] = ft_strdup(" ");
+            if(ft_strncmp(token->args[i], "$?", ft_strlen_longest(token->args[i], "$?")) == 0)
+            {
+                free(token->args[i]);
+                token->args[i] = ft_strdup(ft_itoa(status_code));
+            }
             else
-                token->args[i] = ft_strdup(var);
+            {
+                var = ft_get_env(&token->args[i][1], envp);
+                free(token->args[i]);
+                if(!var)
+                    token->args[i] = ft_strdup(" ");
+                else
+                    token->args[i] = ft_strdup(var);
+            }
         }
         else if (idx_in_var > 0)
         {
@@ -92,7 +100,8 @@ int ft_expend_var(t_token *token, char **envp)
     }
     return(0);
 }
-int get_args(t_list *node, char **input, char **envp)
+
+int get_args(t_list *node, char **input, char **envp, int status_code)
 {
     int i;
     int idx;
@@ -117,7 +126,7 @@ int get_args(t_list *node, char **input, char **envp)
             args[i++] = ft_strdup(input[idx++]);
         args[i] = NULL;
         ((t_token *)node->content)->args = args;
-        ft_expend_var(((t_token *)node->content), envp);
+        ft_expend_var(((t_token *)node->content), envp, status_code);
         return(idx);
     }
     return(0);

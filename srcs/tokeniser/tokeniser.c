@@ -1,6 +1,7 @@
 
 #include "tokeniser.h"
 
+
 char *expend_var(char *str, char **envp)
 {
     char *var;
@@ -52,7 +53,7 @@ static t_list *new_list_node(char *str, int i, char *precedent, char **envp)
     return(node);
 }
 
- static int process_cmd_node(t_list *node, char **input, char **envp)
+ static int process_cmd_node(t_list *node, char **input, char **envp, int status_code)
 {
     int i;
     int r; 
@@ -80,7 +81,7 @@ static t_list *new_list_node(char *str, int i, char *precedent, char **envp)
     return(i + 1);
 }
 
-static int process_node(t_list *node_lst, char **input, char **envp)
+static int process_node(t_list *node_lst, char **input, char **envp, int status_code)
 {
     int process;
     t_token *node;
@@ -92,7 +93,7 @@ static int process_node(t_list *node_lst, char **input, char **envp)
         return(1);
     if(node->type == CMD || node->type == BUILTIN)
     {
-        process = process_cmd_node(node_lst, (input + 1), envp);
+        process = process_cmd_node(node_lst, (input + 1), envp, status_code);
         if(process != -1)
             return(process);
         else
@@ -102,7 +103,7 @@ static int process_node(t_list *node_lst, char **input, char **envp)
     return(1);
 }
 
-t_list **get_token_list(char *str, t_list **lst, char **envp)
+t_list **get_token_list(char *str, t_list **lst, char **envp, int status_code)
 {
     int i;
     int process;
@@ -119,7 +120,7 @@ t_list **get_token_list(char *str, t_list **lst, char **envp)
         node = new_list_node(split[i], i, split[i - process], envp);
         if(!node)
             return(ft_split_clean(&split));
-        process = process_node(node, &split[i], envp);
+        process = process_node(node, &split[i], envp, status_code);
         if(process == -1)
             return(ft_split_clean(&split));
         i += process;

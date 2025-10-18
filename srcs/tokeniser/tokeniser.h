@@ -7,6 +7,8 @@
 #include "../../libft/libft.h"
 #include "../tools/tools.h"
 
+
+
 /* 
     TOKEN:
 
@@ -47,7 +49,8 @@ typedef struct s_token
 } t_token;
 
 
-t_list  **get_token_list(char *str, t_list **lst, char **envp);
+
+t_list  **get_token_list(char *str, t_list **lst, char **envp, int status_code);
 
 // utils
 
@@ -62,8 +65,8 @@ int get_redir(t_list *node, char **input);
 int is_redir(char *str);
 
 // tokeniser args
-int get_args(t_list *node, char **input, char **envp);
-int ft_expend_var(t_token *token, char **envp);
+int get_args(t_list *node, char **input, char **envp, int status_code);
+int ft_expend_var(t_token *token, char **envp, int status_code);
 //tokeniser display
 
 char    *print_token_type(int token_type);
