@@ -42,30 +42,34 @@ void destroy_token(t_token **tk)
 }
 int execute_commande(t_token *token, char *path, char **envp)
 {
-    pid_t   pid;
-    int     status;
+    //int     tube[2];
+    int status;
 
-    pid = fork();
     status = 0;
-    if(pid == -1)
+    // if(open_redirection(token))
+    // {
+    //     pid_t g = execute_heredoc(token, tube, envp);
+    //     waitpid(g,&status, 0);
+    //     close(tube[1]);
+    // }
+    // else
+    //     printf("no redirection\n");
+    pid_t f1 = fork();
+    if(f1 == -1) { perror("fork"); return (-1);}
+    if(f1 == 0)
     {
-        perror("Fork error");
-        return(errno);
-    }
-    if(pid == 0)
-    {
-        //printf("voici path %s\n", path);
         execve(path, token->args, envp);
         perror("Execution error");
-        exit(errno);
+        exit(errno); 
     }
+    waitpid(f1,&status, 0);
+    if(WIFEXITED(status))
+        printf("process terminé avec succes\n");
     else
     {
-        waitpid(pid, &status, 0);
+        printf("Error %d\n", WIFEXITED(status));
         return(status);
     }
-    
-    
     return(status);
 }
 
@@ -91,7 +95,7 @@ int execute_builtin(t_token *token, char ***envp)
     return(1);
 }
 
-int execute_ast(t_token *ast, char ***envp)
+int      execute_ast(t_token *ast, char ***envp)
 {
     int status;
 
@@ -102,44 +106,49 @@ int execute_ast(t_token *ast, char ***envp)
     if(ast->type == PIPE)
     {
         int tube[2];
+
         if(pipe(tube) == -1) {perror("fork"); return (-1);}
-        pid_t f = fork();
-        if(f == -1) { perror("fork"); return (-1);}
-        if(f == 0)
+        pid_t f1 = fork();
+        if(f1 == -1) { perror("fork"); return (-1);}
+        if(f1 == 0)
         {
             close(tube[0]);
-            dup2(tube[1], STDOUT_FILENO);
+            dup2(tube[1],STDOUT_FILENO);
             close(tube[1]);
-            int r = execute_ast(ast->left, envp);
-            exit(r) ;
+            exit(execute_ast(ast->left, envp));
         }
-        else
+
+        pid_t f2 = fork();
+        int status2 = 0;
+        if(f2 == -1) { perror("fork"); return (-1);}
+        if(f2 == 0)
         {
-            
-            waitpid(f, &status, 0);
-            int saved_stdin = dup(STDIN_FILENO);
-            int saved_stdout = dup(STDOUT_FILENO);
             close(tube[1]);
-            dup2(tube[0], STDIN_FILENO);
+            dup2( tube[0], STDIN_FILENO);
             close(tube[0]);
-            execute_ast(ast->right, envp);
-            dup2(saved_stdin, STDIN_FILENO);
-            dup2(saved_stdout, STDOUT_FILENO);
-            return (status);
+            exit(execute_ast(ast->right, envp));
         }
+        close(tube[0]);
+        close(tube[1]);
+        waitpid(f1,&status, 0);
+        waitpid(f2,&status2, 0);
+        printf("fork finished\n");
+        return (status);
     }
     if(ast->type == BUILTIN)
     {
-        execute_builtin(ast, envp);
-        return(0);
+        int r = execute_builtin(ast, envp);
+        return(r);
     }
     else if(ast->type == CMD)
     {
+        printf("voici %s\n", ast->value);
         char *path = get_path(ast->value);
         if(!path)
             return(-1);
-        execute_commande(ast, path, *envp);
-        return(0) ;
+        
+        int r = execute_commande(ast, path, *envp);
+        return(r);
     }
     return (0);
 }

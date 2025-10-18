@@ -3,73 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 
-int execute_heredoc(t_token *ast, char *delim, char **envp)
-{
-    if(!ast)
-        return(1);
-    if(ast->radir[0] && ft_strncmp(ast->radir[0], "<<", ft_strlen(ast->radir[0]) ) == 0)
-    {
-        printf("here %s\n", ast->radir[0]);
 
-        int tube[2];
-        pid_t pid;
-        int status;
-
-        if(pipe(tube) == -1) {perror("pipe"); return(1);}
-        pid = fork();
-        if(pid == -1){perror("fork"); return(1);}
-        else if (pid == 0)
-        {
-            int b_read;
-
-            close(tube[0]);
-            do
-            {
-                char *line = readline(NULL);
-                if(ft_nbr_of_word(line) == 1)
-                {
-                    if(ft_strncmp(line, delim, ft_strlen_longest(line, delim)) == 0)
-                        exit(0);
-                }
-                b_read = write(tube[1], line, ft_strlen(line));
-                if(b_read == -1)
-                {
-                    perror("read");
-                    return(1);
-                }
-                write(tube[1], "\n", ft_strlen("\n"));
-            } while (b_read > 0);
-            exit(errno);
-        }
-        else
-        {
-            close(tube[1]);
-                
-            dup2(tube[0], STDIN_FILENO);
-            close(tube[0]);
-            waitpid(pid, &status, 0);
-
-            char *cnd[] = {"cat", NULL};
-            execve("/usr/bin/cat", cnd, envp);
-            if(WIFEXITED(status))
-                printf("processur enfqnt terminer avec un code=%d\n", WEXITSTATUS(status));
-            if(WIFSIGNALED(status))
-                printf("processur enfqnt tuer par un signal\n");
-            if(WIFSTOPPED(status))
-                printf("processur enfqnt stoper par un signal\n");
-            printf("voici status %d\n", status);
-
-            
-
-            
-
-        }
-        
-
-        return(1);
-    }
-    return(0);
-}
 
 static int process_user_input(char *str, char ***envp)
 {
@@ -106,8 +40,8 @@ static int process_user_input(char *str, char ***envp)
     display_binary_tree(NULL,*ast,0);
     printf("\n");
 
-    //int r = execute_ast(*ast, envp);
-    int r = execute_heredoc(*ast, "n",*envp);
+    int r = execute_ast(*ast, envp);
+    //int r = execute_heredoc(*ast, "n",*envp);
     // important know
     
     ft_lstclear(tokens_lst, delete_list);

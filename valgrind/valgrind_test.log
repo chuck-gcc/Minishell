@@ -1,0 +1,325 @@
+==66877== Memcheck, a memory error detector
+==66877== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==66877== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
+==66877== Command: ./bin/test
+==66877== Parent PID: 66868
+==66877== 
+==66879== 
+==66879== FILE DESCRIPTORS: 9 open (3 std) at exit.
+==66879== Open file descriptor 103: /snap/code/210/usr/share/code/v8_context_snapshot.bin
+==66879==    <inherited from parent>
+==66879== 
+==66879== Open AF_UNIX socket 43: <unknown>
+==66879==    <inherited from parent>
+==66879== 
+==66879== Open file descriptor 42: /home/cc/.config/Code/logs/20251018T162825/ptyhost.log
+==66879==    <inherited from parent>
+==66879== 
+==66879== Open file descriptor 35:
+==66879==    <inherited from parent>
+==66879== 
+==66879== Open pf-16 socket 34:
+==66879==    <inherited from parent>
+==66879== 
+==66879== Open file descriptor 3: /home/cc/Documents/Minishell/valgrind/valgrind_test.log
+==66879==    <inherited from parent>
+==66879== 
+==66879== 
+==66879== HEAP SUMMARY:
+==66879==     in use at exit: 0 bytes in 0 blocks
+==66879==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
+==66879== 
+==66879== All heap blocks were freed -- no leaks are possible
+==66879== 
+==66879== For lists of detected and suppressed errors, rerun with: -s
+==66879== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==66884== 
+==66884== FILE DESCRIPTORS: 9 open (3 std) at exit.
+==66884== Open file descriptor 103: /snap/code/210/usr/share/code/v8_context_snapshot.bin
+==66884==    <inherited from parent>
+==66884== 
+==66884== Open AF_UNIX socket 43: <unknown>
+==66884==    <inherited from parent>
+==66884== 
+==66884== Open file descriptor 42: /home/cc/.config/Code/logs/20251018T162825/ptyhost.log
+==66884==    <inherited from parent>
+==66884== 
+==66884== Open file descriptor 35:
+==66884==    <inherited from parent>
+==66884== 
+==66884== Open pf-16 socket 34:
+==66884==    <inherited from parent>
+==66884== 
+==66884== Open file descriptor 3: /home/cc/Documents/Minishell/valgrind/valgrind_test.log
+==66884==    <inherited from parent>
+==66884== 
+==66884== 
+==66884== HEAP SUMMARY:
+==66884==     in use at exit: 0 bytes in 0 blocks
+==66884==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
+==66884== 
+==66884== All heap blocks were freed -- no leaks are possible
+==66884== 
+==66884== For lists of detected and suppressed errors, rerun with: -s
+==66884== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==66892== 
+==66892== FILE DESCRIPTORS: 9 open (3 std) at exit.
+==66892== Open file descriptor 103: /snap/code/210/usr/share/code/v8_context_snapshot.bin
+==66892==    <inherited from parent>
+==66892== 
+==66892== Open AF_UNIX socket 43: <unknown>
+==66892==    <inherited from parent>
+==66892== 
+==66892== Open file descriptor 42: /home/cc/.config/Code/logs/20251018T162825/ptyhost.log
+==66892==    <inherited from parent>
+==66892== 
+==66892== Open file descriptor 35:
+==66892==    <inherited from parent>
+==66892== 
+==66892== Open pf-16 socket 34:
+==66892==    <inherited from parent>
+==66892== 
+==66892== Open file descriptor 3: /home/cc/Documents/Minishell/valgrind/valgrind_test.log
+==66892==    <inherited from parent>
+==66892== 
+==66892== 
+==66892== HEAP SUMMARY:
+==66892==     in use at exit: 0 bytes in 0 blocks
+==66892==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
+==66892== 
+==66892== All heap blocks were freed -- no leaks are possible
+==66892== 
+==66892== For lists of detected and suppressed errors, rerun with: -s
+==66892== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==66893== 
+==66893== FILE DESCRIPTORS: 9 open (3 std) at exit.
+==66893== Open file descriptor 103: /snap/code/210/usr/share/code/v8_context_snapshot.bin
+==66893==    <inherited from parent>
+==66893== 
+==66893== Open AF_UNIX socket 43: <unknown>
+==66893==    <inherited from parent>
+==66893== 
+==66893== Open file descriptor 42: /home/cc/.config/Code/logs/20251018T162825/ptyhost.log
+==66893==    <inherited from parent>
+==66893== 
+==66893== Open file descriptor 35:
+==66893==    <inherited from parent>
+==66893== 
+==66893== Open pf-16 socket 34:
+==66893==    <inherited from parent>
+==66893== 
+==66893== Open file descriptor 3: /home/cc/Documents/Minishell/valgrind/valgrind_test.log
+==66893==    <inherited from parent>
+==66893== 
+==66893== 
+==66893== HEAP SUMMARY:
+==66893==     in use at exit: 0 bytes in 0 blocks
+==66893==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
+==66893== 
+==66893== All heap blocks were freed -- no leaks are possible
+==66893== 
+==66893== For lists of detected and suppressed errors, rerun with: -s
+==66893== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==66894== 
+==66894== FILE DESCRIPTORS: 9 open (3 std) at exit.
+==66894== Open file descriptor 103: /snap/code/210/usr/share/code/v8_context_snapshot.bin
+==66894==    <inherited from parent>
+==66894== 
+==66894== Open AF_UNIX socket 43: <unknown>
+==66894==    <inherited from parent>
+==66894== 
+==66894== Open file descriptor 42: /home/cc/.config/Code/logs/20251018T162825/ptyhost.log
+==66894==    <inherited from parent>
+==66894== 
+==66894== Open file descriptor 35:
+==66894==    <inherited from parent>
+==66894== 
+==66894== Open pf-16 socket 34:
+==66894==    <inherited from parent>
+==66894== 
+==66894== Open file descriptor 3: /home/cc/Documents/Minishell/valgrind/valgrind_test.log
+==66894==    <inherited from parent>
+==66894== 
+==66894== 
+==66894== HEAP SUMMARY:
+==66894==     in use at exit: 0 bytes in 0 blocks
+==66894==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
+==66894== 
+==66894== All heap blocks were freed -- no leaks are possible
+==66894== 
+==66894== For lists of detected and suppressed errors, rerun with: -s
+==66894== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==66895== 
+==66895== FILE DESCRIPTORS: 9 open (3 std) at exit.
+==66895== Open file descriptor 103: /snap/code/210/usr/share/code/v8_context_snapshot.bin
+==66895==    <inherited from parent>
+==66895== 
+==66895== Open AF_UNIX socket 43: <unknown>
+==66895==    <inherited from parent>
+==66895== 
+==66895== Open file descriptor 42: /home/cc/.config/Code/logs/20251018T162825/ptyhost.log
+==66895==    <inherited from parent>
+==66895== 
+==66895== Open file descriptor 35:
+==66895==    <inherited from parent>
+==66895== 
+==66895== Open pf-16 socket 34:
+==66895==    <inherited from parent>
+==66895== 
+==66895== Open file descriptor 3: /home/cc/Documents/Minishell/valgrind/valgrind_test.log
+==66895==    <inherited from parent>
+==66895== 
+==66895== 
+==66895== HEAP SUMMARY:
+==66895==     in use at exit: 0 bytes in 0 blocks
+==66895==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
+==66895== 
+==66895== All heap blocks were freed -- no leaks are possible
+==66895== 
+==66895== For lists of detected and suppressed errors, rerun with: -s
+==66895== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==66896== 
+==66896== FILE DESCRIPTORS: 9 open (3 std) at exit.
+==66896== Open file descriptor 103: /snap/code/210/usr/share/code/v8_context_snapshot.bin
+==66896==    <inherited from parent>
+==66896== 
+==66896== Open AF_UNIX socket 43: <unknown>
+==66896==    <inherited from parent>
+==66896== 
+==66896== Open file descriptor 42: /home/cc/.config/Code/logs/20251018T162825/ptyhost.log
+==66896==    <inherited from parent>
+==66896== 
+==66896== Open file descriptor 35:
+==66896==    <inherited from parent>
+==66896== 
+==66896== Open pf-16 socket 34:
+==66896==    <inherited from parent>
+==66896== 
+==66896== Open file descriptor 3: /home/cc/Documents/Minishell/valgrind/valgrind_test.log
+==66896==    <inherited from parent>
+==66896== 
+==66896== 
+==66896== HEAP SUMMARY:
+==66896==     in use at exit: 0 bytes in 0 blocks
+==66896==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
+==66896== 
+==66896== All heap blocks were freed -- no leaks are possible
+==66896== 
+==66896== For lists of detected and suppressed errors, rerun with: -s
+==66896== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==66897== 
+==66897== FILE DESCRIPTORS: 9 open (3 std) at exit.
+==66897== Open file descriptor 103: /snap/code/210/usr/share/code/v8_context_snapshot.bin
+==66897==    <inherited from parent>
+==66897== 
+==66897== Open AF_UNIX socket 43: <unknown>
+==66897==    <inherited from parent>
+==66897== 
+==66897== Open file descriptor 42: /home/cc/.config/Code/logs/20251018T162825/ptyhost.log
+==66897==    <inherited from parent>
+==66897== 
+==66897== Open file descriptor 35:
+==66897==    <inherited from parent>
+==66897== 
+==66897== Open pf-16 socket 34:
+==66897==    <inherited from parent>
+==66897== 
+==66897== Open file descriptor 3: /home/cc/Documents/Minishell/valgrind/valgrind_test.log
+==66897==    <inherited from parent>
+==66897== 
+==66897== 
+==66897== HEAP SUMMARY:
+==66897==     in use at exit: 0 bytes in 0 blocks
+==66897==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
+==66897== 
+==66897== All heap blocks were freed -- no leaks are possible
+==66897== 
+==66897== For lists of detected and suppressed errors, rerun with: -s
+==66897== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==66898== 
+==66898== FILE DESCRIPTORS: 9 open (3 std) at exit.
+==66898== Open file descriptor 103: /snap/code/210/usr/share/code/v8_context_snapshot.bin
+==66898==    <inherited from parent>
+==66898== 
+==66898== Open AF_UNIX socket 43: <unknown>
+==66898==    <inherited from parent>
+==66898== 
+==66898== Open file descriptor 42: /home/cc/.config/Code/logs/20251018T162825/ptyhost.log
+==66898==    <inherited from parent>
+==66898== 
+==66898== Open file descriptor 35:
+==66898==    <inherited from parent>
+==66898== 
+==66898== Open pf-16 socket 34:
+==66898==    <inherited from parent>
+==66898== 
+==66898== Open file descriptor 3: /home/cc/Documents/Minishell/valgrind/valgrind_test.log
+==66898==    <inherited from parent>
+==66898== 
+==66898== 
+==66898== HEAP SUMMARY:
+==66898==     in use at exit: 0 bytes in 0 blocks
+==66898==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
+==66898== 
+==66898== All heap blocks were freed -- no leaks are possible
+==66898== 
+==66898== For lists of detected and suppressed errors, rerun with: -s
+==66898== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==66899== 
+==66899== FILE DESCRIPTORS: 9 open (3 std) at exit.
+==66899== Open file descriptor 103: /snap/code/210/usr/share/code/v8_context_snapshot.bin
+==66899==    <inherited from parent>
+==66899== 
+==66899== Open AF_UNIX socket 43: <unknown>
+==66899==    <inherited from parent>
+==66899== 
+==66899== Open file descriptor 42: /home/cc/.config/Code/logs/20251018T162825/ptyhost.log
+==66899==    <inherited from parent>
+==66899== 
+==66899== Open file descriptor 35:
+==66899==    <inherited from parent>
+==66899== 
+==66899== Open pf-16 socket 34:
+==66899==    <inherited from parent>
+==66899== 
+==66899== Open file descriptor 3: /home/cc/Documents/Minishell/valgrind/valgrind_test.log
+==66899==    <inherited from parent>
+==66899== 
+==66899== 
+==66899== HEAP SUMMARY:
+==66899==     in use at exit: 0 bytes in 0 blocks
+==66899==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
+==66899== 
+==66899== All heap blocks were freed -- no leaks are possible
+==66899== 
+==66899== For lists of detected and suppressed errors, rerun with: -s
+==66899== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==66877== 
+==66877== FILE DESCRIPTORS: 9 open (3 std) at exit.
+==66877== Open file descriptor 103: /snap/code/210/usr/share/code/v8_context_snapshot.bin
+==66877==    <inherited from parent>
+==66877== 
+==66877== Open AF_UNIX socket 43: <unknown>
+==66877==    <inherited from parent>
+==66877== 
+==66877== Open file descriptor 42: /home/cc/.config/Code/logs/20251018T162825/ptyhost.log
+==66877==    <inherited from parent>
+==66877== 
+==66877== Open file descriptor 35:
+==66877==    <inherited from parent>
+==66877== 
+==66877== Open pf-16 socket 34:
+==66877==    <inherited from parent>
+==66877== 
+==66877== Open file descriptor 3: /home/cc/Documents/Minishell/valgrind/valgrind_test.log
+==66877==    <inherited from parent>
+==66877== 
+==66877== 
+==66877== HEAP SUMMARY:
+==66877==     in use at exit: 0 bytes in 0 blocks
+==66877==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
+==66877== 
+==66877== All heap blocks were freed -- no leaks are possible
+==66877== 
+==66877== For lists of detected and suppressed errors, rerun with: -s
+==66877== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

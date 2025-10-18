@@ -24,4 +24,8 @@ int     execute_ast(t_token *ast, char ***envp);
 void    display_binary_tree(t_token *parent, t_token *actual, int deriv);
 char    *get_os(void);
 char    *get_base_path(char *str);
+
+int     open_redirection(t_token *ast);
+pid_t   execute_heredoc(t_token *ast, int tub[2], char **envp);
+
 #endif
