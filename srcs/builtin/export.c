@@ -147,8 +147,13 @@ int ft_export(char ***envp, t_token *token)
 {
     char    **new_env;
 
-    if(!envp || !*envp || !token)
+    ft_split_print(*envp);
+
+    if( !envp || !*envp || !token)
+    {
+        printf("Error env :\n");
         return(-1);
+    }
     if(!token->args)
     {
         ft_split_quick_sort(*envp, ft_get_split_len(*envp), ft_strncmp);
@@ -157,8 +162,14 @@ int ft_export(char ***envp, t_token *token)
     }
     new_env = get_new_env(*envp, &token->args[1]);
     if(!new_env)
+    {
+        printf("error creation new env\n");
         return(1);
+    }
     else
+    {
         *envp = new_env;
+        ft_split_print(new_env);
+    }
     return(0);
 }

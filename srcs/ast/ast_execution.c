@@ -40,7 +40,7 @@ void destroy_token(t_token **tk)
         *tk = NULL;
     }
 }
-int execute_commande(t_token *token, char *path, char **envp)
+int execute_commande(t_token *token, char *path, char ***envp)
 {
     //int     tube[2];
     int status;
@@ -58,13 +58,13 @@ int execute_commande(t_token *token, char *path, char **envp)
     if(f1 == -1) { perror("fork"); return (-1);}
     if(f1 == 0)
     {
-        execve(path, token->args, envp);
+        execve(path, token->args, *envp);
         perror("Execution error");
         exit(errno); 
     }
     waitpid(f1,&status, 0);
     if(WIFEXITED(status))
-        printf("process terminé avec succes\n");
+        return(WEXITSTATUS(status));
     else
     {
         printf("Error %d\n", WEXITSTATUS(status));
@@ -146,7 +146,7 @@ int      execute_ast(t_token *ast, char ***envp)
         if(!path)
             return(-1);
         
-        r = execute_commande(ast, path, *envp);
+        r = execute_commande(ast, path, envp);
         return(r);
     }
     return (0);

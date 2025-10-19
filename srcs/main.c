@@ -5,11 +5,38 @@
 #include <string.h>
 
 
+char **dupplicate_env(char **old_env)
+{
+    char **env;
+    int i;
+    int old_env_len;
+
+    old_env_len = ft_get_split_len(old_env);
+    if(old_env_len <= 0)
+        return(NULL);
+    env = malloc(sizeof(char *) * (old_env_len + 1));
+    if(!env)
+        return(NULL);
+    i = 0;
+    while (old_env[i])
+    {
+        env[i] = ft_strdup(old_env[i]);
+        if(!(env[i]))
+            return(ft_split_clean(&env));
+        i++; 
+    }
+    env[i] = NULL;
+    return(env);
+}
+
 static int process_user_input(char *str, char ***envp, int status_code)
 {
     t_list  **tokens_lst;
     int     status;
-    
+
+
+    int split_len = ft_get_split_len(*envp);
+    printf("split = %d\n", split_len);
     tokens_lst = calloc(sizeof(t_list *) , 1);
     if(!tokens_lst)
         return(1);
@@ -42,7 +69,6 @@ static int process_user_input(char *str, char ***envp, int status_code)
     printf("\n");
 
     status = execute_ast(*ast, envp);
-    printf("voici status %d\n", status_code);
     //int r = execute_heredoc(*ast, "n",*envp);
     // important know
     
@@ -52,12 +78,24 @@ static int process_user_input(char *str, char ***envp, int status_code)
 }
 
 
+
+
 int run_minishell(char **envp)
 {
     char *input;
+    char **env;
+    char ***ev;
     int status_code;
 
+    
     status_code = -1;
+    env = dupplicate_env(envp);
+    ev = &env;
+    if(!env)
+    {
+        perror("Error duplicate env\n");
+        return(1);
+    }
     while (1)
     {
         input = readline("mini michel: ");
@@ -72,7 +110,7 @@ int run_minishell(char **envp)
             //     return(1);
             // }
             //printf("voici le status %s\n", input);
-            status_code = process_user_input(input, &envp, status_code);
+            status_code = process_user_input(input, ev, status_code);
             //printf("STATUS COMMANDE %d\n\n", status);
             free(input);
             rl_on_new_line();

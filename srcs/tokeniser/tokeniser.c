@@ -16,7 +16,7 @@ char *expend_var(char *str, char **envp)
     
 }
 
-static t_token *new_token_node(char *str, int num, int precedent_token, char **envp)
+static t_token *new_token_node(char *str, int num, int precedent_token)
 {
     t_token *new_node;
 
@@ -39,14 +39,14 @@ static t_token *new_token_node(char *str, int num, int precedent_token, char **e
     return(new_node);
 }
 
-static t_list *new_list_node(char *str, int i, char *precedent, char **envp)
+static t_list *new_list_node(char *str, int i, char *precedent)
 {
     t_list *node;
 
     node = malloc(sizeof(t_list));
     if(!node)
         return(NULL);
-    node->content = new_token_node(str, i, get_token_type(precedent), envp);
+    node->content = new_token_node(str, i, get_token_type(precedent));
     if(node->content == NULL)
             return(NULL);
     node->next = NULL;
@@ -60,7 +60,7 @@ static t_list *new_list_node(char *str, int i, char *precedent, char **envp)
     int rdir; 
     
     i = 0;
-    r = get_args(node, input, envp);
+    r = get_args(node, input, envp, status_code);
     if(r == -1)
     {
         printf("error get arg\n");
@@ -117,12 +117,18 @@ t_list **get_token_list(char *str, t_list **lst, char **envp, int status_code)
     process = 0;
     while (split[i])
     {
-        node = new_list_node(split[i], i, split[i - process], envp);
+        node = new_list_node(split[i], i, split[i - process]);
         if(!node)
+        {
+            printf("error new list node\n");
             return(ft_split_clean(&split));
+        }
         process = process_node(node, &split[i], envp, status_code);
         if(process == -1)
+        {
+            printf("error process\n");
             return(ft_split_clean(&split));
+        }
         i += process;
         ft_lstadd_back(lst, node);
     }

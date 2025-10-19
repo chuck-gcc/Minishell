@@ -44,9 +44,31 @@ int ft_fork()
     return (0);
 }
 
-int main()
-{
 
-    ft_fork();
+
+
+typedef struct s_env_manager
+{
+    // char ***env;
+    int  (*init_env)(struct s_env_manager *self ,char **new);
+    // int  (*swap_env)(char ***env, char **old, char **new);
+    // int  (*clean_env)(char **old);
+    void  (*printtt)(char *str);
+
+}t_env;
+
+void printtt(char *msg)
+{
+    printf("%s\n",msg);
+}
+
+
+
+int main(int argc, char **envp)
+{
+    (void)argc;
+
+    
+    char txt[512];
     return (0);
 }
