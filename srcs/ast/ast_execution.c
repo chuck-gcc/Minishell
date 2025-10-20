@@ -78,20 +78,20 @@ int execute_builtin(t_token *token, t_env *env)
 {
     if(!token)
         return(1);
-    // if(ft_strncmp(token->value, "cd", ft_strlen(token->value)) == 0)
-    //     return(ft_cd(token));
-    // if(ft_strncmp(token->value, "env", ft_strlen(token->value)) == 0)
-    //     return(ft_env(*envp, *envp));
-    // if(ft_strncmp(token->value, "pwd", ft_strlen(token->value)) == 0)
-    //     return(ft_pwd());
-    // if(ft_strncmp(token->value, "echo", ft_strlen(token->value)) == 0)
-    //     return(ft_echo(token));
+    if(ft_strncmp(token->value, "cd", ft_strlen(token->value)) == 0)
+        return(ft_cd(token));
+    if(ft_strncmp(token->value, "env", ft_strlen(token->value)) == 0)
+        return(ft_env(token, env));
+    if(ft_strncmp(token->value, "pwd", ft_strlen(token->value)) == 0)
+        return(ft_pwd());
+    if(ft_strncmp(token->value, "echo", ft_strlen(token->value)) == 0)
+        return(ft_echo(token));
     if(ft_strncmp(token->value, "export", ft_strlen(token->value)) == 0)
         return(ft_export(env,token));
-    // if(ft_strncmp(token->value, "unset", ft_strlen(token->value)) == 0)
-    //     return(ft_unset(envp,token));
-    // if(ft_strncmp(token->value, "exit", ft_strlen(token->value)) == 0)
-    //     ft_exit();
+    if(ft_strncmp(token->value, "unset", ft_strlen(token->value)) == 0)
+        return(ft_unset(env,token));
+    if(ft_strncmp(token->value, "exit", ft_strlen(token->value)) == 0)
+        ft_exit();
     return(1);
 }
 

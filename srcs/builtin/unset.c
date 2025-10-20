@@ -35,7 +35,8 @@ char **upload_env(char **envp, char **args, int env_len)
         char *c2 = ft_substr(envp[i], 0, ft_index_of_c(envp[i], '='));
        if(add_in_env(c2, args))
        {
-            new_env[k] = envp[i];
+            new_env[k] = ft_strdup(envp[i]);
+            free(c2);
             k++;
        }
         else
@@ -94,7 +95,6 @@ int ft_unset(t_env *env, t_token *token)
     if(env->swap_env(env, new_env) == 1)
     {
         printf("Error unset swap env\n");
-        ft_split_clean(&new_env);
         return(1);
 
     }

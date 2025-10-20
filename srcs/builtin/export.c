@@ -115,7 +115,7 @@ char **get_new_env(char **envp, char **args)
             on_env = is_on_env(args[j], new_env, len_env);
             if(on_env >= 0)
             {
-                //free(new_env[on_env]);
+                free(new_env[on_env]);
                 new_env[on_env] = ft_strdup(args[j]);
             }
             else
@@ -134,7 +134,7 @@ int ft_export(t_env *env, t_token *token)
 
     if( !env || !env->env || !(*env->env) || !token)
     {
-        printf("Error enssv :\n");
+        printf("Error env :\n");
         return(-1);
     }
     if(!token->args)

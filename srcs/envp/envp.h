@@ -8,7 +8,6 @@
 typedef struct s_env_manager
 {
     char ***env;
-
     int   start;
 
     int     (*swap_env)(struct s_env_manager *self ,char **new_env);

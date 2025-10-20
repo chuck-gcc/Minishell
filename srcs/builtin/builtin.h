@@ -8,7 +8,7 @@
 #define EXPORT 0
 #define UNSET 1
 
-int ft_env(t_env *self_env, char **var);
+int ft_env(t_token *token, t_env *env);
 int ft_cd(t_token *token);
 int ft_pwd(void);
 int ft_echo(t_token *token);
