@@ -36,7 +36,7 @@ static int dup_env(struct s_env_manager *self ,char **old)
     return(0);
 }
 
-void cleandd(char **split)
+static void clean_env(char **split)
 {
     int i;
     printf("adresse 1: %p\n", split);
@@ -57,7 +57,7 @@ int swap_env(t_env **self, char **new_env)
         return(1);
 
     printf("adresse 1: %p, adresse 2 %p\n", *(*self)->env ,new_env);
-    cleandd(*(*self)->env);
+    clean_env(*(*self)->env);
     *(*self)->env = new_env;
     printf("adresse 1: %p, adresse 2 %p\n", *(*self)->env ,new_env);
 
