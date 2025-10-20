@@ -2,6 +2,35 @@
 
 static void print_env(struct s_env_manager *self){return(ft_split_print(*self->env));}
 
+void display_export_env(struct s_env_manager *self)
+{
+    int i;
+    int j;
+    char **envp;
+
+    envp = *self->env;
+    if(!envp)
+        return;
+    ft_split_quick_sort(envp, ft_get_split_len(envp), ft_strncmp);
+    j = 0;
+    while (envp[j])
+    {
+        printf("declare -x ");
+        i = 0;
+        while (envp[j][i])
+        {
+            if(envp[j][i] == '=')
+                printf("%c\"", envp[j][i]);
+            else
+                printf("%c", envp[j][i]);
+            i++;
+        }
+        printf("\"\n");
+        j++;
+    }
+}
+
+
 static int destroy_env(struct s_env_manager *self)
 {
     ft_split_clean(self->env);
@@ -36,31 +65,28 @@ static int dup_env(struct s_env_manager *self ,char **old)
     return(0);
 }
 
-void cleandd(char **split)
+void cleandd(char ***split)
 {
     int i;
     printf("adresse 1: %p\n", split);
     i =0;
-    while (split[i])
+    while ((*split)[i])
     {
-        free(split[i]);
-        split[i] = NULL;
+        free((*split)[i]);
+        (*split)[i] = NULL;
         i++;
     }
-    free(split);
-    split = NULL;
+    free(*split);
+    *split = NULL;
 }
 
-int swap_env(t_env **self, char **new_env)
+int swap_env(t_env *self, char **new_env)
 {
-    if(!*self || !(*self)->env || !*(*self)->env || !new_env)
+    if(!self || !self->env || !*self->env || !new_env)
         return(1);
 
-    printf("adresse 1: %p, adresse 2 %p\n", *(*self)->env ,new_env);
-    cleandd(*(*self)->env);
-    *(*self)->env = new_env;
-    printf("adresse 1: %p, adresse 2 %p\n", *(*self)->env ,new_env);
-
+    ft_split_clean(self->env);
+    *self->env = new_env;
     printf("environnement swapper avec succes\n");
     return(0); 
 }
@@ -82,7 +108,7 @@ t_env *init_env(char **envp)
     self->swap_env = swap_env;
     self->dup_env = dup_env;
     self->print_env = print_env;
-    
+    self->display_export_env = display_export_env;
     self->destroy_env = destroy_env;
     if(self->dup_env(self, envp) == 1)
     {

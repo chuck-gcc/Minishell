@@ -1,29 +1,6 @@
 #include "builtin.h"
 
-void display_export(char **envp)
-{
-    int i;
-    int j;
 
-    if(!envp)
-        return;
-    j = 0;
-    while (envp[j])
-    {
-        printf("declare -x ");
-        i = 0;
-        while (envp[j][i])
-        {
-            if(envp[j][i] == '=')
-                printf("%c\"", envp[j][i]);
-            else
-                printf("%c", envp[j][i]);
-            i++;
-        }
-        printf("\"\n");
-        j++;
-    }
-}
 
 /*
     A  word  consisting  only  of alphanumeric characters and under‐
@@ -114,6 +91,7 @@ char **get_new_env(char **envp, char **args)
     size_t len_env;
     size_t valide_var;
     size_t  j;
+    size_t  i;
 
     len_env = ft_get_split_len(envp);
     valide_var = count_valide_variable(args, EXPORT);
@@ -123,6 +101,12 @@ char **get_new_env(char **envp, char **args)
     if(!new_env)
         return(NULL);
     ft_memcpy(new_env, envp, sizeof(char *) * len_env);
+    i = 0;
+    while (envp[i])
+    {
+        new_env[i] = ft_strdup(envp[i]);
+        i++;
+    }
     j = 0;
     while (args[j])
     {
@@ -135,18 +119,17 @@ char **get_new_env(char **envp, char **args)
                 new_env[on_env] = ft_strdup(args[j]);
             }
             else
-                new_env[len_env++] = ft_strdup(args[j]);
+                new_env[i++] = ft_strdup(args[j]);
         }
         j++;
     }
-    new_env[len_env] = NULL;
+    new_env[i] = NULL;
     return(new_env);
 }
 
 
 int ft_export(t_env *env, t_token *token)
 {
-    char    **tmp;
     char    **new_env;
 
     if( !env || !env->env || !(*env->env) || !token)
@@ -156,11 +139,7 @@ int ft_export(t_env *env, t_token *token)
     }
     if(!token->args)
     {
-        tmp = *env->env;
-        assert(tmp);
-        ft_split_print(tmp);
-        ft_split_quick_sort(tmp, ft_get_split_len(tmp), ft_strncmp);
-        display_export(tmp);
+        env->display_export_env(env);
         return(0);
     }
     new_env = get_new_env(*env->env, &token->args[1]);
@@ -171,13 +150,11 @@ int ft_export(t_env *env, t_token *token)
     }
     else
     {
-
-        if(env->swap_env(&env,new_env) == 1)
+        if(env->swap_env(env,new_env) == 1)
         {
             printf("Error swap env\n");
             return(1);
         }
-
     }
     return(0);
 }
