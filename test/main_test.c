@@ -23,14 +23,14 @@ int main(int argc, char **argv,char **envp)
 
     fd = open("file.txt",  get_ssredir_option(REDIR_APPEND));
     if(fd == -1){perror("fd"); return(1);}
-    char buffer[] = "hello\n";
-    
-    int r = write(fd, buffer, 6);
-    if(r == -1)
+    char buffer[1024];
+    int r;
+    while ((r = read(STDIN_FILENO,buffer, 1023))  > 0)
     {
-        perror("write");
-        return(errno);
+        buffer[r] = '\0';
+        write(fd, buffer, ft_strlen(buffer));
     }
+    
     close(fd);
 
     return (0);

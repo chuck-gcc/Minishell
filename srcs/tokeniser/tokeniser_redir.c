@@ -39,7 +39,7 @@ static int redir_check(char *str)
     return(0);
 }
 
-int get_redir_option(int redir_type)
+int get_redir_flags(int redir_type)
 {
     if(redir_type == REDIR_RIGHT)
         return(O_WRONLY);
@@ -98,7 +98,7 @@ int get_redir(t_list *node, char **input)
         ((t_token *)node->content)->redir[1] = redir_arg;
     }
     //printf("we have proceced the redir %s for the commande :%s\n",((t_token *)node->content)->radir[0], ((t_token *)node->content)->value);
-    ((t_token *)node->content)->redir_type = get_redir_option(get_token_type(((t_token *)node->content)->redir[0]));
+    ((t_token *)node->content)->redir_type = get_redir_flags(get_token_type(((t_token *)node->content)->redir[0]));
 
     return(idx);
 }
