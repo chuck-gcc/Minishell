@@ -149,14 +149,16 @@ int ft_export(t_env *env, t_token *token)
     char    **tmp;
     char    **new_env;
 
-    if( !env || !env->env || !token)
+    if( !env || !env->env || !(*env->env) || !token)
     {
-        printf("Error env :\n");
+        printf("Error enssv :\n");
         return(-1);
     }
     if(!token->args)
     {
         tmp = *env->env;
+        assert(tmp);
+        ft_split_print(tmp);
         ft_split_quick_sort(tmp, ft_get_split_len(tmp), ft_strncmp);
         display_export(tmp);
         return(0);
@@ -169,11 +171,13 @@ int ft_export(t_env *env, t_token *token)
     }
     else
     {
-        if(env->swap_env(env,new_env) == 1)
+
+        if(env->swap_env(&env,new_env) == 1)
         {
             printf("Error swap env\n");
             return(1);
         }
+
     }
     return(0);
 }

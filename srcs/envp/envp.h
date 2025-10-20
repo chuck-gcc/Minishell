@@ -10,7 +10,7 @@ typedef struct s_env_manager
 
     int   start;
 
-    int     (*swap_env)(struct s_env_manager *self ,char **new_env);
+    int     (*swap_env)(struct s_env_manager **self ,char **new_env);
     int     (*dup_env)(struct s_env_manager *self ,char **new_env);
     int     (*destroy_env)(struct s_env_manager *self);
     void    (*print_env)(struct s_env_manager *self);

@@ -91,7 +91,7 @@ int ft_unset(t_env *env, t_token *token)
         printf("Error new env\n");
         return(1);
     }
-    if(env->swap_env(env, new_env) == 1)
+    if(env->swap_env(&env, new_env) == 1)
     {
         printf("Error unset swap env\n");
         ft_split_clean(&new_env);

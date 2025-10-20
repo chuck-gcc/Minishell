@@ -1,6 +1,6 @@
 #include "envp.h"
 
-static void print_env(struct s_env_manager *self){return(ft_split_print(*(self->env)));}
+static void print_env(struct s_env_manager *self){return(ft_split_print(*self->env));}
 
 static int destroy_env(struct s_env_manager *self)
 {
@@ -36,17 +36,32 @@ static int dup_env(struct s_env_manager *self ,char **old)
     return(0);
 }
 
-int swap_env(t_env *self, char **new_env)
+void cleandd(char **split)
 {
-    char ***tmp;
+    int i;
+    printf("adresse 1: %p\n", split);
+    i =0;
+    while (split[i])
+    {
+        free(split[i]);
+        split[i] = NULL;
+        i++;
+    }
+    free(split);
+    split = NULL;
+}
 
-    if(!self || !(*self->env) || !new_env)
+int swap_env(t_env **self, char **new_env)
+{
+    if(!*self || !(*self)->env || !*(*self)->env || !new_env)
         return(1);
-    tmp = self->env;
-    *self->env = new_env;
-    ft_split_clean(tmp);
+
+    printf("adresse 1: %p, adresse 2 %p\n", *(*self)->env ,new_env);
+    cleandd(*(*self)->env);
+    *(*self)->env = new_env;
+    printf("adresse 1: %p, adresse 2 %p\n", *(*self)->env ,new_env);
+
     printf("environnement swapper avec succes\n");
-    self->print_env(self);
     return(0); 
 }
 
