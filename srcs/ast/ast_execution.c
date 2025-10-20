@@ -40,7 +40,7 @@ void destroy_token(t_token **tk)
         *tk = NULL;
     }
 }
-int execute_commande(t_token *token, char *path, char ***envp)
+int execute_commande(t_token *token, char *path, t_env *self_env)
 {
     //int     tube[2];
     int status;
@@ -58,7 +58,7 @@ int execute_commande(t_token *token, char *path, char ***envp)
     if(f1 == -1) { perror("fork"); return (-1);}
     if(f1 == 0)
     {
-        execve(path, token->args, *envp);
+        execve(path, token->args, *self_env->env);
         perror("Execution error");
         exit(errno); 
     }
@@ -74,28 +74,28 @@ int execute_commande(t_token *token, char *path, char ***envp)
 }
 
 
-int execute_builtin(t_token *token, char ***envp)
+int execute_builtin(t_token *token, t_env *env)
 {
     if(!token)
         return(1);
-    if(ft_strncmp(token->value, "cd", ft_strlen(token->value)) == 0)
-        return(ft_cd(token));
-    if(ft_strncmp(token->value, "env", ft_strlen(token->value)) == 0)
-        return(ft_env(*envp, *envp));
-    if(ft_strncmp(token->value, "pwd", ft_strlen(token->value)) == 0)
-        return(ft_pwd());
-    if(ft_strncmp(token->value, "echo", ft_strlen(token->value)) == 0)
-        return(ft_echo(token));
+    // if(ft_strncmp(token->value, "cd", ft_strlen(token->value)) == 0)
+    //     return(ft_cd(token));
+    // if(ft_strncmp(token->value, "env", ft_strlen(token->value)) == 0)
+    //     return(ft_env(*envp, *envp));
+    // if(ft_strncmp(token->value, "pwd", ft_strlen(token->value)) == 0)
+    //     return(ft_pwd());
+    // if(ft_strncmp(token->value, "echo", ft_strlen(token->value)) == 0)
+    //     return(ft_echo(token));
     if(ft_strncmp(token->value, "export", ft_strlen(token->value)) == 0)
-        return(ft_export(envp,token));
-    if(ft_strncmp(token->value, "unset", ft_strlen(token->value)) == 0)
-        return(ft_unset(envp,token));
-    if(ft_strncmp(token->value, "exit", ft_strlen(token->value)) == 0)
-        ft_exit();
+        return(ft_export(env,token));
+    // if(ft_strncmp(token->value, "unset", ft_strlen(token->value)) == 0)
+    //     return(ft_unset(envp,token));
+    // if(ft_strncmp(token->value, "exit", ft_strlen(token->value)) == 0)
+    //     ft_exit();
     return(1);
 }
 
-int      execute_ast(t_token *ast, char ***envp)
+int      execute_ast(t_token *ast, t_env *self_env)
 {
     int status;
     int r;
@@ -116,7 +116,7 @@ int      execute_ast(t_token *ast, char ***envp)
             close(tube[0]);
             dup2(tube[1],STDOUT_FILENO);
             close(tube[1]);
-            exit(execute_ast(ast->left, envp));
+            exit(execute_ast(ast->left, self_env));
         }
 
         pid_t f2 = fork();
@@ -127,7 +127,7 @@ int      execute_ast(t_token *ast, char ***envp)
             close(tube[1]);
             dup2( tube[0], STDIN_FILENO);
             close(tube[0]);
-            exit(execute_ast(ast->right, envp));
+            exit(execute_ast(ast->right, self_env));
         }
         close(tube[0]);
         close(tube[1]);
@@ -137,7 +137,7 @@ int      execute_ast(t_token *ast, char ***envp)
     }
     if(ast->type == BUILTIN)
     {
-        r = execute_builtin(ast, envp);
+        r = execute_builtin(ast, self_env);
         return(r);
     }
     else if(ast->type == CMD)
@@ -146,7 +146,7 @@ int      execute_ast(t_token *ast, char ***envp)
         if(!path)
             return(-1);
         
-        r = execute_commande(ast, path, envp);
+        r = execute_commande(ast, path, self_env);
         return(r);
     }
     return (0);

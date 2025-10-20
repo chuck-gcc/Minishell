@@ -29,19 +29,17 @@ char **dupplicate_env(char **old_env)
     return(env);
 }
 
-static int process_user_input(char *str, char ***envp, int status_code)
+static int process_user_input(char *str, t_env *self_env, int status_code)
 {
     t_list  **tokens_lst;
     int     status;
 
 
-    int split_len = ft_get_split_len(*envp);
-    printf("split = %d\n", split_len);
     tokens_lst = calloc(sizeof(t_list *) , 1);
     if(!tokens_lst)
         return(1);
    
-    if(!get_token_list(str, tokens_lst, *envp, status_code))
+    if(!get_token_list(str, tokens_lst, *self_env->env, status_code))
     {
         printf("Error token list\n");
         ft_lstclear(tokens_lst, delete_list);
@@ -68,7 +66,7 @@ static int process_user_input(char *str, char ***envp, int status_code)
     display_binary_tree(NULL,*ast,0);
     printf("\n");
 
-    status = execute_ast(*ast, envp);
+    status = execute_ast(*ast, self_env);
     //int r = execute_heredoc(*ast, "n",*envp);
     // important know
     
@@ -80,20 +78,16 @@ static int process_user_input(char *str, char ***envp, int status_code)
 
 
 
-int run_minishell(char **envp)
+int run_minishell(t_env *self_env)
 {
     char *input;
-    char **env;
-    char ***ev;
     int status_code;
 
     
     status_code = -1;
-    env = dupplicate_env(envp);
-    ev = &env;
-    if(!env)
+    if(!self_env || !self_env->env)
     {
-        perror("Error duplicate env\n");
+        perror("Error Env\n");
         return(1);
     }
     while (1)
@@ -110,7 +104,7 @@ int run_minishell(char **envp)
             //     return(1);
             // }
             //printf("voici le status %s\n", input);
-            status_code = process_user_input(input, ev, status_code);
+            status_code = process_user_input(input, self_env, status_code);
             //printf("STATUS COMMANDE %d\n\n", status);
             free(input);
             rl_on_new_line();
@@ -122,9 +116,14 @@ int run_minishell(char **envp)
 int main(int argc, char **argv, char **envp)
 {
 
+    t_env *self_env;
     
-
-    run_minishell(envp);
+    self_env = init_env(envp);
+    if(!self_env)
+    {
+        printf("error\n");
+    }
+    run_minishell(self_env);
     
     return(0);
 }

@@ -14,6 +14,7 @@ LIB= -Llibft -lft -lreadline
 # Module readline : export EXT_F=readline
 
 EXT_SRCS= 		srcs/main.c \
+				srcs/envp/envp.c \
 				srcs/tokeniser/tokeniser.c \
 				srcs/ast/ast_generation.c \
 				srcs/ast/ast_execution.c \
@@ -59,7 +60,7 @@ endif
 
 test: $(TEST_OBJ)
 	@$(CC) $(TEST_OBJ) $(LIB) -o $(NAME_TEST)
-	@valgrind --leak-check=full --read-var-info=yes --track-fds=yes --trace-children=yes --log-file=valgrind/valgrind_test.log ./$(NAME_TEST)
+	@valgrind --leak-check=full --log-file=valgrind/valgrind_test.log ./$(NAME_TEST)
 
 clean:
 	rm -rf $(EXT_OBJ)

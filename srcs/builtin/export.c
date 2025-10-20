@@ -77,6 +77,7 @@ size_t count_valide_variable(char **vars, int mode)
     }
     return(i);
 }
+
 int is_on_env(char *var, char **env, int len)
 {
     int i;
@@ -143,24 +144,24 @@ char **get_new_env(char **envp, char **args)
 }
 
 
-int ft_export(char ***envp, t_token *token)
+int ft_export(t_env *env, t_token *token)
 {
+    char    **tmp;
     char    **new_env;
 
-    ft_split_print(*envp);
-
-    if( !envp || !*envp || !token)
+    if( !env || !env->env || !token)
     {
         printf("Error env :\n");
         return(-1);
     }
     if(!token->args)
     {
-        ft_split_quick_sort(*envp, ft_get_split_len(*envp), ft_strncmp);
-        display_export(*envp);
+        tmp = *env->env;
+        ft_split_quick_sort(tmp, ft_get_split_len(tmp), ft_strncmp);
+        display_export(tmp);
         return(0);
     }
-    new_env = get_new_env(*envp, &token->args[1]);
+    new_env = get_new_env(*env->env, &token->args[1]);
     if(!new_env)
     {
         printf("error creation new env\n");
@@ -168,8 +169,11 @@ int ft_export(char ***envp, t_token *token)
     }
     else
     {
-        *envp = new_env;
-        ft_split_print(new_env);
+        if(env->swap_env(env,new_env) == 1)
+        {
+            printf("Error swap env\n");
+            return(1);
+        }
     }
     return(0);
 }

@@ -2,17 +2,18 @@
 #define BUILTIN_H
 
 #include "../../libft/libft.h"
-#include "../main.h"
+#include "../envp/envp.h"
+#include "../tokeniser/tokeniser.h"
 
 #define EXPORT 0
 #define UNSET 1
 
-int ft_env(char **envp, char **var);
+int ft_env(t_env *self_env, char **var);
 int ft_cd(t_token *token);
 int ft_pwd(void);
 int ft_echo(t_token *token);
-int ft_export(char ***envp, t_token *token);
-int ft_unset(char ***envp, t_token *token);
+int ft_export(t_env *self_env, t_token *token);
+int ft_unset(t_env *self_env, t_token *token);
 void ft_exit();
 
 int is_valide_variable(char *var);

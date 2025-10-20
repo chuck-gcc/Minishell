@@ -16,6 +16,9 @@
         "wait.h": "c",
         "tokeniser.h": "c",
         "_types.h": "c",
-        "builtin.h": "c"
+        "builtin.h": "c",
+        "envp.h": "c",
+        "tools.h": "c",
+        "stdlib.h": "c"
     }
 }

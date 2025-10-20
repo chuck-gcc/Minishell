@@ -2,73 +2,83 @@
 #include <errno.h>
 #include <assert.h>
 
-int err2(int r, const char *fonction, char *module)
-{
-    printf("[ fonction : %s ][ module : %s ] Err :%s\n", fonction, module, strerror(r));
-    return (r);
-}
-
-int ft_fork()
-{
-    int i;
-    int status;
-    pid_t pid;
-
-    i = 0;
-    status = 0;
-    while (i < 10)
-    {
-        pid = fork();
-        if (pid == -1)
-        {
-            perror("ft_fork");
-            return (1);
-        }
-        if (pid == 0)
-        {
-            printf("voici le pid du process parent%d\n", getppid());
-            printf("voici le pid du process enfant %d\n", getpid());
-            if(i == 3)
-                exit(20);
-            exit(0);    
-        }
-        else
-        {
-            i++;
-            waitpid(pid, &status, 0);
-            printf("fin des process number: %d enfrant %d whith status %d\n",i, pid, WEXITSTATUS(status));
-        }
-        
-    }
-
-    return (0);
-}
-
-
-
 
 typedef struct s_env_manager
 {
-    // char ***env;
-    int  (*init_env)(struct s_env_manager *self ,char **new);
-    // int  (*swap_env)(char ***env, char **old, char **new);
-    // int  (*clean_env)(char **old);
-    void  (*printtt)(char *str);
+    char **env;
+    int   start;
 
-}t_env;
+    int  (*dup_env)(struct s_env_manager *self ,char **new);
+    int  (*destoy)(struct s_env_manager *self);
+    void  (*print_env)(struct s_env_manager *self);
 
-void printtt(char *msg)
+} t_env;
+
+void print_env(struct s_env_manager *self){return(ft_split_print(self->env));}
+
+int destroy(struct s_env_manager *self)
 {
-    printf("%s\n",msg);
+    ft_split_clean(&self->env);
+    free(self);
+    return(0);
+}
+
+int dup_env(struct s_env_manager *self ,char **old)
+{
+    int len_env;
+    int i;
+    len_env = ft_get_split_len(old);
+    if(!len_env)
+        return(1);
+    if(self->start)
+    {
+        ft_split_clean(&self->env);
+    }
+    self->env = malloc(sizeof(char *) * (len_env + 1));
+    if(!self->env)
+        return(1);
+    i = 0;
+    while (old[i])
+    {
+        self->env[i] = ft_strdup(old[i]);
+        i++;
+    }
+    self->env[i] = NULL;
+    if(!self->start)
+        self->start = 1;
+    return(0);
 }
 
 
-
-int main(int argc, char **envp)
+int main(int argc, char **argv,char **envp)
 {
     (void)argc;
+    (void)argv;
 
+    t_env *self;
+
+    self = malloc(sizeof(t_env));
+    if(!self)
+        return(1);
+    self->env = NULL;
+    self->start = 0;
+    self->dup_env = dup_env;
+    self->print_env = print_env;
+    self->destoy = destroy;
+
+    int r = self->dup_env(self, envp);
+    assert(r == 0);
     
-    char txt[512];
+    char *h[] = {"hekdza","fezfz","gzrgz", NULL};
+    r = self->dup_env(self, h);
+    
+    
+    r = self->dup_env(self, envp);
+    r = self->dup_env(self, h);
+    r = self->dup_env(self, envp);
+    r = self->dup_env(self, h);
+
+    r = self->destoy(self);
+
     return (0);
 }

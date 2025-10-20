@@ -70,7 +70,7 @@ int unset_valide_variable(char **envp, char **args, int *err)
     return(count);
 }
 
-int ft_unset(char ***envp, t_token *token)
+int ft_unset(t_env *env, t_token *token)
 {
     int err;
     int new_env_len;
@@ -78,19 +78,25 @@ int ft_unset(char ***envp, t_token *token)
     char    **new_env;
 
     err = 0;
-    if(!envp || !*envp || !token)
+    if(!env || !env->env || !token)
         return(-1);
     
-    valide_variable = unset_valide_variable(*envp, &token->args[1], &err);
+    valide_variable = unset_valide_variable(*env->env, &token->args[1], &err);
     printf("voici le nombre in env : %d et la valeur de retour %d\n", valide_variable,err);
     
-    new_env_len = (ft_get_split_len(*envp) - valide_variable) + 1;
-    new_env =  upload_env(*envp, &token->args[1], new_env_len);
+    new_env_len = (ft_get_split_len(*env->env) - valide_variable) + 1;
+    new_env =  upload_env(*env->env, &token->args[1], new_env_len);
     if(!new_env)
     {
         printf("Error new env\n");
         return(1);
     }
-    *envp = new_env;
+    if(env->swap_env(env, new_env) == 1)
+    {
+        printf("Error unset swap env\n");
+        ft_split_clean(&new_env);
+        return(1);
+
+    }
     return(err);
 }

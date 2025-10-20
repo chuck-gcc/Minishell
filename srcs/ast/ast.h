@@ -1,8 +1,9 @@
 #ifndef AST_H
 #define AST_H
 
-#include "../tokeniser/tokeniser.h"
+
 #include "../builtin/builtin.h"
+#include "../envp/envp.h"
 #include "../tools/tools.h"
 #include <string.h>
 #include <fcntl.h>
@@ -20,7 +21,7 @@
 
 
 int     generate_ast(t_list *token_list, t_token **ast_root);
-int     execute_ast(t_token *ast, char ***envp);
+int     execute_ast(t_token *ast, t_env *env);
 void    display_binary_tree(t_token *parent, t_token *actual, int deriv);
 char    *get_os(void);
 char    *get_base_path(char *str);
