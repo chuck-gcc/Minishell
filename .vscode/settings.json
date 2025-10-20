@@ -19,6 +19,8 @@
         "builtin.h": "c",
         "envp.h": "c",
         "tools.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "ast.h": "c",
+        "types.h": "c"
     }
 }

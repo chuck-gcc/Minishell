@@ -39,6 +39,17 @@ static int redir_check(char *str)
     return(0);
 }
 
+int get_redir_option(int redir_type)
+{
+    if(redir_type == REDIR_RIGHT)
+        return(O_WRONLY);
+    if(redir_type == REDIR_APPEND)
+        return(O_WRONLY | O_APPEND);
+    if((redir_type == REDIR_LEFT) | (redir_type == DELIM))
+        return(O_RDONLY);
+    return(-1);
+}
+
 int get_redir(t_list *node, char **input)
 {
     int idx;
@@ -54,7 +65,7 @@ int get_redir(t_list *node, char **input)
     redir = ft_strdup(input[idx]);
     if(!redir)
         return(-1);
-    ((t_token *)node->content)->radir[0] = redir;
+    ((t_token *)node->content)->redir[0] = redir;
     if(get_token_type(input[idx]) == DELIM)
     {
         idx++;
@@ -65,7 +76,7 @@ int get_redir(t_list *node, char **input)
             redir = NULL;
             return(-1);
         }
-        ((t_token *)node->content)->radir[1] = redir_arg;
+        ((t_token *)node->content)->redir[1] = redir_arg;
         while (input[idx] && get_token_type(input[idx]) != PIPE)
             idx++;
     }
@@ -84,9 +95,10 @@ int get_redir(t_list *node, char **input)
             redir = NULL;
             return(-1);
         }
-        ((t_token *)node->content)->radir[1] = redir_arg;
+        ((t_token *)node->content)->redir[1] = redir_arg;
     }
     //printf("we have proceced the redir %s for the commande :%s\n",((t_token *)node->content)->radir[0], ((t_token *)node->content)->value);
-    
+    ((t_token *)node->content)->redir_type = get_redir_option(get_token_type(((t_token *)node->content)->redir[0]));
+
     return(idx);
 }

@@ -27,8 +27,8 @@
 #define WORD            2
 #define BUILTIN         3
 #define PIPE            4 //'|'
-#define REDIR_LEFT      5 //'>'    
-#define REDIR_RIGHT     6 //'<'
+#define REDIR_LEFT      5 //'<'    
+#define REDIR_RIGHT     6 //'>'
 #define REDIR_APPEND    7 //'>>'
 #define DELIM           8 //'<<'
 #define VAR             9
@@ -42,7 +42,8 @@ typedef struct s_token
     int             asso;
     char            *value;
     char            **args;
-    char            *radir[2];
+    char            *redir[2];
+    int             redir_type;
     struct s_token  *left;
     struct s_token  *right;
 

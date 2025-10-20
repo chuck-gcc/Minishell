@@ -4,13 +4,15 @@ int open_redirection(t_token *ast)
 {
     char *redir;
 
-    if(!ast->radir[0])
+    if(!ast->redir[0])
         return(0);
-    redir = ast->radir[0];
-    if(ft_strncmp(redir,"<<", ft_strlen_longest("<<", redir)) == 0)
+    redir = ast->redir[0];
+    if(ft_strncmp(redir,"<", ft_strlen_longest("<", redir)) == 0)
         return(1);
     return(0);
 }
+
+
 
 // pid_t execute_heredoc(t_token *ast, int tub[2], char **envp)
 // {

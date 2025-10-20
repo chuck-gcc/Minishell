@@ -25,15 +25,15 @@ void delete_list(void *content)
             free(token->args);
             token->args = NULL;
         }
-        if(token->radir[0])
+        if(token->redir[0])
         {
-            free(token->radir[0]);
-            token->radir[0] = NULL;
+            free(token->redir[0]);
+            token->redir[0] = NULL;
         }
-        if(token->radir[1])
+        if(token->redir[1])
         {
-            free(token->radir[1]);
-            token->radir[1] = NULL;
+            free(token->redir[1]);
+            token->redir[1] = NULL;
         }
         free(token);
         token = NULL;

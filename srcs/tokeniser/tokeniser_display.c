@@ -56,9 +56,10 @@ void display_arg_of_cmd(t_token *token)
             i++;
         }
         printf("\n");
+        printf("Redir type: [%d]\n",token->redir_type);
         printf("Redir: ");
-        printf("[%s]", token->radir[0]);
-        printf("[%s]", token->radir[1]);
+        printf("[%s]", token->redir[0]);
+        printf("[%s]", token->redir[1]);
         printf("\n");
     }
     printf("\n");

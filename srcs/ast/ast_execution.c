@@ -26,34 +26,33 @@ void destroy_token(t_token **tk)
             free(token->args);
             token->args = NULL;
         }
-        if(token->radir[0])
+        if(token->redir[0])
         {
-            free(token->radir[0]);
-            token->radir[0] = NULL;
+            free(token->redir[0]);
+            token->redir[0] = NULL;
         }
-        if(token->radir[1])
+        if(token->redir[1])
         {
-            free(token->radir[1]);
-            token->radir[1] = NULL;
+            free(token->redir[1]);
+            token->redir[1] = NULL;
         }
         free(*tk);
         *tk = NULL;
     }
 }
+
+
 int execute_commande(t_token *token, char *path, t_env *self_env)
 {
-    //int     tube[2];
     int status;
 
     status = 0;
-    // if(open_redirection(token))
-    // {
-    //     pid_t g = execute_heredoc(token, tube, envp);
-    //     waitpid(g,&status, 0);
-    //     close(tube[1]);
-    // }
-    // else
-    //     printf("no redirection\n");
+
+    if(open_redirection(token))
+    {
+        assert(token->redir_type != O_APPEND);
+    }
+    
     pid_t f1 = fork();
     if(f1 == -1) { perror("fork"); return (-1);}
     if(f1 == 0)

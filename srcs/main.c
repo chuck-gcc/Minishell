@@ -120,10 +120,7 @@ int main(int argc, char **argv, char **envp)
     
     self_env = init_env(envp);
     if(!self_env)
-    {
         printf("error\n");
-    }
     run_minishell(self_env);
-    
     return(0);
 }
