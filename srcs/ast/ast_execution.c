@@ -48,19 +48,39 @@ int execute_commande(t_token *token, char *path, t_env *self_env)
 
     status = 0;
 
-    if(open_redirection(token))
-    {
-        assert(token->redir_type != O_APPEND);
-    }
+    
     
     pid_t f1 = fork();
     if(f1 == -1) { perror("fork"); return (-1);}
     if(f1 == 0)
     {
+
+        
         execve(path, token->args, *self_env->env);
         perror("Execution error");
         exit(errno); 
     }
+    // if(open_redirection(token))
+    // {
+    //     int fd;
+
+    //     fd = open("file.txt",  token->redir_type);
+    //     if(fd == -1){perror("fd"); return(1);}
+    //     char buffer[1024];
+    //     int r;
+    //     while ((r = read(STDIN_FILENO,buffer, 1023))  > 0)
+    //     {
+    //         buffer[r] = '\0';
+    //         printf("buffer: %s\n", buffer);
+    //         if(ft_strncmp(buffer, token->redir[1], ft_strlen(buffer) - 1) == 0)
+    //         {
+    //             printf("delimiteur\n");
+    //             break;
+    //         }
+    //         write(STDOUT_FILENO, buffer, ft_strlen(buffer));
+    //     }
+    //     close(fd);
+    // }
     waitpid(f1,&status, 0);
     if(WIFEXITED(status))
         return(WEXITSTATUS(status));

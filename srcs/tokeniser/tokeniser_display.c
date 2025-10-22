@@ -47,20 +47,32 @@ void display_arg_of_cmd(t_token *token)
         return;
     if(token->type == CMD || token->type == BUILTIN  || token->type == PIPE)
     {
-        printf("Commande: [%s]\n", token->value);
-        int i = 0;
+        printf("Commande: ");
+        printf("%s\n", token->value);
         printf("Args: ");
-        while (token->args && token->args[i])
+        if(!token->args)
+            printf("\033[31m%s\033[0m\n", "No arguments");
+        else
         {
-            printf("[%s]", token->args[i]);
-            i++;
+            int i = 0;
+            while (token->args && token->args[i])
+            {
+                printf("[%s]", token->args[i]);
+                i++;
+            }
+            printf("\n");
         }
-        printf("\n");
-        printf("Redir type: [%d]\n",token->redir_type);
+        printf("Redir type: %d\n",token->redir_type);
         printf("Redir: ");
-        printf("[%s]", token->redir[0]);
-        printf("[%s]", token->redir[1]);
-        printf("\n");
+        if(token->redir_type >= 0)
+        {
+            
+            printf("[%s]", token->redir[0]);
+            printf("[%s]", token->redir[1]);
+            printf("\n");
+        }
+        else
+            printf("\033[31mNo redirection\033[0m\n");
     }
     printf("\n");
 }

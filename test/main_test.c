@@ -28,10 +28,14 @@ int main(int argc, char **argv,char **envp)
     while ((r = read(STDIN_FILENO,buffer, 1023))  > 0)
     {
         buffer[r] = '\0';
+        if(ft_strncmp(buffer, "t", ft_strlen(buffer) - 1) == 0)
+        {
+            printf("delimiteur\n");
+            break;
+        }
         write(fd, buffer, ft_strlen(buffer));
     }
     
     close(fd);
-
     return (0);
 }
