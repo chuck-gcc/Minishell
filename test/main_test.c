@@ -17,6 +17,32 @@ int get_ssredir_option(int redir_type)
     return(-1);
 }
 
+int read_here(int *in, int *out, char *delim)
+{
+    char    *str;
+    int     w;
+
+    if(in == NULL  | out == NULL)
+        return(1);
+    w = close(*in);
+    if(w == -1){perror("heredoc write 1"); return(errno);}
+    while ((str = readline("heredoc> ")) != NULL)
+    {
+        if(str == NULL)
+            return(1);
+        if(ft_strncmp(str, "t", ft_strlen(str) - 1) == 0)
+            return(0);
+        else
+        {
+            w = write(*out, str, ft_strlen(str));
+            if(w == -1){perror("heredoc write 1"); return(errno);}
+            w = write(*out, "\n", ft_strlen("\n"));
+            if(w == -1){perror("heredoc write 2"); return(errno);}
+        }
+    }
+    return(1);
+}
+
 int main(int argc, char **argv,char **envp)
 {
     printf("voici la fonction test main\n");
@@ -29,37 +55,26 @@ int main(int argc, char **argv,char **envp)
     if(pid == -1){perror("test"); return(1);}
     if (pid == 0)
     {
-        close(tube[0]);
-        char *r;
-        while ((r = readline("heredoc>")) != NULL)
-        {
-            if(ft_strncmp(r, "t", ft_strlen(r) - 1) == 0)
-                exit(0);
-            else
-            {
-                write(tube[1], r, ft_strlen(r));
-                write(tube[1], "\n", ft_strlen("\n"));
-            }
-        }
-        
+        read_here(&tube[0],&tube[1], "t");
+        exit(0);
     }
     else
     {   
         waitpid(pid, &status, 0);
         if(WIFEXITED(status))
         {
-            int r;
+            char *arg[] = {"cat",NULL};
+            char *cmd = "/bin/cat";
 
             close(tube[1]);
-            char buffer[1024];
-            while ((r = read(tube[0],buffer, 1023)) > 0)
-            {
-                buffer[r] = '\0';
-                printf("%s", buffer);
-            }
-            close(tube[0]);
-        }
+            dup2(tube[0],STDIN_FILENO);
 
+            close(tube[0]);
+
+            int e = execve(cmd, arg, envp);
+            if(e == -1){perror("excve test"); return(1);}
+
+        }
 
     }
     return (0);

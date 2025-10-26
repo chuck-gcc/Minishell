@@ -41,21 +41,70 @@ void destroy_token(t_token **tk)
     }
 }
 
+int read_here(int *in, int *out, char *delim)
+{
+    char    *str;
+    int     w;
 
-int execute_commande(t_token *token, char *path, t_env *self_env)
+    printf("voici le delim %s\n",delim);
+    if(in == NULL  | out == NULL)
+        return(1);
+    w = close(*in);
+    if(w == -1){perror("heredoc write 1"); return(errno);}
+    while ((str = readline("heredoc> ")) != NULL)
+    {
+        if(str == NULL)
+            return(1);
+        if(ft_strncmp(str, delim, ft_strlen(str)) == 0)
+        {
+            printf("delimn\n");
+            return(0);
+        }
+        else
+        {
+            w = write(*out, str, ft_strlen(str));
+            if(w == -1){perror("heredoc write 1"); return(errno);}
+            w = write(*out, "\n", ft_strlen("\n"));
+            if(w == -1){perror("heredoc write 2"); return(errno);}
+        }
+    }
+    return(1);
+}
+
+int execute_redirection(t_token *token, int *tube)
+{
+    int r;
+
+    r = 1;
+    if(is_redir(token->redir[0]) == DELIM)
+        r = read_here(&tube[0], &tube[1], token->redir[1]);
+    return(r);
+
+}
+
+int execute_commande(t_token *token, char *path, t_env *self_env, int tube[2])
 {
     int status;
 
     status = 0;
 
     
-    
+    printf("tube bien recu %p and %p\n", &tube[0], &tube[1]);
     pid_t f1 = fork();
     if(f1 == -1) { perror("fork"); return (-1);}
     if(f1 == 0)
     {
 
-        
+        if(token->redir_type != -1)
+        {
+            execute_redirection(token, tube);
+            printf("we rare here\n");
+            close(tube[1]);
+            dup2(tube[0],STDIN_FILENO);
+
+            close(tube[0]);
+
+        }
         execve(path, token->args, *self_env->env);
         perror("Execution error");
         exit(errno); 
@@ -118,16 +167,18 @@ int      execute_ast(t_token *ast, t_env *self_env)
 {
     int status;
     int r;
+    int tube[2];
 
     if(!ast)
         return(0);
         
     status = 0;
+    if(pipe(tube) == -1) {perror("fork"); return (-1);}
+        printf("voici adresse in: %p et adresse out %p\n", &tube[0], & tube[1]);
     if(ast->type == PIPE)
     {
-        int tube[2];
 
-        if(pipe(tube) == -1) {perror("fork"); return (-1);}
+        
         pid_t f1 = fork();
         if(f1 == -1) { perror("fork"); return (-1);}
         if(f1 == 0)
@@ -165,7 +216,7 @@ int      execute_ast(t_token *ast, t_env *self_env)
         if(!path)
             return(-1);
         
-        r = execute_commande(ast, path, self_env);
+        r = execute_commande(ast, path, self_env, tube);
         return(r);
     }
     return (0);

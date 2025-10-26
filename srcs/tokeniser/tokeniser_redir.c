@@ -5,13 +5,13 @@ int is_redir(char *str)
     if(!str)
         return(-1);
     if(!ft_strncmp(str, "<", ft_strlen(str)))
-        return(1);
+        return(REDIR_LEFT);
     if(!ft_strncmp(str, ">", ft_strlen(str)))
-        return(2);
+        return(REDIR_RIGHT);
     if(!ft_strncmp(str, ">>", ft_strlen(str)))
-        return(3);
+        return(REDIR_APPEND);
     if(!ft_strncmp(str, "<<", ft_strlen(str)))
-        return(4);
+        return(DELIM);
 
     return(0);
 }
