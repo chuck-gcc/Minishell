@@ -33,10 +33,10 @@ EXT_SRCS= 		srcs/main.c \
 				srcs/tokeniser/tokeniser_clean.c \
 				srcs/tools/tools_path.c \
 
-TEST_SRCS = 	test/external_fonction/dup.c  \
- 				test/external_fonction/readline.c\
-				test/main_test.c
+TEST_SRCS =  	test/main_test.c
+				
 
+ 				
 EXT_OBJ= $(EXT_SRCS:%.c=%.o)
 TEST_OBJ= $(TEST_SRCS:%.c=%.o)
 #########
@@ -60,7 +60,11 @@ endif
 
 test: $(TEST_OBJ)
 	@$(CC) $(TEST_OBJ) $(LIB) -o $(NAME_TEST)
-	@valgrind --leak-check=full --log-file=valgrind/valgrind_test.log ./$(NAME_TEST)
+	@./$(NAME_TEST)
+
+# test: $(TEST_OBJ)
+# 	@$(CC) $(TEST_OBJ) $(LIB) -o $(NAME_TEST)
+# 	@valgrind --leak-check=full --log-file=valgrind/valgrind_test.log ./$(NAME_TEST)
 
 clean:
 	rm -rf $(EXT_OBJ)

@@ -19,23 +19,48 @@ int get_ssredir_option(int redir_type)
 
 int main(int argc, char **argv,char **envp)
 {
-    int fd;
+    printf("voici la fonction test main\n");
+    int tube[2];
+    pid_t pid;
+    int status;
 
-    fd = open("file.txt",  get_ssredir_option(REDIR_APPEND));
-    if(fd == -1){perror("fd"); return(1);}
-    char buffer[1024];
-    int r;
-    while ((r = read(STDIN_FILENO,buffer, 1023))  > 0)
+    if(pipe(tube) == -1){perror("tube"); return (errno);}
+    pid = fork();
+    if(pid == -1){perror("test"); return(1);}
+    if (pid == 0)
     {
-        buffer[r] = '\0';
-        if(ft_strncmp(buffer, "t", ft_strlen(buffer) - 1) == 0)
+        close(tube[0]);
+        char *r;
+        while ((r = readline("heredoc>")) != NULL)
         {
-            printf("delimiteur\n");
-            break;
+            if(ft_strncmp(r, "t", ft_strlen(r) - 1) == 0)
+                exit(0);
+            else
+            {
+                write(tube[1], r, ft_strlen(r));
+                write(tube[1], "\n", ft_strlen("\n"));
+            }
         }
-        write(fd, buffer, ft_strlen(buffer));
+        
     }
-    
-    close(fd);
+    else
+    {   
+        waitpid(pid, &status, 0);
+        if(WIFEXITED(status))
+        {
+            int r;
+
+            close(tube[1]);
+            char buffer[1024];
+            while ((r = read(tube[0],buffer, 1023)) > 0)
+            {
+                buffer[r] = '\0';
+                printf("%s", buffer);
+            }
+            close(tube[0]);
+        }
+
+
+    }
     return (0);
 }
