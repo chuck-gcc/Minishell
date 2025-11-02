@@ -47,19 +47,17 @@ int read_here(int *in, int *out, char *delim)
     int     w;
 
     printf("voici le delim %s\n",delim);
-    if(in == NULL  | out == NULL)
+    if((in == NULL ) | (out == NULL))
         return(1);
-    w = close(*in);
+    w = 0;
     if(w == -1){perror("heredoc write 1"); return(errno);}
+    
     while ((str = readline("heredoc> ")) != NULL)
     {
         if(str == NULL)
             return(1);
         if(ft_strncmp(str, delim, ft_strlen(str)) == 0)
-        {
-            printf("delimn\n");
             return(0);
-        }
         else
         {
             w = write(*out, str, ft_strlen(str));
@@ -82,60 +80,60 @@ int execute_redirection(t_token *token, int *tube)
 
 }
 
-int execute_commande(t_token *token, char *path, t_env *self_env, int tube[2])
+int execute_commande(t_token *token, char *path, t_env *self_env)
 {
     int status;
-
+    int tube[2];
     status = 0;
-
     
-    printf("tube bien recu %p and %p\n", &tube[0], &tube[1]);
+    
+    if(pipe(tube) == -1) { perror("pipe"); return (-1);}
+    
     pid_t f1 = fork();
-    if(f1 == -1) { perror("fork"); return (-1);}
+
+    if((f1 == -1) ) { perror("fork"); return (-1);}
     if(f1 == 0)
     {
-
+        close(tube[0]);
         if(token->redir_type != -1)
         {
             execute_redirection(token, tube);
-            printf("we rare here\n");
             close(tube[1]);
-            dup2(tube[0],STDIN_FILENO);
-
-            close(tube[0]);
-
+            exit(0);
         }
-        execve(path, token->args, *self_env->env);
-        perror("Execution error");
-        exit(errno); 
+        
     }
-    // if(open_redirection(token))
-    // {
-    //     int fd;
-
-    //     fd = open("file.txt",  token->redir_type);
-    //     if(fd == -1){perror("fd"); return(1);}
-    //     char buffer[1024];
-    //     int r;
-    //     while ((r = read(STDIN_FILENO,buffer, 1023))  > 0)
-    //     {
-    //         buffer[r] = '\0';
-    //         printf("buffer: %s\n", buffer);
-    //         if(ft_strncmp(buffer, token->redir[1], ft_strlen(buffer) - 1) == 0)
-    //         {
-    //             printf("delimiteur\n");
-    //             break;
-    //         }
-    //         write(STDOUT_FILENO, buffer, ft_strlen(buffer));
-    //     }
-    //     close(fd);
-    // }
     waitpid(f1,&status, 0);
     if(WIFEXITED(status))
-        return(WEXITSTATUS(status));
+    {
+        pid_t f2 = fork();
+        if((f2 == -1) ) { perror("fork"); return (-1);}
+        if(f2 == 0)
+        {
+            close(tube[1]);
+            dup2(tube[0], STDIN_FILENO);
+            close(tube[0]);
+
+            execve(path, token->args, *self_env->env);
+            perror("Execution error");
+            exit(errno); 
+        }
+        close(tube[0]);
+        close(tube[1]);
+        waitpid(f2,&status, 0);
+        if(WIFEXITED(status))
+            return(WEXITSTATUS(status));
+        else
+        {
+            printf("Error %d\n", WEXITSTATUS(status));
+            return(WEXITSTATUS(status));
+        }
+    }
     else
     {
         printf("Error %d\n", WEXITSTATUS(status));
+        close(tube[0]);
+        close(tube[1]);
         return(WEXITSTATUS(status));
     }
     return(WEXITSTATUS(status));
@@ -169,26 +167,28 @@ int      execute_ast(t_token *ast, t_env *self_env)
     int r;
     int tube[2];
 
+
     if(!ast)
         return(0);
         
     status = 0;
     if(pipe(tube) == -1) {perror("fork"); return (-1);}
-        printf("voici adresse in: %p et adresse out %p\n", &tube[0], & tube[1]);
+    
     if(ast->type == PIPE)
     {
-
         
         pid_t f1 = fork();
         if(f1 == -1) { perror("fork"); return (-1);}
         if(f1 == 0)
-        {
-            close(tube[0]);
-            dup2(tube[1],STDOUT_FILENO);
-            close(tube[1]);
-            exit(execute_ast(ast->left, self_env));
-        }
+        {   
 
+            close(tube[0]);
+            dup2(tube[1], STDOUT_FILENO);
+            execute_ast(ast->left, self_env);
+            exit(0);
+        }
+        waitpid(f1,&status, 0);
+        
         pid_t f2 = fork();
         int status2 = 0;
         if(f2 == -1) { perror("fork"); return (-1);}
@@ -201,7 +201,7 @@ int      execute_ast(t_token *ast, t_env *self_env)
         }
         close(tube[0]);
         close(tube[1]);
-        waitpid(f1,&status, 0);
+
         waitpid(f2,&status2, 0);
         return (status);
     }
@@ -215,8 +215,7 @@ int      execute_ast(t_token *ast, t_env *self_env)
         char *path = get_path(ast->value);
         if(!path)
             return(-1);
-        
-        r = execute_commande(ast, path, self_env, tube);
+        r = execute_commande(ast, path, self_env);
         return(r);
     }
     return (0);

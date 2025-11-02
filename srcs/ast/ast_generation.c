@@ -11,10 +11,7 @@ void display_binary_tree(t_token *parent, t_token *actual, int deriv)
     
     parent = actual;
 
-    printf("%-10s | %-15s | precedence: %-3d | asso: %-3d\n",actual->value,
-    print_token_type(actual->type),
-    actual->precedence,
-    actual->asso);
+    printf("%-10s | %-15s | precedence: %-3d | asso: %-3d\n",actual->value, print_token_type(actual->type),actual->precedence, actual->asso);
 
     display_binary_tree(actual,actual->left, deriv);
     
