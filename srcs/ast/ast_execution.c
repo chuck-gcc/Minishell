@@ -41,23 +41,30 @@ void destroy_token(t_token **tk)
     }
 }
 
-int read_here(int *in, int *out, char *delim)
+int read_here(int *in, int *out, char *delim, int saved)
 {
     char    *str;
     int     w;
+    int s;
 
-    printf("voici le delim %s\n",delim);
+    //important to commante every stout write. for cat << t | wc -l, every line put on stdout in cat children are count in wc.
+    //printf("voici le delim %s\n",delim);
     if((in == NULL ) | (out == NULL))
         return(1);
     w = 0;
     if(w == -1){perror("heredoc write 1"); return(errno);}
-    
+    s = dup(STDOUT_FILENO);
+    (void)s;
+    dup2(saved, STDOUT_FILENO);
     while ((str = readline("heredoc> ")) != NULL)
     {
         if(str == NULL)
             return(1);
         if(ft_strncmp(str, delim, ft_strlen(str)) == 0)
+        {
+            dup2(s, STDOUT_FILENO);
             return(0);
+        }
         else
         {
             w = write(*out, str, ft_strlen(str));
@@ -66,21 +73,22 @@ int read_here(int *in, int *out, char *delim)
             if(w == -1){perror("heredoc write 2"); return(errno);}
         }
     }
+
     return(1);
 }
 
-int execute_redirection(t_token *token, int *tube)
+int execute_redirection(t_token *token, int *tube, int saved)
 {
     int r;
 
     r = 1;
     if(is_redir(token->redir[0]) == DELIM)
-        r = read_here(&tube[0], &tube[1], token->redir[1]);
+        r = read_here(&tube[0], &tube[1], token->redir[1], saved);
     return(r);
 
 }
 
-int execute_commande(t_token *token, char *path, t_env *self_env)
+int execute_commande(t_token *token, char *path, t_env *self_env, int saved)
 {
     int status;
     int tube[2];
@@ -97,10 +105,13 @@ int execute_commande(t_token *token, char *path, t_env *self_env)
         close(tube[0]);
         if(token->redir_type != -1)
         {
-            execute_redirection(token, tube);
+            execute_redirection(token, tube, saved);
             close(tube[1]);
             exit(0);
         }
+        close(tube[1]);
+        //exit(0);
+
         
     }
     waitpid(f1,&status, 0);
@@ -161,7 +172,7 @@ int execute_builtin(t_token *token, t_env *env)
     return(1);
 }
 
-int      execute_ast(t_token *ast, t_env *self_env)
+int      execute_ast(t_token *ast, t_env *self_env, int saved)
 {
     int status;
     int r;
@@ -170,7 +181,7 @@ int      execute_ast(t_token *ast, t_env *self_env)
 
     if(!ast)
         return(0);
-        
+
     status = 0;
     if(pipe(tube) == -1) {perror("fork"); return (-1);}
     
@@ -184,7 +195,9 @@ int      execute_ast(t_token *ast, t_env *self_env)
 
             close(tube[0]);
             dup2(tube[1], STDOUT_FILENO);
-            execute_ast(ast->left, self_env);
+            execute_ast(ast->left, self_env, saved);
+            
+            dup2(STDOUT_FILENO, saved);
             exit(0);
         }
         waitpid(f1,&status, 0);
@@ -194,15 +207,18 @@ int      execute_ast(t_token *ast, t_env *self_env)
         if(f2 == -1) { perror("fork"); return (-1);}
         if(f2 == 0)
         {
+
             close(tube[1]);
-            dup2( tube[0], STDIN_FILENO);
+            dup2(tube[0], STDIN_FILENO);
             close(tube[0]);
-            exit(execute_ast(ast->right, self_env));
+            exit(execute_ast(ast->right, self_env, saved));
         }
+
         close(tube[0]);
         close(tube[1]);
-
         waitpid(f2,&status2, 0);
+        printf("voici saved %d\n", saved);
+
         return (status);
     }
     if(ast->type == BUILTIN)
@@ -215,7 +231,7 @@ int      execute_ast(t_token *ast, t_env *self_env)
         char *path = get_path(ast->value);
         if(!path)
             return(-1);
-        r = execute_commande(ast, path, self_env);
+        r = execute_commande(ast, path, self_env, saved);
         return(r);
     }
     return (0);

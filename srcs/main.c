@@ -65,8 +65,9 @@ static int process_user_input(char *str, t_env *self_env, int status_code)
 
     display_binary_tree(NULL,*ast,0);
     printf("\n");
+    int saved =  dup(STDOUT_FILENO);
 
-    status = execute_ast(*ast, self_env);
+    status = execute_ast(*ast, self_env, saved);
     //int r = execute_heredoc(*ast, "n",*envp);
     // important know
     
