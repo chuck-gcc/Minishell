@@ -217,7 +217,6 @@ int      execute_ast(t_token *ast, t_env *self_env, int saved)
         close(tube[0]);
         close(tube[1]);
         waitpid(f2,&status2, 0);
-        printf("voici saved %d\n", saved);
 
         return (status);
     }
